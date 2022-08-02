@@ -1,0 +1,9 @@
+-r requirements.txt
+PyGobject-stubs
+pretty-errors
+
+pytest==7.1.2
+pytest-cov
+pytest-randomly
+pytest-mock
+Faker
