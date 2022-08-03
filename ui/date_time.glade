@@ -2,6 +2,36 @@
 <!-- Generated with glade 3.39.0 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
+  <object class="GtkAdjustment" id="days">
+    <property name="lower">1</property>
+    <property name="upper">31</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="hour">
+    <property name="upper">24</property>
+    <property name="value">12</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="minute">
+    <property name="upper">59</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="months">
+    <property name="lower">1</property>
+    <property name="upper">12</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="years">
+    <property name="lower">1549</property>
+    <property name="upper">2650</property>
+    <property name="value">2000</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
   <object class="GtkBox" id="date_time">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -10,7 +40,11 @@
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="input-purpose">digits</property>
+        <property name="orientation">vertical</property>
+        <property name="adjustment">hour</property>
         <property name="climb-rate">1</property>
+        <property name="numeric">True</property>
+        <property name="update-policy">if-valid</property>
         <property name="value">12</property>
       </object>
       <packing>
@@ -24,7 +58,10 @@
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="input-purpose">digits</property>
+        <property name="orientation">vertical</property>
+        <property name="adjustment">minute</property>
         <property name="climb-rate">1</property>
+        <property name="update-policy">if-valid</property>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -38,7 +75,10 @@
         <property name="can-focus">True</property>
         <property name="text" translatable="yes">0</property>
         <property name="input-purpose">digits</property>
+        <property name="orientation">vertical</property>
+        <property name="adjustment">days</property>
         <property name="climb-rate">1</property>
+        <property name="update-policy">if-valid</property>
         <property name="value">1</property>
       </object>
       <packing>
@@ -53,7 +93,10 @@
         <property name="can-focus">True</property>
         <property name="text" translatable="yes">0</property>
         <property name="input-purpose">digits</property>
+        <property name="orientation">vertical</property>
+        <property name="adjustment">months</property>
         <property name="climb-rate">1</property>
+        <property name="update-policy">if-valid</property>
         <property name="value">1</property>
       </object>
       <packing>
@@ -68,7 +111,10 @@
         <property name="can-focus">True</property>
         <property name="text" translatable="yes">0</property>
         <property name="input-purpose">digits</property>
+        <property name="orientation">vertical</property>
+        <property name="adjustment">years</property>
         <property name="climb-rate">1</property>
+        <property name="update-policy">if-valid</property>
         <property name="value">2000</property>
       </object>
       <packing>
