@@ -57,6 +57,7 @@
       <object class="GtkSpinButton" id="minutes">
         <property name="visible">True</property>
         <property name="can-focus">True</property>
+        <property name="margin-end">16</property>
         <property name="input-purpose">digits</property>
         <property name="orientation">vertical</property>
         <property name="adjustment">minute</property>
