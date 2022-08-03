@@ -14,29 +14,20 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Synastry.  If not, see <https://www.gnu.org/licenses/>.
 #
-
 from gi.repository import Gtk
 
-from core.date_time import DateTime
 from core.gtk_utils import GladeTemplate
 
 
-class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
+class DateTime(GladeTemplate):
     # <editor-fold>
     parent_widget: Gtk.Box
+    hours: Gtk.SpinButton
+    minutes: Gtk.SpinButton
+    day: Gtk.SpinButton
+    month: Gtk.SpinButton
+    year: Gtk.SpinButton
 
     # </editor-fold>
-    def __init__(self, *args, **kwargs):
-        Gtk.ApplicationWindow.__init__(self, *args, **kwargs)
-        GladeTemplate.__init__(self, "main_window")
-
-        self.set_default_size(1280, 720)
-        # self.set_icon_from_file("img/icon.svg")
-
-        self.date1 = DateTime()
-        self.date2 = DateTime()
-
-        hbox = Gtk.HBox()
-        hbox.pack_start(self.date1, False, True, 0)
-        hbox.pack_end(self.date2, False, True, 0)
-        self.parent_widget.pack_start(hbox, False, True, 0)
+    def __init__(self):
+        GladeTemplate.__init__(self, "date_time")
