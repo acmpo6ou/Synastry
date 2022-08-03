@@ -21,6 +21,10 @@ from core.gtk_utils import GladeTemplate
 
 
 class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
+    # <editor-fold>
+    parent_widget: Gtk.Box
+
+    # </editor-fold>
     def __init__(self, *args, **kwargs):
         Gtk.ApplicationWindow.__init__(self, *args, **kwargs)
         GladeTemplate.__init__(self, "main_window")
