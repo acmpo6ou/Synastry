@@ -24,6 +24,9 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="label" translatable="yes">Conflicts</property>
+            <attributes>
+              <attribute name="font-desc" value="Ubuntu Bold 16"/>
+            </attributes>
             <property name="xalign">0</property>
           </object>
           <packing>
@@ -388,6 +391,9 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="label" translatable="yes">Love</property>
+            <attributes>
+              <attribute name="font-desc" value="Ubuntu Bold 16"/>
+            </attributes>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -399,6 +405,9 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="label" translatable="yes">Friendship</property>
+            <attributes>
+              <attribute name="font-desc" value="Ubuntu Bold 16"/>
+            </attributes>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -410,6 +419,9 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="label" translatable="yes">Happiness 1</property>
+            <attributes>
+              <attribute name="font-desc" value="Ubuntu Bold 16"/>
+            </attributes>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -421,6 +433,9 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="label" translatable="yes">Happiness 2</property>
+            <attributes>
+              <attribute name="font-desc" value="Ubuntu Bold 16"/>
+            </attributes>
           </object>
           <packing>
             <property name="left-attach">1</property>
