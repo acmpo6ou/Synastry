@@ -46,6 +46,7 @@
         <property name="numeric">True</property>
         <property name="update-policy">if-valid</property>
         <property name="value">12</property>
+        <signal name="value-changed" handler="on_value_changed" swapped="no"/>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -63,6 +64,7 @@
         <property name="adjustment">minute</property>
         <property name="climb-rate">1</property>
         <property name="update-policy">if-valid</property>
+        <signal name="value-changed" handler="on_value_changed" swapped="no"/>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -81,6 +83,7 @@
         <property name="climb-rate">1</property>
         <property name="update-policy">if-valid</property>
         <property name="value">1</property>
+        <signal name="value-changed" handler="on_value_changed" swapped="no"/>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -99,6 +102,7 @@
         <property name="climb-rate">1</property>
         <property name="update-policy">if-valid</property>
         <property name="value">1</property>
+        <signal name="value-changed" handler="on_value_changed" swapped="no"/>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -117,6 +121,7 @@
         <property name="climb-rate">1</property>
         <property name="update-policy">if-valid</property>
         <property name="value">2000</property>
+        <signal name="value-changed" handler="on_value_changed" swapped="no"/>
       </object>
       <packing>
         <property name="expand">False</property>

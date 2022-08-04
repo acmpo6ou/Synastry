@@ -32,10 +32,15 @@ class DateTime(GladeTemplate):
     day: Gtk.SpinButton
     month: Gtk.SpinButton
     year: Gtk.SpinButton
+
     # </editor-fold>
-    def __init__(self):
+    def __init__(self, main_window):
         GladeTemplate.__init__(self, "date_time")
+        self.main_window = main_window
 
     @property
     def date_time(self) -> str:
         ...
+
+    def on_value_changed(self, _):
+        self.main_window.on_date_changed()

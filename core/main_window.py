@@ -27,6 +27,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
     love: Gtk.Grid
     friendship: Gtk.Grid
     conflicts: Gtk.Grid
+
     # </editor-fold>
     def __init__(self, *args, **kwargs):
         Gtk.ApplicationWindow.__init__(self, *args, **kwargs)
@@ -35,10 +36,13 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         self.set_default_size(1280, 720)
         # self.set_icon_from_file("img/icon.svg")
 
-        self.date1 = DateTime()
-        self.date2 = DateTime()
+        self.date1 = DateTime(self)
+        self.date2 = DateTime(self)
 
         hbox = Gtk.HBox()
         hbox.pack_start(self.date1, False, True, 0)
         hbox.pack_end(self.date2, False, True, 0)
         self.parent_widget.pack_start(hbox, False, True, 0)
+
+    def on_date_changed(self):
+        ...
