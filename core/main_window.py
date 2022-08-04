@@ -19,6 +19,7 @@ from gi.repository import Gtk
 
 from core.date_time import DateTime
 from core.gtk_utils import GladeTemplate
+from core.planets import Planet
 
 
 class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
@@ -64,6 +65,20 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
     def calculate_conflictedness(self, table: Gtk.Grid, date_time: str):
         """ Calculates conflictedness of a person. """
+        mars = Planet("mars", date_time)
+        jupiter = Planet("jupiter", date_time)
+        saturn = Planet("saturn", date_time)
+        pluto = Planet("pluto", date_time)
+        planets = (mars, jupiter, saturn, pluto)
+
+        for p1 in planets:
+            for p2 in planets:
+                aspect = p1 + p2
+                row = planets.index(p1) + 1
+                column = planets.index(p2) + 1
+
+                label = Gtk.Label(aspect.angle)
+                table.attach(label, column, row, 1, 1)
 
     def calculate_conflicts(self):
         ...
