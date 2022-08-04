@@ -1,4 +1,4 @@
-#!/usr/bin/python3.9
+#!/usr/bin/env python3
 
 #   Copyright (c) 2022. Bohdan Kolvakh
 #   This file is part of Synastry.
