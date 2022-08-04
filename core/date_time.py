@@ -31,3 +31,7 @@ class DateTime(GladeTemplate):
     # </editor-fold>
     def __init__(self):
         GladeTemplate.__init__(self, "date_time")
+
+    @property
+    def date_time(self) -> str:
+        ...
