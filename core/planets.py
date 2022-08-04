@@ -28,9 +28,15 @@ class Planet:
         time = Time(date_time)
         self.body = get_body(name, time, self.loc)
 
-    def __add__(self, other: "Planet") -> bool:
-        """ Returns whether an aspect between planets is good. """
+    def __add__(self, other: "Planet") -> "Aspect":
+        return Aspect(self, other)
 
     @property
     def good(self) -> bool:
         ...
+
+
+class Aspect:
+    def __init__(self, planet1: "Planet", planet2: "Planet"):
+        self.angle = ...
+        self.good = ...
