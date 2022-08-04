@@ -45,4 +45,25 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         self.parent_widget.pack_start(hbox, False, True, 0)
 
     def on_date_changed(self):
+        date1 = ...
+        date2 = ...
+        self.calculate_conflictedness(self.conflicts1)
+
+    def calculate_conflictedness(self, table: Gtk.Grid, date_time: str):
+        """ Calculates conflictedness of a person. """
+
+    def calculate_conflicts(self):
         ...
+
+    def calculate_love(self):
+        ...
+
+    def calculate_friendship(self):
+        ...
+
+    def calculate_happiness(self, table: Gtk.Grid, date1: str, date2: str):
+        """
+        Calculates how happy/unhappy person with date2
+        makes person with date1.
+        """
+
