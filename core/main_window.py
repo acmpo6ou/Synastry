@@ -24,7 +24,9 @@ from core.gtk_utils import GladeTemplate
 class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
     # <editor-fold>
     parent_widget: Gtk.Box
-
+    love: Gtk.Grid
+    friendship: Gtk.Grid
+    conflicts: Gtk.Grid
     # </editor-fold>
     def __init__(self, *args, **kwargs):
         Gtk.ApplicationWindow.__init__(self, *args, **kwargs)

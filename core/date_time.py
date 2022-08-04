@@ -21,13 +21,17 @@ from core.gtk_utils import GladeTemplate
 
 class DateTime(GladeTemplate):
     # <editor-fold>
+    days: Gtk.Adjustment
+    hour: Gtk.Adjustment
+    minute: Gtk.Adjustment
+    months: Gtk.Adjustment
+    years: Gtk.Adjustment
     parent_widget: Gtk.Box
     hours: Gtk.SpinButton
     minutes: Gtk.SpinButton
     day: Gtk.SpinButton
     month: Gtk.SpinButton
     year: Gtk.SpinButton
-
     # </editor-fold>
     def __init__(self):
         GladeTemplate.__init__(self, "date_time")
