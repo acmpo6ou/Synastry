@@ -24,8 +24,12 @@ from core.gtk_utils import GladeTemplate
 class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
     # <editor-fold>
     parent_widget: Gtk.Box
+    conflicts1: Gtk.Grid
     love: Gtk.Grid
     friendship: Gtk.Grid
+    happiness1: Gtk.Grid
+    happiness2: Gtk.Grid
+    conflicts2: Gtk.Grid
     conflicts: Gtk.Grid
 
     # </editor-fold>
@@ -66,4 +70,3 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         Calculates how happy/unhappy person with date2
         makes person with date1.
         """
-
