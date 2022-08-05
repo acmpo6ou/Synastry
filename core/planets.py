@@ -42,5 +42,12 @@ class Aspect:
         angle = offsets[0].degree
         self.angle = round(abs(angle), 1)
 
-        # TODO: handle 6.5 orbs for bad aspects, and 8.5 for good
-        self.good = ...
+        # TODO: handle Jupiter
+        if 111.5 <= self.angle <= 128.5 or 51.5 <= self.angle <= 68.5:
+            self.good = True
+        elif 171.5 <= self.angle <= 188.5 or 81.5 <= self.angle <= 98.5:
+            self.good = False
+        elif 0 <= self.angle <= 8.5:
+            self.good = planet1.good and planet2.good
+        else:
+            self.angle = None
