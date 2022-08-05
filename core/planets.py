@@ -38,5 +38,9 @@ class Planet:
 
 class Aspect:
     def __init__(self, planet1: "Planet", planet2: "Planet"):
-        self.angle = ...
+        offsets = planet1.body.spherical_offsets_to(planet2.body)
+        angle = offsets[0].degree
+        self.angle = round(abs(angle), 1)
+
+        # TODO: handle 6.5 orbs for bad aspects, and 8.5 for good
         self.good = ...
