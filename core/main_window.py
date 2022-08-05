@@ -90,8 +90,9 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 row = PLANETS.index(p1) + 1
                 column = PLANETS.index(p2) + 1
 
-                label = Gtk.Label(f"{aspect.angle}°")
+                label = Gtk.Label()
                 label.xalign = 0
+                label.markup = f'<span foreground="#f04b51">{aspect.angle}°</span>'
                 table.attach(label, column, row, 1, 1)
                 label.show()
 
