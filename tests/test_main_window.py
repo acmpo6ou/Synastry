@@ -17,15 +17,36 @@
 import itertools
 from gi.repository import Gtk
 from core.main_window import MainWindow
+from core.planets import Aspect, Planet
+
+DATE = "2022-08-04 12:00"
 
 
 def test_calculate_conflictedness():
     window = MainWindow()
     grid = Gtk.Grid()
 
-    window.calculate_conflictedness(grid, "2022-08-04 12:00")
+    window.calculate_conflictedness(grid, DATE)
     for row, column in itertools.product(range(5), range(5)):
         if row == 0 and column == 3:
-            assert grid.get_child_at(column, row).text == "90°"
+            assert grid.get_child_at(column, row).text == "88°"
             continue
         assert not grid.get_child_at(column, row)
+
+
+def test_aspect_good():
+    p1 = Planet("moon", DATE)
+    p2 = Planet("mercury", DATE)
+
+    aspect = Aspect(p1, p2)
+    assert aspect.angle == 58.8
+    assert aspect.good
+
+
+def test_aspect_bad():
+    p1 = Planet("moon", DATE)
+    p2 = Planet("pluto", DATE)
+
+    aspect = Aspect(p1, p2)
+    assert aspect.angle == 85.8
+    assert not aspect.good
