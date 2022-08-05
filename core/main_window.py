@@ -15,6 +15,7 @@
 #   along with Synastry.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+import itertools
 from gi.repository import Gtk
 
 from core.date_time import DateTime
@@ -63,22 +64,33 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         self.calculate_happiness(self.happiness1, date1, date2)
         self.calculate_happiness(self.happiness2, date2, date1)
 
-    def calculate_conflictedness(self, table: Gtk.Grid, date_time: str):
+    @staticmethod
+    def calculate_conflictedness(table: Gtk.Grid, date_time: str):
         """ Calculates conflictedness of a person. """
         mars = Planet("mars", date_time)
         jupiter = Planet("jupiter", date_time)
         saturn = Planet("saturn", date_time)
         pluto = Planet("pluto", date_time)
-        planets = (mars, jupiter, saturn, pluto)
 
-        for p1 in planets:
+        # clear table
+        for row, column in itertools.product(range(1, 5), range(1, 5)):
+            child = table.get_child_at(column, row)
+            if child:
+                child.destroy()
+
+        PLANETS = (mars, jupiter, saturn, pluto)
+        planets = [mars, jupiter, saturn, pluto]
+        for p1 in PLANETS:
+            planets.remove(p1)
             for p2 in planets:
                 aspect = Aspect(p1, p2, conflicts=True)
-                row = planets.index(p1) + 1
-                column = planets.index(p2) + 1
+                row = PLANETS.index(p1) + 1
+                column = PLANETS.index(p2) + 1
 
                 label = Gtk.Label(aspect.angle)
+                label.xalign = 0
                 table.attach(label, column, row, 1, 1)
+                label.show()
 
     def calculate_conflicts(self):
         ...

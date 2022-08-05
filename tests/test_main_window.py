@@ -28,10 +28,12 @@ def test_calculate_conflictedness():
 
     window.calculate_conflictedness(grid, DATE)
     for row, column in itertools.product(range(5), range(5)):
-        if row == 0 and column == 3:
+        if row == 0 or column == 0:
+            continue
+        if row == 1 and column == 3:
             assert grid.get_child_at(column, row).text == "88°"
             continue
-        assert not grid.get_child_at(column, row)
+        assert not grid.get_child_at(column, row), f"{row}, {column}"
 
 
 def test_aspect_120():
