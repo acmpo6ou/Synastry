@@ -19,7 +19,7 @@ from gi.repository import Gtk
 
 from core.date_time import DateTime
 from core.gtk_utils import GladeTemplate
-from core.planets import Planet
+from core.planets import Planet, Aspect
 
 
 class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
@@ -73,7 +73,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
         for p1 in planets:
             for p2 in planets:
-                aspect = p1 + p2
+                aspect = Aspect(p1, p2, conflicts=True)
                 row = planets.index(p1) + 1
                 column = planets.index(p2) + 1
 

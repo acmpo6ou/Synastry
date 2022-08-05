@@ -28,26 +28,26 @@ class Planet:
         time = Time(date_time)
         self.body = get_body(name, time, self.loc)
 
-    def __add__(self, other: "Planet") -> "Aspect":
-        return Aspect(self, other)
-
     @property
     def good(self) -> bool:
         ...
 
 
 class Aspect:
-    def __init__(self, planet1: "Planet", planet2: "Planet"):
+    def __init__(self, planet1: "Planet", planet2: "Planet", conflicts=False):
         offsets = planet1.body.spherical_offsets_to(planet2.body)
         angle = offsets[0].degree
         self.angle = round(abs(angle), 1)
 
-        # TODO: handle Jupiter
         if 111.5 <= self.angle <= 128.5 or 51.5 <= self.angle <= 68.5:
             self.good = True
         elif 171.5 <= self.angle <= 188.5 or 81.5 <= self.angle <= 98.5:
             self.good = False
         elif 0 <= self.angle <= 8.5:
+            # in the context of conflicts Jupiter is a bad planet
+            if conflicts and planet1.name == planet2.name and planet1.name == "jupiter":
+                self.good = False
+                return
             self.good = planet1.good and planet2.good
         else:
             self.angle = None
