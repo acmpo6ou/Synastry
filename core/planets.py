@@ -30,7 +30,7 @@ class Planet:
 
     @property
     def good(self) -> bool:
-        ...
+        return self.name in ("sun", "venus", "moon", "jupiter")
 
 
 class Aspect:
