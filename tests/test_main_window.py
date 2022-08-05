@@ -31,7 +31,7 @@ def test_calculate_conflictedness():
         if row == 0 or column == 0:
             continue
         if row == 1 and column == 3:
-            assert grid.get_child_at(column, row).text == "88°"
+            assert grid.get_child_at(column, row).text == "87.5°"
             continue
         assert not grid.get_child_at(column, row), f"{row}, {column}"
 

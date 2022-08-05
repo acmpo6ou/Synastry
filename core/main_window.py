@@ -84,10 +84,13 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             planets.remove(p1)
             for p2 in planets:
                 aspect = Aspect(p1, p2, conflicts=True)
+                if aspect.angle is None or aspect.good:
+                    continue
+
                 row = PLANETS.index(p1) + 1
                 column = PLANETS.index(p2) + 1
 
-                label = Gtk.Label(aspect.angle)
+                label = Gtk.Label(f"{aspect.angle}°")
                 label.xalign = 0
                 table.attach(label, column, row, 1, 1)
                 label.show()
