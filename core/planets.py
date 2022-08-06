@@ -34,7 +34,7 @@ class Planet:
 
 
 class Aspect:
-    def __init__(self, planet1: "Planet", planet2: "Planet", conflicts=False):
+    def __init__(self, planet1: "Planet", planet2: "Planet"):
         offsets = planet1.body.spherical_offsets_to(planet2.body)
         angle = offsets[0].degree
         self.angle = round(abs(angle), 1)
@@ -45,7 +45,7 @@ class Aspect:
             self.good = False
         elif 0 <= self.angle <= 8.5:
             # in the context of conflicts Jupiter is a bad planet
-            if conflicts and planet1.name == planet2.name and planet1.name == "jupiter":
+            if planet1.name == planet2.name and planet1.name == "jupiter":
                 self.good = False
                 return
             self.good = planet1.good and planet2.good

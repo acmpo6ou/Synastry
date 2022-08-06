@@ -83,7 +83,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         for p1 in PLANETS:
             planets.remove(p1)
             for p2 in planets:
-                aspect = Aspect(p1, p2, conflicts=True)
+                aspect = Aspect(p1, p2)
                 if aspect.angle is None or aspect.good:
                     continue
 
