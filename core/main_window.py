@@ -54,9 +54,9 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         date1 = self.date1.date_time
         date2 = self.date2.date_time
 
-        self.calculate_conflictedness(self.conflicts1, date1)
-        self.calculate_conflictedness(self.conflicts2, date2)
-        self.calculate_conflicts()
+        conf1 = self.calculate_conflictedness(self.conflicts1, date1)
+        conf2 = self.calculate_conflictedness(self.conflicts2, date2)
+        self.calculate_conflicts(date1, date2, conf1, conf2)
 
         self.calculate_love()
         self.calculate_friendship()
@@ -65,8 +65,13 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         self.calculate_happiness(self.happiness2, date2, date1)
 
     @staticmethod
-    def calculate_conflictedness(table: Gtk.Grid, date_time: str):
-        """ Calculates conflictedness of a person. """
+    def calculate_conflictedness(table: Gtk.Grid, date_time: str) -> list[Aspect]:
+        """
+        Calculates conflictedness of a person.
+        :returns: a list of conflicting aspects of this person.
+        """
+
+        conflictedness = []
         mars = Planet("mars", date_time)
         jupiter = Planet("jupiter", date_time)
         saturn = Planet("saturn", date_time)
@@ -80,6 +85,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
         PLANETS = (mars, jupiter, saturn, pluto)
         planets = [mars, jupiter, saturn, pluto]
+
         for p1 in PLANETS:
             planets.remove(p1)
             for p2 in planets:
@@ -87,6 +93,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 if aspect.angle is None or aspect.good:
                     continue
 
+                conflictedness.append(aspect)
                 row = PLANETS.index(p1) + 1
                 column = PLANETS.index(p2) + 1
 
@@ -95,6 +102,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 label.markup = f'<span foreground="#f04b51">{aspect.angle}°</span>'
                 table.attach(label, column, row, 1, 1)
                 label.show()
+        return conflictedness
 
     def calculate_conflicts(self):
         ...

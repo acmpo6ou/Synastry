@@ -24,8 +24,8 @@ DATE = "2022-08-04 12:00"
 def test_calculate_conflictedness():
     window = MainWindow()
     grid = Gtk.Grid()
+    conflictedness = window.calculate_conflictedness(grid, DATE)
 
-    window.calculate_conflictedness(grid, DATE)
     for row, column in itertools.product(range(5), range(5)):
         if row == 0 or column == 0:
             continue
@@ -33,3 +33,6 @@ def test_calculate_conflictedness():
             assert grid.get_child_at(column, row).text == "87.5°"
             continue
         assert not grid.get_child_at(column, row), f"{row}, {column}"
+
+    assert conflictedness[0].angle == 87.5
+    assert len(conflictedness) == 1
