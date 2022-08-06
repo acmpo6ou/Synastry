@@ -37,11 +37,11 @@ def test_aspect_60():
 
 
 def test_aspect_180():
-    p1 = Planet("venus", DATE)
-    p2 = Planet("pluto", DATE)
+    p1 = Planet("venus", "2022-08-06 12:00")
+    p2 = Planet("pluto", "2022-08-06 12:00")
 
     aspect = Aspect(p1, p2)
-    assert aspect.angle == 173.9
+    assert aspect.angle == 176.3
     assert not aspect.good
 
 
@@ -81,7 +81,7 @@ def test_aspect_0_bad_bad():
     assert not aspect.good
 
 
-def test_aspect_0_jupiter_conflicts():
+def test_aspect_0_jupiter():
     p1 = Planet("jupiter", DATE)
     p2 = Planet("jupiter", DATE)
 

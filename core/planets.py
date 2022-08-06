@@ -39,15 +39,18 @@ class Aspect:
         angle = offsets[0].degree
         self.angle = round(abs(angle), 1)
 
-        if 111.5 <= self.angle <= 128.5 or 51.5 <= self.angle <= 68.5:
+        if 112 <= self.angle <= 128 or 52 <= self.angle <= 68:
             self.good = True
-        elif 171.5 <= self.angle <= 188.5 or 81.5 <= self.angle <= 98.5:
+        elif 174 <= self.angle <= 186 or 84 <= self.angle <= 96:
             self.good = False
-        elif 0 <= self.angle <= 8.5:
+        elif 0 <= self.angle <= 8 and planet1.good and planet2.good:
             # in the context of conflicts Jupiter is a bad planet
             if planet1.name == planet2.name and planet1.name == "jupiter":
-                self.good = False
-                return
-            self.good = planet1.good and planet2.good
+                if 0 <= self.angle <= 6:
+                    self.good = False
+            else:
+                self.good = True
+        elif 0 <= self.angle <= 6:
+            self.good = False
         else:
             self.angle = None
