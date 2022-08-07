@@ -64,7 +64,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         self.calculate_happiness(self.happiness2, date2, date1)
 
     @staticmethod
-    def calculate_conflictedness(table: Gtk.Grid, date_time: str) -> list[Planet]:
+    def calculate_conflictedness(table: Gtk.Grid, date_time: str) -> list[str]:
         """
         Calculates conflictedness of a person.
         :returns: a list of conflicting planets of this person.
@@ -87,7 +87,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 if aspect.angle is None or aspect.good:
                     continue
 
-                conflictedness.extend((p1, p2))
+                conflictedness.extend((p1.name, p2.name))
                 row = PLANETS.index(p1) + 1
                 column = PLANETS.index(p2)
 
@@ -107,8 +107,8 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             self,
             date1: str,
             date2: str,
-            conflictedness1: list[Planet],
-            conflictedness2: list[Planet],
+            conflictedness1: list[str],
+            conflictedness2: list[str],
     ):
         mars1 = Planet("mars", date1)
         jupiter1 = Planet("jupiter", date1)
@@ -120,9 +120,23 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         saturn2 = Planet("saturn", date2)
         pluto2 = Planet("pluto", date2)
 
+        clear_table(self.conflicts)
+
         planets1 = (mars1, jupiter1, saturn1, pluto1)
         planets2 = (mars2, jupiter2, saturn2, pluto2)
-        clear_table(self.conflicts)
+
+        planet_names1 = [planet.name for planet in planets1]
+        planet_names2 = [planet.name for planet in planets2]
+
+        for planet in conflictedness1:
+            i = planet_names1.index(planet) + 1
+            header = self.conflicts.get_child_at(0, i)
+            header.markup = f'<span foreground="red">{header.text}</span>'
+
+        for planet in conflictedness2:
+            i = planet_names2.index(planet) + 1
+            header = self.conflicts.get_child_at(i, 0)
+            header.markup = f'<span foreground="red">{header.text}</span>'
 
         for p1 in planets1:
             for p2 in planets2:
@@ -133,9 +147,13 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 row = planets1.index(p1) + 1
                 column = planets2.index(p2) + 1
 
+                color = "#f04b51"
+                if p1.name in conflictedness1 or p2.name in conflictedness2:
+                    color = "red"
+
                 label = Gtk.Label()
                 label.xalign = 0
-                label.markup = f'<span foreground="#f04b51">{aspect.angle}°</span>'
+                label.markup = f'<span foreground="{color}">{aspect.angle}°</span>'
                 self.conflicts.attach(label, column, row, 1, 1)
                 label.show()
 

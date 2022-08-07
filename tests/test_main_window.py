@@ -35,8 +35,7 @@ def test_calculate_conflictedness():
             continue
         assert not grid.get_child_at(column, row), f"{row}, {column}"
 
-    planets = [planet.name for planet in conflictedness]
-    assert planets == ["mars", "saturn"]
+    assert conflictedness == ["mars", "saturn"]
 
 
 def test_calculate_conflicts():
