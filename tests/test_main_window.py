@@ -19,6 +19,7 @@ from gi.repository import Gtk
 from core.main_window import MainWindow
 
 DATE = "2022-08-04 12:00"
+DATE2 = "2022-08-06 12:00"
 
 
 def test_calculate_conflictedness():
@@ -26,7 +27,7 @@ def test_calculate_conflictedness():
     grid = window.conflicts1
     conflictedness = window.calculate_conflictedness(grid, DATE)
 
-    for row, column in itertools.product(range(5), range(5)):
+    for row, column in itertools.product(range(4), range(4)):
         if row == 0 or column == 0:
             continue
         if row == 1 and column == 2:
@@ -36,3 +37,23 @@ def test_calculate_conflictedness():
 
     planets = [planet.name for planet in conflictedness]
     assert planets == ["mars", "saturn"]
+
+
+def test_calculate_conflicts():
+    window = MainWindow()
+    conf1 = window.calculate_conflictedness(window.conflicts1, DATE)
+    conf2 = window.calculate_conflictedness(window.conflicts2, DATE2)
+    window.calculate_conflicts(DATE, DATE2, conf1, conf2)
+
+    for row, column in itertools.product(range(5), range(5)):
+        if row == 0 or column == 0:
+            continue
+        if row == column:
+            degrees = window.conflicts.get_child_at(column, row).text
+            assert degrees in ("1.2°", "0.1°", "0.0°")
+        elif row == 1 and column == 3:
+            assert window.conflicts.get_child_at(column, row).text == "87.7°"
+        elif row == 3 and column == 1:
+            assert window.conflicts.get_child_at(column, row).text == "88.8°"
+        else:
+            assert not window.conflicts.get_child_at(column, row), f"{row}, {column}"

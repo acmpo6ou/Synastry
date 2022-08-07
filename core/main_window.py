@@ -112,8 +112,41 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 header2.markup = f'<span foreground="#f04b51">{header2.text}</span>'
         return conflictedness
 
-    def calculate_conflicts(self):
-        ...
+    def calculate_conflicts(
+            self,
+            date1: str,
+            date2: str,
+            conflictedness1: list[Planet],
+            conflictedness2: list[Planet],
+    ):
+        mars1 = Planet("mars", date1)
+        jupiter1 = Planet("jupiter", date1)
+        saturn1 = Planet("saturn", date1)
+        pluto1 = Planet("pluto", date1)
+
+        mars2 = Planet("mars", date2)
+        jupiter2 = Planet("jupiter", date2)
+        saturn2 = Planet("saturn", date2)
+        pluto2 = Planet("pluto", date2)
+
+        planets1 = (mars1, jupiter1, saturn1, pluto1)
+        planets2 = (mars2, jupiter2, saturn2, pluto2)
+        clear_table(self.conflicts)
+
+        for p1 in planets1:
+            for p2 in planets2:
+                aspect = Aspect(p1, p2)
+                if aspect.angle is None or aspect.good:
+                    continue
+
+                row = planets1.index(p1) + 1
+                column = planets2.index(p2) + 1
+
+                label = Gtk.Label()
+                label.xalign = 0
+                label.markup = f'<span foreground="#f04b51">{aspect.angle}°</span>'
+                self.conflicts.attach(label, column, row, 1, 1)
+                label.show()
 
     def calculate_love(self):
         ...
