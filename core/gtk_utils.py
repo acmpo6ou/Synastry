@@ -153,3 +153,13 @@ def clear_table(table: Gtk.Grid):
         child = table.get_child_at(column, row)
         if child:
             child.destroy()
+
+    # clear colors from headers
+    for i in range(1, 5):
+        header1 = table.get_child_at(0, i)
+        header2 = table.get_child_at(i, 0)
+
+        if header1:
+            header1.markup = header1.text
+        if header2:
+            header2.markup = header2.text

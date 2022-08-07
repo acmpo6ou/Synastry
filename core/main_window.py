@@ -15,7 +15,6 @@
 #   along with Synastry.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-import itertools
 from gi.repository import Gtk
 
 from core.date_time import DateTime
@@ -78,14 +77,6 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         pluto = Planet("pluto", date_time)
 
         clear_table(table)
-        # clear colors from headers
-        for i in range(1, 4):
-            header1 = table.get_child_at(0, i)
-            header2 = table.get_child_at(i, 0)
-
-            header1.markup = header1.text
-            header2.markup = header2.text
-
         PLANETS = (mars, jupiter, saturn, pluto)
         planets = [mars, jupiter, saturn, pluto]
 
