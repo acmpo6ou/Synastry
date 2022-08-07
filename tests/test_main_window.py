@@ -61,4 +61,21 @@ def test_calculate_love():
     for row, column in itertools.product(range(1, 3), range(1, 3)):
         if row == 2 and column == 2:
             assert window.love.get_child_at(column, row).text == "59.4°"
+            continue
         assert not window.conflicts.get_child_at(column, row)
+
+
+def test_calculate_friendship():
+    window = MainWindow()
+    window.calculate_friendship(DATE, DATE2)
+
+    for row, column in itertools.product(range(1, 4), range(1, 4)):
+        if row == 1 and column == 1:
+            assert window.friendship.get_child_at(column, row).text == "1.8°"
+        elif row == 3 and column == 3:
+            assert window.friendship.get_child_at(column, row).text == "2.4°"
+        elif row == 3 and column == 2:
+            assert window.friendship.get_child_at(column, row).text == "127.3°"
+        else:
+            assert not window.conflicts.get_child_at(column, row)
+
