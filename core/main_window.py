@@ -83,6 +83,14 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             if child:
                 child.destroy()
 
+        # clear colors from headers
+        for i in range(1, 5):
+            header1 = table.get_child_at(0, i)
+            header2 = table.get_child_at(i, 0)
+
+            header1.markup = header1.text
+            header2.markup = header2.text
+
         PLANETS = (mars, jupiter, saturn, pluto)
         planets = [mars, jupiter, saturn, pluto]
 
@@ -102,6 +110,11 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 label.markup = f'<span foreground="#f04b51">{aspect.angle}°</span>'
                 table.attach(label, column, row, 1, 1)
                 label.show()
+
+                header1 = table.get_child_at(0, row)
+                header2 = table.get_child_at(column, 0)
+                header1.markup = f'<span foreground="#f04b51">{header1.text}</span>'
+                header2.markup = f'<span foreground="#f04b51">{header2.text}</span>'
         return conflictedness
 
     def calculate_conflicts(self):
