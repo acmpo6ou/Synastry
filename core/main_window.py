@@ -78,13 +78,13 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         pluto = Planet("pluto", date_time)
 
         # clear table
-        for row, column in itertools.product(range(1, 5), range(1, 5)):
+        for row, column in itertools.product(range(1, 4), range(1, 4)):
             child = table.get_child_at(column, row)
             if child:
                 child.destroy()
 
         # clear colors from headers
-        for i in range(1, 5):
+        for i in range(1, 4):
             header1 = table.get_child_at(0, i)
             header2 = table.get_child_at(i, 0)
 
@@ -103,7 +103,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
                 conflictedness.append(aspect)
                 row = PLANETS.index(p1) + 1
-                column = PLANETS.index(p2) + 1
+                column = PLANETS.index(p2)
 
                 label = Gtk.Label()
                 label.xalign = 0

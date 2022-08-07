@@ -23,13 +23,13 @@ DATE = "2022-08-04 12:00"
 
 def test_calculate_conflictedness():
     window = MainWindow()
-    grid = Gtk.Grid()
+    grid = window.conflicts1
     conflictedness = window.calculate_conflictedness(grid, DATE)
 
     for row, column in itertools.product(range(5), range(5)):
         if row == 0 or column == 0:
             continue
-        if row == 1 and column == 3:
+        if row == 1 and column == 2:
             assert grid.get_child_at(column, row).text == "87.5°"
             continue
         assert not grid.get_child_at(column, row), f"{row}, {column}"
