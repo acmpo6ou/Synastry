@@ -19,7 +19,7 @@ import itertools
 from gi.repository import Gtk
 
 from core.date_time import DateTime
-from core.gtk_utils import GladeTemplate
+from core.gtk_utils import GladeTemplate, clear_table
 from core.planets import Planet, Aspect
 
 
@@ -77,12 +77,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         saturn = Planet("saturn", date_time)
         pluto = Planet("pluto", date_time)
 
-        # clear table
-        for row, column in itertools.product(range(1, 4), range(1, 4)):
-            child = table.get_child_at(column, row)
-            if child:
-                child.destroy()
-
+        clear_table(table)
         # clear colors from headers
         for i in range(1, 4):
             header1 = table.get_child_at(0, i)

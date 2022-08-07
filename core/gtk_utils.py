@@ -21,9 +21,11 @@ Contains various utilities to simplify development with GTK.
 from __future__ import annotations
 
 import contextlib
+import itertools
 import time
 from typing import Callable
 
+import pytest
 from gi.repository import GObject, Gtk
 
 
@@ -144,3 +146,10 @@ def wait_until(callback: Callable[[], bool], timeout=5):
 
         while Gtk.events_pending():
             Gtk.main_iteration()
+
+
+def clear_table(table: Gtk.Grid):
+    for row, column in itertools.product(range(1, 5), range(1, 5)):
+        child = table.get_child_at(column, row)
+        if child:
+            child.destroy()
