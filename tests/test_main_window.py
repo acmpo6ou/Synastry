@@ -34,5 +34,5 @@ def test_calculate_conflictedness():
             continue
         assert not grid.get_child_at(column, row), f"{row}, {column}"
 
-    assert conflictedness[0].angle == 87.5
-    assert len(conflictedness) == 1
+    planets = [planet.name for planet in conflictedness]
+    assert planets == ["mars", "saturn"]

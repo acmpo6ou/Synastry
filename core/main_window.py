@@ -65,10 +65,10 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         self.calculate_happiness(self.happiness2, date2, date1)
 
     @staticmethod
-    def calculate_conflictedness(table: Gtk.Grid, date_time: str) -> list[Aspect]:
+    def calculate_conflictedness(table: Gtk.Grid, date_time: str) -> list[Planet]:
         """
         Calculates conflictedness of a person.
-        :returns: a list of conflicting aspects of this person.
+        :returns: a list of conflicting planets of this person.
         """
 
         conflictedness = []
@@ -101,7 +101,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 if aspect.angle is None or aspect.good:
                     continue
 
-                conflictedness.append(aspect)
+                conflictedness.extend((p1, p2))
                 row = PLANETS.index(p1) + 1
                 column = PLANETS.index(p2)
 
