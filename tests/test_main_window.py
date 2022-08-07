@@ -27,9 +27,7 @@ def test_calculate_conflictedness():
     grid = window.conflicts1
     conflictedness = window.calculate_conflictedness(grid, DATE)
 
-    for row, column in itertools.product(range(4), range(4)):
-        if row == 0 or column == 0:
-            continue
+    for row, column in itertools.product(range(1, 4), range(1, 4)):
         if row == 1 and column == 2:
             assert grid.get_child_at(column, row).text == "87.5°"
             continue
@@ -44,9 +42,7 @@ def test_calculate_conflicts():
     conf2 = window.calculate_conflictedness(window.conflicts2, DATE2)
     window.calculate_conflicts(DATE, DATE2, conf1, conf2)
 
-    for row, column in itertools.product(range(5), range(5)):
-        if row == 0 or column == 0:
-            continue
+    for row, column in itertools.product(range(1, 5), range(1, 5)):
         if row == column:
             degrees = window.conflicts.get_child_at(column, row).text
             assert degrees in ("1.2°", "0.1°", "0.0°")
@@ -56,3 +52,13 @@ def test_calculate_conflicts():
             assert window.conflicts.get_child_at(column, row).text == "88.8°"
         else:
             assert not window.conflicts.get_child_at(column, row), f"{row}, {column}"
+
+
+def test_calculate_love():
+    window = MainWindow()
+    window.calculate_love(DATE, DATE2)
+
+    for row, column in itertools.product(range(1, 3), range(1, 3)):
+        if row == 2 and column == 2:
+            assert window.love.get_child_at(column, row).text == "59.4°"
+        assert not window.conflicts.get_child_at(column, row)

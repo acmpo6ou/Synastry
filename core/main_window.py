@@ -57,7 +57,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         conf2 = self.calculate_conflictedness(self.conflicts2, date2)
         self.calculate_conflicts(date1, date2, conf1, conf2)
 
-        self.calculate_love()
+        self.calculate_love(date1, date2)
         self.calculate_friendship()
 
         self.calculate_happiness(self.happiness1, date1, date2)
@@ -157,8 +157,31 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 self.conflicts.attach(label, column, row, 1, 1)
                 label.show()
 
-    def calculate_love(self):
-        ...
+    def calculate_love(self, date1: str, date2: str):
+        moon = Planet("moon", date1)
+        venus = Planet("venus", date1)
+        sun = Planet("sun", date2)
+        mars = Planet("mars", date2)
+
+        clear_table(self.love)
+        planets1 = (moon, venus)
+        planets2 = (sun, mars)
+
+        for p1 in planets1:
+            for p2 in planets2:
+                aspect = Aspect(p1, p2)
+                if aspect.angle is None:
+                    continue
+
+                row = planets1.index(p1) + 1
+                column = planets2.index(p2) + 1
+                color = "#6db442" if aspect.good else "#f04b51"
+
+                label = Gtk.Label()
+                label.xalign = 0
+                label.markup = f'<span foreground="{color}">{aspect.angle}°</span>'
+                self.love.attach(label, column, row, 1, 1)
+                label.show()
 
     def calculate_friendship(self):
         ...
