@@ -38,7 +38,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         Gtk.ApplicationWindow.__init__(self, *args, **kwargs)
         GladeTemplate.__init__(self, "main_window")
 
-        self.set_default_size(1280, 720)
+        self.maximize()
         # self.set_icon_from_file("img/icon.svg")
 
         self.date1 = DateTime(self)
