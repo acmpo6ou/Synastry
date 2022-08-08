@@ -15,7 +15,7 @@
 #   along with Synastry.  If not, see <https://www.gnu.org/licenses/>.
 #
 import itertools
-from gi.repository import Gtk
+
 from core.main_window import MainWindow
 
 DATE = "2022-08-04 12:00"
@@ -55,15 +55,9 @@ def test_calculate_friendship():
     window = MainWindow()
     window.calculate_friendship(DATE, DATE2)
 
-    for row, column in itertools.product(range(1, 4), range(1, 4)):
-        if row == 1 and column == 1:
-            assert window.friendship.get_child_at(column, row).text == "1.8°"
-        elif row == 3 and column == 3:
-            assert window.friendship.get_child_at(column, row).text == "2.4°"
-        elif row == 3 and column == 2:
-            assert window.friendship.get_child_at(column, row).text == "127.3°"
-        else:
-            assert not window.friendship.get_child_at(column, row)
+    assert window.friendship.get_child_at(1, 1).text == "1.8°"
+    assert window.friendship.get_child_at(3, 3).text == "2.4°"
+    assert window.friendship.get_child_at(2, 3).text == "127.3°"
 
 
 def test_calculate_happiness():
@@ -77,4 +71,3 @@ def test_calculate_happiness():
             assert window.happiness2.get_child_at(column, row).text == "84.2°"
         else:
             assert not window.happiness2.get_child_at(column, row)
-

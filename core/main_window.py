@@ -204,15 +204,17 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         for p1 in planets1:
             for p2 in planets2:
                 aspect = Aspect(p1, p2)
-                if aspect.good is None or not aspect.good:
-                    continue
-
                 row = planets1.index(p1) + 1
                 column = planets2.index(p2) + 1
 
+                if aspect.good is None or not aspect.good:
+                    color = ""
+                else:
+                    color = 'foreground="#6db442"'
+
                 label = Gtk.Label()
                 label.xalign = 0
-                label.markup = f'<span foreground="#6db442">{aspect.angle}°</span>'
+                label.markup = f'<span {color}>{aspect.angle}°</span>'
                 self.friendship.attach(label, column, row, 1, 1)
                 label.show()
 
