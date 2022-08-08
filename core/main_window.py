@@ -84,12 +84,12 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             planets.remove(p1)
             for p2 in planets:
                 aspect = Aspect(p1, p2)
-                if aspect.angle is None or aspect.good:
+                if aspect.good is None or aspect.good:
                     continue
 
-                conflictedness.extend((p1.name, p2.name))
                 row = PLANETS.index(p1) + 1
                 column = PLANETS.index(p2)
+                conflictedness.extend((p1.name, p2.name))
 
                 label = Gtk.Label()
                 label.xalign = 0
@@ -141,7 +141,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         for p1 in planets1:
             for p2 in planets2:
                 aspect = Aspect(p1, p2)
-                if aspect.angle is None or aspect.good:
+                if aspect.good is None or aspect.good:
                     continue
 
                 row = planets1.index(p1) + 1
@@ -170,7 +170,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         for p1 in planets1:
             for p2 in planets2:
                 aspect = Aspect(p1, p2)
-                if aspect.angle is None:
+                if aspect.good is None:
                     continue
 
                 row = planets1.index(p1) + 1
@@ -199,7 +199,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         for p1 in planets1:
             for p2 in planets2:
                 aspect = Aspect(p1, p2)
-                if aspect.angle is None or not aspect.good:
+                if aspect.good is None or not aspect.good:
                     continue
 
                 row = planets1.index(p1) + 1
@@ -227,7 +227,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
         for i, planet in enumerate((sun1, moon1)):
             aspect = Aspect(jupiter2, planet)
-            if aspect.angle is None or not aspect.good:
+            if aspect.good is None or not aspect.good:
                 continue
 
             label = Gtk.Label()
@@ -238,7 +238,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
         for i, planet in enumerate((sun1, moon1)):
             aspect = Aspect(saturn2, planet)
-            if aspect.angle is None or aspect.good:
+            if aspect.good is None or aspect.good:
                 continue
 
             label = Gtk.Label()

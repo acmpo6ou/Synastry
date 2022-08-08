@@ -55,4 +55,4 @@ class Aspect:
         elif 0 <= self.angle < 6:
             self.good = False
         else:
-            self.angle = None
+            self.good = None

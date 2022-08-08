@@ -95,4 +95,4 @@ def test_no_aspect():
     p2 = Planet("sun", DATE)
 
     aspect = Aspect(p1, p2)
-    assert aspect.angle is None
+    assert aspect.good is None
