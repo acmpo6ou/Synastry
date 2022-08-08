@@ -48,12 +48,7 @@ def test_calculate_conflicts():
 def test_calculate_love():
     window = MainWindow()
     window.calculate_love(DATE, DATE2)
-
-    for row, column in itertools.product(range(1, 3), range(1, 3)):
-        if row == 2 and column == 2:
-            assert window.love.get_child_at(column, row).text == "59.4°"
-            continue
-        assert not window.love.get_child_at(column, row)
+    assert window.love.get_child_at(2, 2).text == "59.4°"
 
 
 def test_calculate_friendship():
