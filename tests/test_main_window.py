@@ -37,16 +37,12 @@ def test_calculate_conflicts():
     conf2 = window.calculate_conflictedness(window.conflicts2, DATE2)
     window.calculate_conflicts(DATE, DATE2, conf1, conf2)
 
-    for row, column in itertools.product(range(1, 5), range(1, 5)):
-        if row == column:
-            degrees = window.conflicts.get_child_at(column, row).text
-            assert degrees in ("1.2°", "0.1°", "0.0°")
-        elif row == 1 and column == 3:
-            assert window.conflicts.get_child_at(column, row).text == "87.7°"
-        elif row == 3 and column == 1:
-            assert window.conflicts.get_child_at(column, row).text == "88.8°"
-        else:
-            assert not window.conflicts.get_child_at(column, row), f"{row}, {column}"
+    for i in range(1, 5):
+        degrees = window.conflicts.get_child_at(i, i).text
+        assert degrees in ("1.2°", "0.1°", "0.0°")
+
+    assert window.conflicts.get_child_at(3, 1).text == "87.7°"
+    assert window.conflicts.get_child_at(1, 3).text == "88.8°"
 
 
 def test_calculate_love():

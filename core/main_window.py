@@ -143,19 +143,19 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         for p1 in planets1:
             for p2 in planets2:
                 aspect = Aspect(p1, p2)
-                if aspect.good is None or aspect.good:
-                    continue
-
                 row = planets1.index(p1) + 1
                 column = planets2.index(p2) + 1
 
-                color = "#f04b51"
-                if p1.name in conflictedness1 or p2.name in conflictedness2:
-                    color = "red"
+                if aspect.good is None or aspect.good:
+                    color = ""
+                else:
+                    color = 'foreground="#f04b51"'
+                    if p1.name in conflictedness1 or p2.name in conflictedness2:
+                        color = 'foreground="red"'
 
                 label = Gtk.Label()
                 label.xalign = 0
-                label.markup = f'<span foreground="{color}">{aspect.angle}°</span>'
+                label.markup = f'<span {color}>{aspect.angle}°</span>'
                 self.conflicts.attach(label, column, row, 1, 1)
                 label.show()
 
