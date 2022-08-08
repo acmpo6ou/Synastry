@@ -27,12 +27,7 @@ def test_calculate_conflictedness():
     grid = window.conflicts1
     conflictedness = window.calculate_conflictedness(grid, DATE)
 
-    for row, column in itertools.product(range(1, 4), range(1, 4)):
-        if row == 1 and column == 2:
-            assert grid.get_child_at(column, row).text == "87.5°"
-            continue
-        assert not grid.get_child_at(column, row), f"{row}, {column}"
-
+    assert grid.get_child_at(2, 1).text == "87.5°"
     assert conflictedness == ["mars", "saturn"]
 
 

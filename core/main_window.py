@@ -84,31 +84,33 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             planets.remove(p1)
             for p2 in planets:
                 aspect = Aspect(p1, p2)
-                if aspect.good is None or aspect.good:
-                    continue
-
                 row = PLANETS.index(p1) + 1
                 column = PLANETS.index(p2)
-                conflictedness.extend((p1.name, p2.name))
+
+                if aspect.good is None or aspect.good:
+                    color = ""
+                else:
+                    conflictedness.extend((p1.name, p2.name))
+                    color = 'foreground="#f04b51"'
+
+                    header1 = table.get_child_at(0, row)
+                    header2 = table.get_child_at(column, 0)
+                    header1.markup = f'<span foreground="#f04b51">{header1.text}</span>'
+                    header2.markup = f'<span foreground="#f04b51">{header2.text}</span>'
 
                 label = Gtk.Label()
                 label.xalign = 0
-                label.markup = f'<span foreground="#f04b51">{aspect.angle}°</span>'
+                label.markup = f'<span {color}>{aspect.angle}°</span>'
                 table.attach(label, column, row, 1, 1)
                 label.show()
-
-                header1 = table.get_child_at(0, row)
-                header2 = table.get_child_at(column, 0)
-                header1.markup = f'<span foreground="#f04b51">{header1.text}</span>'
-                header2.markup = f'<span foreground="#f04b51">{header2.text}</span>'
         return conflictedness
 
     def calculate_conflicts(
-            self,
-            date1: str,
-            date2: str,
-            conflictedness1: list[str],
-            conflictedness2: list[str],
+        self,
+        date1: str,
+        date2: str,
+        conflictedness1: list[str],
+        conflictedness2: list[str],
     ):
         mars1 = Planet("mars", date1)
         jupiter1 = Planet("jupiter", date1)
