@@ -211,9 +211,38 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 self.friendship.attach(label, column, row, 1, 1)
                 label.show()
 
-
-    def calculate_happiness(self, table: Gtk.Grid, date1: str, date2: str):
+    @staticmethod
+    def calculate_happiness(table: Gtk.Grid, date1: str, date2: str):
         """
         Calculates how happy/unhappy person with date2
         makes person with date1.
         """
+
+        sun1 = Planet("sun", date1)
+        moon1 = Planet("moon", date1)
+        jupiter2 = Planet("jupiter", date2)
+        saturn2 = Planet("saturn", date2)
+
+        clear_table(table)
+
+        for i, planet in enumerate((sun1, moon1)):
+            aspect = Aspect(jupiter2, planet)
+            if aspect.angle is None or not aspect.good:
+                continue
+
+            label = Gtk.Label()
+            label.xalign = 0
+            label.markup = f'<span foreground="#6db442">{aspect.angle}°</span>'
+            table.attach(label, 1, i + 1, 1, 1)
+            label.show()
+
+        for i, planet in enumerate((sun1, moon1)):
+            aspect = Aspect(saturn2, planet)
+            if aspect.angle is None or aspect.good:
+                continue
+
+            label = Gtk.Label()
+            label.xalign = 0
+            label.markup = f'<span foreground="#f04b51">{aspect.angle}°</span>'
+            table.attach(label, 2, i + 1, 1, 1)
+            label.show()

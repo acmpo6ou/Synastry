@@ -62,7 +62,7 @@ def test_calculate_love():
         if row == 2 and column == 2:
             assert window.love.get_child_at(column, row).text == "59.4°"
             continue
-        assert not window.conflicts.get_child_at(column, row)
+        assert not window.love.get_child_at(column, row)
 
 
 def test_calculate_friendship():
@@ -77,5 +77,18 @@ def test_calculate_friendship():
         elif row == 3 and column == 2:
             assert window.friendship.get_child_at(column, row).text == "127.3°"
         else:
-            assert not window.conflicts.get_child_at(column, row)
+            assert not window.friendship.get_child_at(column, row)
+
+
+def test_calculate_happiness():
+    window = MainWindow()
+    window.calculate_happiness(window.happiness2, DATE2, DATE)
+
+    for row, column in itertools.product(range(1, 4), range(1, 4)):
+        if row == 1 and column == 1:
+            assert window.happiness2.get_child_at(column, row).text == "127.5°"
+        elif row == 2 and column == 2:
+            assert window.happiness2.get_child_at(column, row).text == "84.2°"
+        else:
+            assert not window.happiness2.get_child_at(column, row)
 
