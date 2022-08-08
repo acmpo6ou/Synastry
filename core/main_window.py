@@ -235,21 +235,25 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         for i, planet in enumerate((sun1, moon1)):
             aspect = Aspect(jupiter2, planet)
             if aspect.good is None or not aspect.good:
-                continue
+                color = ""
+            else:
+                color = 'foreground="#6db442"'
 
             label = Gtk.Label()
             label.xalign = 0
-            label.markup = f'<span foreground="#6db442">{aspect.angle}°</span>'
+            label.markup = f'<span {color}>{aspect.angle}°</span>'
             table.attach(label, 1, i + 1, 1, 1)
             label.show()
 
         for i, planet in enumerate((sun1, moon1)):
             aspect = Aspect(saturn2, planet)
             if aspect.good is None or aspect.good:
-                continue
+                color = ""
+            else:
+                color = 'foreground="#f04b51"'
 
             label = Gtk.Label()
             label.xalign = 0
-            label.markup = f'<span foreground="#f04b51">{aspect.angle}°</span>'
+            label.markup = f'<span {color}>{aspect.angle}°</span>'
             table.attach(label, 2, i + 1, 1, 1)
             label.show()
