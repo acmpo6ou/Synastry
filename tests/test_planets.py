@@ -81,15 +81,6 @@ def test_aspect_0_bad_bad():
     assert not aspect.good
 
 
-def test_aspect_0_jupiter():
-    p1 = Planet("jupiter", DATE)
-    p2 = Planet("jupiter", DATE)
-
-    aspect = Aspect(p1, p2)
-    assert aspect.angle == 0
-    assert not aspect.good
-
-
 def test_no_aspect():
     p1 = Planet("moon", DATE)
     p2 = Planet("sun", DATE)

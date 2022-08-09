@@ -45,12 +45,7 @@ class Aspect:
         elif 174 < self.angle < 186 or 84 < self.angle < 96:
             self.good = False
         elif 0 <= self.angle < 8 and planet1.good and planet2.good:
-            # in the context of conflicts Jupiter is a bad planet
-            if planet1.name == planet2.name and planet1.name == "jupiter":
-                if 0 <= self.angle < 6:
-                    self.good = False
-            else:
-                self.good = True
+            self.good = True
         elif 0 <= self.angle < 6:
             self.good = False
         else:
