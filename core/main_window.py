@@ -21,6 +21,9 @@ from core.date_time import DateTime
 from core.gtk_utils import GladeTemplate, clear_table
 from core.planets import Planet, Aspect
 
+RED = "#f04b51"
+GREEN = "#6db442"
+
 
 class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
     # <editor-fold>
@@ -91,12 +94,12 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                     color = ""
                 else:
                     conflictedness.extend((p1.name, p2.name))
-                    color = 'foreground="#f04b51"'
+                    color = f'foreground="{RED}"'
 
                     header1 = table.get_child_at(0, row)
                     header2 = table.get_child_at(column, 0)
-                    header1.markup = f'<span foreground="#f04b51">{header1.text}</span>'
-                    header2.markup = f'<span foreground="#f04b51">{header2.text}</span>'
+                    header1.markup = f'<span foreground="{RED}">{header1.text}</span>'
+                    header2.markup = f'<span foreground="{RED}">{header2.text}</span>'
 
                 label = Gtk.Label()
                 label.xalign = 0
@@ -106,11 +109,11 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         return conflictedness
 
     def calculate_conflicts(
-        self,
-        date1: str,
-        date2: str,
-        conflictedness1: list[str],
-        conflictedness2: list[str],
+            self,
+            date1: str,
+            date2: str,
+            conflictedness1: list[str],
+            conflictedness2: list[str],
     ):
         mars1 = Planet("mars", date1)
         jupiter1 = Planet("jupiter", date1)
@@ -149,7 +152,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 if aspect.good is None or aspect.good:
                     color = ""
                 else:
-                    color = 'foreground="#f04b51"'
+                    color = f'foreground="{RED}"'
                     if p1.name in conflictedness1 or p2.name in conflictedness2:
                         color = 'foreground="red"'
 
@@ -178,9 +181,9 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 if aspect.good is None:
                     color = ""
                 elif aspect.good:
-                    color = 'foreground="#6db442"'
+                    color = f'foreground="{GREEN}"'
                 else:
-                    color = 'foreground="#f04b51"'
+                    color = f'foreground="{RED}"'
 
                 label = Gtk.Label()
                 label.xalign = 0
@@ -210,7 +213,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 if aspect.good is None or not aspect.good:
                     color = ""
                 else:
-                    color = 'foreground="#6db442"'
+                    color = f'foreground="{GREEN}"'
 
                 label = Gtk.Label()
                 label.xalign = 0
@@ -237,7 +240,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             if aspect.good is None or not aspect.good:
                 color = ""
             else:
-                color = 'foreground="#6db442"'
+                color = f'foreground="{GREEN}"'
 
             label = Gtk.Label()
             label.xalign = 0
@@ -250,7 +253,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             if aspect.good is None or aspect.good:
                 color = ""
             else:
-                color = 'foreground="#f04b51"'
+                color = f'foreground="{RED}"'
 
             label = Gtk.Label()
             label.xalign = 0
