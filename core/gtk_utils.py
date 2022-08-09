@@ -78,6 +78,18 @@ GObject.Object.__getattr__ = _getattr
 GObject.Object.__setattr__ = _setattr
 
 
+def _set_markup(self, value: str):
+    self._html_text = value
+    original_set_markup(self, value)
+
+
+# replace set_markup with our version that saves the markup
+# it's useful to get the markup later, e.g. in the tests
+original_set_markup = Gtk.Label.set_markup
+Gtk.Label.set_markup = _set_markup
+Gtk.Label.get_markup = lambda self: self._html_text
+
+
 class GladeTemplate(Gtk.Bin):
     """
     Simplifies loading of glade ui files.
