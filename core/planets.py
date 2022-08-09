@@ -37,8 +37,7 @@ class Aspect:
     def __init__(self, planet1: "Planet", planet2: "Planet"):
         body1 = SkyCoord(planet1.body.ra, planet1.body.dec)
         body2 = SkyCoord(planet2.body.ra, planet2.body.dec)
-        offsets = body1.spherical_offsets_to(body2)
-        angle = offsets[0].degree
+        angle = body1.separation(body2).degree
         self.angle = round(abs(angle), 1)
 
         if 112 < self.angle < 128 or 52 < self.angle < 68:

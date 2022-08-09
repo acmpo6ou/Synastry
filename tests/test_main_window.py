@@ -27,7 +27,7 @@ def test_calculate_conflictedness():
     grid = window.conflicts1
     conflictedness = window.calculate_conflictedness(grid, DATE)
 
-    assert grid.get_child_at(2, 1).text == "87.5°"
+    assert grid.get_child_at(2, 1).text == "87.6°"
     assert conflictedness == ["mars", "saturn"]
 
 
@@ -39,30 +39,30 @@ def test_calculate_conflicts():
 
     for i in range(1, 5):
         degrees = window.conflicts.get_child_at(i, i).text
-        assert degrees in ("1.2°", "0.1°", "0.0°")
+        assert degrees in ("1.3°", "0.1°", "0.0°")
 
-    assert window.conflicts.get_child_at(3, 1).text == "87.7°"
-    assert window.conflicts.get_child_at(1, 3).text == "88.8°"
+    assert window.conflicts.get_child_at(3, 1).text == "87.8°"
+    assert window.conflicts.get_child_at(1, 3).text == "88.9°"
 
 
 def test_calculate_love():
     window = MainWindow()
     window.calculate_love(DATE, DATE2)
-    assert window.love.get_child_at(2, 2).text == "59.4°"
+    assert window.love.get_child_at(2, 2).text == "59.6°"
 
 
 def test_calculate_friendship():
     window = MainWindow()
     window.calculate_friendship(DATE, DATE2)
 
-    assert window.friendship.get_child_at(1, 1).text == "1.8°"
+    assert window.friendship.get_child_at(1, 1).text == "1.9°"
     assert window.friendship.get_child_at(3, 3).text == "2.4°"
-    assert window.friendship.get_child_at(2, 3).text == "127.3°"
+    assert window.friendship.get_child_at(2, 3).text == "126.9°"
 
 
 def test_calculate_happiness():
     window = MainWindow()
     window.calculate_happiness(window.happiness2, DATE2, DATE)
 
-    assert window.happiness2.get_child_at(1, 1).text == "127.5°"
-    assert window.happiness2.get_child_at(2, 2).text == "84.2°"
+    assert window.happiness2.get_child_at(1, 1).text == "125.4°"
+    assert window.happiness2.get_child_at(2, 2).text == "84.6°"

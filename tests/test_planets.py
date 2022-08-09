@@ -23,7 +23,7 @@ def test_aspect_120():
     p2 = Planet("jupiter", DATE)
 
     aspect = Aspect(p1, p2)
-    assert aspect.angle == 124.3
+    assert aspect.angle == 123.5
     assert aspect.good
 
 
@@ -32,7 +32,7 @@ def test_aspect_60():
     p2 = Planet("mercury", DATE)
 
     aspect = Aspect(p1, p2)
-    assert aspect.angle == 58.8
+    assert aspect.angle == 60.6
     assert aspect.good
 
 
@@ -41,7 +41,7 @@ def test_aspect_180():
     p2 = Planet("pluto", "2022-08-06 12:00")
 
     aspect = Aspect(p1, p2)
-    assert aspect.angle == 176.3
+    assert aspect.angle == 176.1
     assert not aspect.good
 
 
@@ -50,7 +50,7 @@ def test_aspect_90():
     p2 = Planet("pluto", DATE)
 
     aspect = Aspect(p1, p2)
-    assert aspect.angle == 85.8
+    assert aspect.angle == 86.1
     assert not aspect.good
 
 
@@ -59,7 +59,7 @@ def test_aspect_0_good_good():
     p2 = Planet("sun", "2022-07-29 06:00")
 
     aspect = Aspect(p1, p2)
-    assert aspect.angle == 7.3
+    assert aspect.angle == 7.7
     assert aspect.good
 
 
@@ -68,7 +68,7 @@ def test_aspect_0_good_bad():
     p2 = Planet("pluto", "2022-08-10 07:00")
 
     aspect = Aspect(p1, p2)
-    assert aspect.angle == 4.3
+    assert aspect.angle == 5.6
     assert not aspect.good
 
 
@@ -77,7 +77,7 @@ def test_aspect_0_bad_bad():
     p2 = Planet("uranus", DATE)
 
     aspect = Aspect(p1, p2)
-    assert aspect.angle == 1.8
+    assert aspect.angle == 2.0
     assert not aspect.good
 
 
