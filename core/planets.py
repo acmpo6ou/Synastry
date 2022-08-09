@@ -40,13 +40,13 @@ class Aspect:
         angle = body1.separation(body2).degree
         self.angle = round(abs(angle), 1)
 
-        if 112 < self.angle < 128 or 52 < self.angle < 68:
+        if 112 <= self.angle <= 128 or 52 <= self.angle <= 68:
             self.good = True
-        elif 174 < self.angle < 186 or 84 < self.angle < 96:
+        elif 174 <= self.angle <= 186 or 84 <= self.angle <= 96:
             self.good = False
-        elif 0 <= self.angle < 8 and planet1.good and planet2.good:
+        elif 0 <= self.angle <= 8 and planet1.good and planet2.good:
             self.good = True
-        elif 0 <= self.angle < 6:
+        elif 0 <= self.angle <= 6:
             self.good = False
         else:
             self.good = None
