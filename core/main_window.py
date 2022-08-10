@@ -210,6 +210,13 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 row = planets1.index(p1) + 1
                 column = planets2.index(p2) + 1
 
+                # in the context of friendship we care only about
+                # aspects between Suns, other aspects of Sun
+                # (with Venus or Moon) are sexual and shouldn't
+                # be highlighted
+                if (p1.name == "sun" or p2.name == "sun") and p1.name != p2.name:
+                    aspect.good = None
+
                 if aspect.good is None or not aspect.good:
                     color = ""
                 else:
