@@ -14,9 +14,19 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Synastry.  If not, see <https://www.gnu.org/licenses/>.
 #
+from contextlib import contextmanager
+from time import perf_counter
+
 from gi.repository import Gtk
 
 from core.gtk_utils import GladeTemplate
+
+
+@contextmanager
+def catch_time(name) -> float:
+    start = perf_counter()
+    yield
+    print(name, perf_counter() - start)
 
 
 class DateTime(GladeTemplate):
@@ -48,4 +58,5 @@ class DateTime(GladeTemplate):
         return f"{year}-{month:02}-{day:02} {hours:02}:{minutes:02}"
 
     def on_value_changed(self, _):
-        self.main_window.on_date_changed()
+        with catch_time("") as t:
+            self.main_window.on_date_changed()

@@ -78,6 +78,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         jupiter = Planet("jupiter", date_time)
         saturn = Planet("saturn", date_time)
         pluto = Planet("pluto", date_time)
+        return
 
         clear_table(table)
         PLANETS = (mars, jupiter, saturn, pluto)
@@ -124,6 +125,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         jupiter2 = Planet("jupiter", date2)
         saturn2 = Planet("saturn", date2)
         pluto2 = Planet("pluto", date2)
+        return
 
         clear_table(self.conflicts)
 
@@ -167,6 +169,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         venus = Planet("venus", date1)
         sun = Planet("sun", date2)
         mars = Planet("mars", date2)
+        return
 
         clear_table(self.love)
         planets1 = (moon, venus)
@@ -199,6 +202,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         sun2 = Planet("sun", date2)
         moon2 = Planet("moon", date2)
         venus2 = Planet("venus", date2)
+        return
 
         clear_table(self.friendship)
         planets1 = (sun1, moon1, venus1)
@@ -239,6 +243,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         moon1 = Planet("moon", date1)
         jupiter2 = Planet("jupiter", date2)
         saturn2 = Planet("saturn", date2)
+        return
 
         clear_table(table)
 
