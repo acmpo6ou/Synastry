@@ -16,6 +16,7 @@
 #
 
 from core.main_window import MainWindow, RED, GREEN
+from core.planets import Planet
 
 DATE = "2022-08-04 12:00"
 DATE2 = "2022-08-06 12:00"
@@ -25,7 +26,9 @@ NO_COLOR = "<span >"
 def test_calculate_conflictedness():
     window = MainWindow()
     grid = window.conflicts1
-    conflictedness = window.calculate_conflictedness(grid, DATE)
+
+    planets = window.conflicting_planets(DATE)
+    conflictedness = window.calculate_conflictedness(grid, *planets)
 
     label = grid.get_child_at(2, 1)
     assert label.text == "87.6°"
@@ -39,9 +42,12 @@ def test_calculate_conflictedness():
 
 def test_calculate_conflicts():
     window = MainWindow()
-    conf1 = window.calculate_conflictedness(window.conflicts1, DATE)
-    conf2 = window.calculate_conflictedness(window.conflicts2, DATE2)
-    window.calculate_conflicts(DATE, DATE2, conf1, conf2)
+    planets1 = window.conflicting_planets(DATE)
+    planets2 = window.conflicting_planets(DATE2)
+
+    conf1 = window.calculate_conflictedness(window.conflicts1, *planets1)
+    conf2 = window.calculate_conflictedness(window.conflicts2, *planets2)
+    window.calculate_conflicts(*planets1, *planets2, conf1, conf2)
 
     label = window.conflicts.get_child_at(1, 1)
     assert label.text == "1.3°"
