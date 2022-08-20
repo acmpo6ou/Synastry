@@ -98,7 +98,7 @@ def test_calculate_friendship():
     assert GREEN in label.markup
 
     label = window.friendship.get_child_at(2, 3)
-    assert label.text == "126.9°"
+    assert label.text == "127.1°"
     assert GREEN in label.markup
 
     no_color = len([label for label in window.friendship.children
@@ -115,7 +115,7 @@ def test_calculate_happiness():
     assert GREEN in label.markup
 
     label = window.happiness2.get_child_at(2, 2)
-    assert label.text == "84.6°"
+    assert label.text == "84.4°"
     assert RED in label.markup
 
     no_color = len([label for label in window.happiness2.children

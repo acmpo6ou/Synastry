@@ -21,7 +21,7 @@ solar_system_ephemeris.set('de430')
 
 
 class Planet:
-    loc = EarthLocation.of_site('greenwich')
+    loc = EarthLocation(0, 0, 0)
 
     def __init__(self, name: str, date_time: str):
         self.name = name

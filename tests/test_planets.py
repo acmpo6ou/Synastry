@@ -55,11 +55,11 @@ def test_aspect_90():
 
 
 def test_aspect_0_good_good():
-    p1 = Planet("moon", "2022-07-29 06:00")
-    p2 = Planet("sun", "2022-07-29 06:00")
+    p1 = Planet("moon", "2022-07-29 00:00")
+    p2 = Planet("sun", "2022-07-29 00:00")
 
     aspect = Aspect(p1, p2)
-    assert aspect.angle == 7.7
+    assert aspect.angle == 5.4
     assert aspect.good
 
 
@@ -68,7 +68,7 @@ def test_aspect_0_good_bad():
     p2 = Planet("pluto", "2022-08-10 07:00")
 
     aspect = Aspect(p1, p2)
-    assert aspect.angle == 5.6
+    assert aspect.angle == 5.3
     assert not aspect.good
 
 
