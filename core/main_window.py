@@ -47,12 +47,17 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         self.date1 = DateTime(self)
         self.date2 = DateTime(self)
 
-        hbox = Gtk.HBox()
+        calculate = Gtk.Button("Calculate")
+        calculate.connect("clicked", self.on_date_changed)
+        calculate.style_context.add_class("suggested-action")
+
+        hbox = Gtk.Box(Gtk.Orientation.HORIZONTAL, 100)
         hbox.pack_start(self.date1, False, True, 0)
+        hbox.center_widget = calculate
         hbox.pack_end(self.date2, False, True, 0)
         self.parent_widget.pack_start(hbox, False, True, 0)
 
-    def on_date_changed(self):
+    def on_date_changed(self, _):
         date1 = self.date1.date_time
         date2 = self.date2.date_time
 

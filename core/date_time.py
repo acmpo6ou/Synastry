@@ -46,6 +46,3 @@ class DateTime(GladeTemplate):
         month = int(self.month.value)
         year = int(self.year.value)
         return f"{year}-{month:02}-{day:02} {hours:02}:{minutes:02}"
-
-    def on_value_changed(self, _):
-        self.main_window.on_date_changed()
