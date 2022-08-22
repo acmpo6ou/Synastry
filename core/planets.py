@@ -14,6 +14,8 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Synastry.  If not, see <https://www.gnu.org/licenses/>.
 #
+from functools import cache
+
 from astropy.coordinates import EarthLocation, solar_system_ephemeris, get_body, SkyCoord
 from astropy.time import Time
 
@@ -31,6 +33,11 @@ class Planet:
     @property
     def good(self) -> bool:
         return self.name in ("sun", "venus", "moon", "jupiter")
+
+
+@cache
+def get_planet(name: str, date_time: str):
+    return Planet(name, date_time)
 
 
 class Aspect:

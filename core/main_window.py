@@ -14,12 +14,13 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Synastry.  If not, see <https://www.gnu.org/licenses/>.
 #
+from time import perf_counter
 
 from gi.repository import Gtk
 
 from core.date_time import DateTime
 from core.gtk_utils import GladeTemplate, clear_table
-from core.planets import Planet, Aspect
+from core.planets import Planet, get_planet, Aspect
 
 RED = "#f04b51"
 GREEN = "#6db442"
@@ -58,6 +59,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         self.parent_widget.pack_start(hbox, False, True, 0)
 
     def on_date_changed(self, _):
+        start = perf_counter()
         date1 = self.date1.date_time
         date2 = self.date2.date_time
 
@@ -73,13 +75,14 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
         self.calculate_happiness(self.happiness1, date1, date2)
         self.calculate_happiness(self.happiness2, date2, date1)
+        print(perf_counter() - start)
 
     @staticmethod
     def conflicting_planets(date: str):
-        mars = Planet("mars", date)
-        jupiter = Planet("jupiter", date)
-        saturn = Planet("saturn", date)
-        pluto = Planet("pluto", date)
+        mars = get_planet("mars", date)
+        jupiter = get_planet("jupiter", date)
+        saturn = get_planet("saturn", date)
+        pluto = get_planet("pluto", date)
         return mars, jupiter, saturn, pluto
 
     @staticmethod
@@ -177,10 +180,10 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 label.show()
 
     def calculate_love(self, date1: str, date2: str):
-        moon = Planet("moon", date1)
-        venus = Planet("venus", date1)
-        sun = Planet("sun", date2)
-        mars = Planet("mars", date2)
+        moon = get_planet("moon", date1)
+        venus = get_planet("venus", date1)
+        sun = get_planet("sun", date2)
+        mars = get_planet("mars", date2)
 
         clear_table(self.love)
         planets1 = (moon, venus)
@@ -206,13 +209,13 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 label.show()
 
     def calculate_friendship(self, date1: str, date2: str):
-        sun1 = Planet("sun", date1)
-        moon1 = Planet("moon", date1)
-        venus1 = Planet("venus", date1)
+        sun1 = get_planet("sun", date1)
+        moon1 = get_planet("moon", date1)
+        venus1 = get_planet("venus", date1)
 
-        sun2 = Planet("sun", date2)
-        moon2 = Planet("moon", date2)
-        venus2 = Planet("venus", date2)
+        sun2 = get_planet("sun", date2)
+        moon2 = get_planet("moon", date2)
+        venus2 = get_planet("venus", date2)
 
         clear_table(self.friendship)
         planets1 = (sun1, moon1, venus1)
@@ -249,10 +252,10 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         makes person with date1.
         """
 
-        sun1 = Planet("sun", date1)
-        moon1 = Planet("moon", date1)
-        jupiter2 = Planet("jupiter", date2)
-        saturn2 = Planet("saturn", date2)
+        sun1 = get_planet("sun", date1)
+        moon1 = get_planet("moon", date1)
+        jupiter2 = get_planet("jupiter", date2)
+        saturn2 = get_planet("saturn", date2)
 
         clear_table(table)
 
