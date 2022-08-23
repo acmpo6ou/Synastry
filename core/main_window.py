@@ -63,12 +63,9 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         date1 = self.date1.date_time
         date2 = self.date2.date_time
 
-        planets1 = self.conflicting_planets(date1)
-        planets2 = self.conflicting_planets(date2)
-
-        conf1 = self.calculate_conflictedness(self.conflicts1, *planets1)
-        conf2 = self.calculate_conflictedness(self.conflicts2, *planets2)
-        self.calculate_conflicts(*planets1, *planets2, conf1, conf2)
+        conf1 = self.calculate_conflictedness(self.conflicts1, date1)
+        conf2 = self.calculate_conflictedness(self.conflicts2, date2)
+        self.calculate_conflicts(date1, date2, conf1, conf2)
 
         self.calculate_love(date1, date2)
         self.calculate_friendship(date1, date2)
@@ -86,19 +83,18 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         return mars, jupiter, saturn, pluto
 
     @staticmethod
-    def calculate_conflictedness(
-        table: Gtk.Grid,
-        mars: Planet,
-        jupiter: Planet,
-        saturn: Planet,
-        pluto: Planet,
-    ) -> list[str]:
+    def calculate_conflictedness(table: Gtk.Grid, date_time: str, ) -> list[str]:
         """
         Calculates conflictedness of a person.
         :returns: a list of conflicting planets of this person.
         """
 
         conflictedness = []
+        mars = get_planet("mars", date_time)
+        jupiter = get_planet("jupiter", date_time)
+        saturn = get_planet("saturn", date_time)
+        pluto = get_planet("pluto", date_time)
+
         clear_table(table)
 
         PLANETS = (mars, jupiter, saturn, pluto)
@@ -130,18 +126,22 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         return conflictedness
 
     def calculate_conflicts(
-            self,
-            mars1: Planet,
-            jupiter1: Planet,
-            saturn1: Planet,
-            pluto1: Planet,
-            mars2: Planet,
-            jupiter2: Planet,
-            saturn2: Planet,
-            pluto2: Planet,
-            conflictedness1: list[str],
-            conflictedness2: list[str],
+        self,
+        date1: str,
+        date2: str,
+        conflictedness1: list[str],
+        conflictedness2: list[str],
     ):
+        mars1 = get_planet("mars", date1)
+        jupiter1 = get_planet("jupiter", date1)
+        saturn1 = get_planet("saturn", date1)
+        pluto1 = get_planet("pluto", date1)
+
+        mars2 = get_planet("mars", date2)
+        jupiter2 = get_planet("jupiter", date2)
+        saturn2 = get_planet("saturn", date2)
+        pluto2 = get_planet("pluto", date2)
+
         clear_table(self.conflicts)
 
         planets1 = (mars1, jupiter1, saturn1, pluto1)
