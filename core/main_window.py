@@ -217,6 +217,30 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 self.conflicts.attach(label, column, row, 1, 1)
                 label.show()
 
+    @staticmethod
+    def collect_love(date1: str, date2: str) -> tuple[list[float]]:
+        # TODO: REFACTOR
+        moon = get_planet("moon", date1)
+        venus = get_planet("venus", date1)
+        sun = get_planet("sun", date2)
+        mars = get_planet("mars", date2)
+
+        planets1 = (moon, venus)
+        planets2 = (sun, mars)
+
+        ra1 = []
+        dec1 = []
+        ra2 = []
+        dec2 = []
+
+        for p1 in planets1:
+            for p2 in planets2:
+                ra1.append(p1.body.ra)
+                dec1.append(p1.body.dec)
+                ra2.append(p2.body.ra)
+                dec2.append(p2.body.dec)
+        return ra1, dec1, ra2, dec2
+
     def calculate_love(self, date1: str, date2: str):
         moon = get_planet("moon", date1)
         venus = get_planet("venus", date1)
