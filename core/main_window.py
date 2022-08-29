@@ -135,6 +135,34 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 """
         return conflictedness
 
+    @staticmethod
+    def collect_conflicts(date1: str, date2: str) -> tuple[list[float]]:
+        mars1 = get_planet("mars", date1)
+        jupiter1 = get_planet("jupiter", date1)
+        saturn1 = get_planet("saturn", date1)
+        pluto1 = get_planet("pluto", date1)
+
+        mars2 = get_planet("mars", date2)
+        jupiter2 = get_planet("jupiter", date2)
+        saturn2 = get_planet("saturn", date2)
+        pluto2 = get_planet("pluto", date2)
+
+        planets1 = (mars1, jupiter1, saturn1, pluto1)
+        planets2 = (mars2, jupiter2, saturn2, pluto2)
+
+        ra1 = []
+        dec1 = []
+        ra2 = []
+        dec2 = []
+
+        for p1 in planets1:
+            for p2 in planets2:
+                ra1.append(p1.body.ra)
+                dec1.append(p1.body.dec)
+                ra2.append(p2.body.ra)
+                dec2.append(p2.body.dec)
+        return ra1, dec1, ra2, dec2
+
     def calculate_conflicts(
         self,
         date1: str,
