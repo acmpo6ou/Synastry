@@ -75,23 +75,40 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         print(perf_counter() - start)
 
     @staticmethod
-    def calculate_conflictedness(table: Gtk.Grid, date_time: str, ) -> list[str]:
+    def collect_conflictedness(date_time: str) -> tuple[list[float]]:
+        mars = get_planet("mars", date_time)
+        jupiter = get_planet("jupiter", date_time)
+        saturn = get_planet("saturn", date_time)
+        pluto = get_planet("pluto", date_time)
+
+        PLANETS = (mars, jupiter, saturn, pluto)
+        planets = [mars, jupiter, saturn, pluto]
+
+        ra1 = []
+        dec1 = []
+        ra2 = []
+        dec2 = []
+
+        for p1 in PLANETS:
+            planets.remove(p1)
+            for p2 in planets:
+                ra1.append(p1.body.ra)
+                dec1.append(p1.body.dec)
+                ra2.append(p2.body.ra)
+                dec2.append(p2.body.dec)
+        return ra1, dec1, ra2, dec2
+
+    @staticmethod
+    def calculate_conflictedness(table: Gtk.Grid, date_time: str) -> list[str]:
         """
         Calculates conflictedness of a person.
         :returns: a list of conflicting planets of this person.
         """
 
         conflictedness = []
-        mars = get_planet("mars", date_time)
-        jupiter = get_planet("jupiter", date_time)
-        saturn = get_planet("saturn", date_time)
-        pluto = get_planet("pluto", date_time)
-
         clear_table(table)
 
-        PLANETS = (mars, jupiter, saturn, pluto)
-        planets = [mars, jupiter, saturn, pluto]
-
+        """
         for p1 in PLANETS:
             planets.remove(p1)
             for p2 in planets:
@@ -115,6 +132,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 label.markup = f'<span {color}>{aspect.angle}°</span>'
                 table.attach(label, column, row, 1, 1)
                 label.show()
+                """
         return conflictedness
 
     def calculate_conflicts(
