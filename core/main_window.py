@@ -75,14 +75,6 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         print(perf_counter() - start)
 
     @staticmethod
-    def conflicting_planets(date: str):
-        mars = get_planet("mars", date)
-        jupiter = get_planet("jupiter", date)
-        saturn = get_planet("saturn", date)
-        pluto = get_planet("pluto", date)
-        return mars, jupiter, saturn, pluto
-
-    @staticmethod
     def calculate_conflictedness(table: Gtk.Grid, date_time: str, ) -> list[str]:
         """
         Calculates conflictedness of a person.
