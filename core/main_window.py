@@ -14,8 +14,10 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Synastry.  If not, see <https://www.gnu.org/licenses/>.
 #
+from pprint import pprint
 from time import perf_counter
 
+from astropy.coordinates import SkyCoord, Angle
 from gi.repository import Gtk
 
 from core.date_time import DateTime
@@ -63,6 +65,11 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         date1 = self.date1.date_time
         date2 = self.date2.date_time
 
+        angles = self.calculate_angles(date1, date2)
+        pprint(angles)
+        print(perf_counter() - start)
+        return
+
         conf1 = self.calculate_conflictedness(self.conflicts1, date1)
         conf2 = self.calculate_conflictedness(self.conflicts2, date2)
         self.calculate_conflicts(date1, date2, conf1, conf2)
@@ -72,7 +79,36 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
         self.calculate_happiness(self.happiness1, date1, date2)
         self.calculate_happiness(self.happiness2, date2, date1)
-        print(perf_counter() - start)
+
+    def calculate_angles(self, date1: str, date2: str) -> Angle:
+        """
+        Collects coordinates of appropriate pairs of planets,
+        and calculates angles between them.
+        """
+
+        conf1 = self.collect_conflictedness(date1)
+        conf2 = self.collect_conflictedness(date2)
+        confs = self.collect_conflicts(date1, date2)
+        friendship = self.collect_friendship(date1, date2)
+        love = self.collect_love(date1, date2)
+        happiness1 = self.collect_happiness(date1, date2)
+        happiness2 = self.collect_happiness(date2, date1)
+        coords = (conf1, conf2, confs, friendship, love, happiness1, happiness2)
+
+        ra1_all = []
+        dec1_all = []
+        ra2_all = []
+        dec2_all = []
+
+        for ra1, dec1, ra2, dec2 in coords:
+            ra1_all += ra1
+            dec1_all += dec1
+            ra2_all += ra2
+            dec2_all += dec2
+
+        coords1 = SkyCoord(ra1_all, dec1_all)
+        coords2 = SkyCoord(ra2_all, dec2_all)
+        return coords1.separation(coords2)
 
     @staticmethod
     def collect_coords(
