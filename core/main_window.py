@@ -75,6 +75,24 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         print(perf_counter() - start)
 
     @staticmethod
+    def collect_coords(
+        planets1: tuple[Planet],
+        planets2: tuple[Planet],
+    ) -> tuple[list[float]]:
+        ra1 = []
+        dec1 = []
+        ra2 = []
+        dec2 = []
+
+        for p1 in planets1:
+            for p2 in planets2:
+                ra1.append(p1.body.ra)
+                dec1.append(p1.body.dec)
+                ra2.append(p2.body.ra)
+                dec2.append(p2.body.dec)
+        return ra1, dec1, ra2, dec2
+
+    @staticmethod
     def collect_conflictedness(date_time: str) -> tuple[list[float]]:
         mars = get_planet("mars", date_time)
         jupiter = get_planet("jupiter", date_time)
@@ -135,8 +153,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 """
         return conflictedness
 
-    @staticmethod
-    def collect_conflicts(date1: str, date2: str) -> tuple[list[float]]:
+    def collect_conflicts(self, date1: str, date2: str) -> tuple[list[float]]:
         mars1 = get_planet("mars", date1)
         jupiter1 = get_planet("jupiter", date1)
         saturn1 = get_planet("saturn", date1)
@@ -149,19 +166,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
         planets1 = (mars1, jupiter1, saturn1, pluto1)
         planets2 = (mars2, jupiter2, saturn2, pluto2)
-
-        ra1 = []
-        dec1 = []
-        ra2 = []
-        dec2 = []
-
-        for p1 in planets1:
-            for p2 in planets2:
-                ra1.append(p1.body.ra)
-                dec1.append(p1.body.dec)
-                ra2.append(p2.body.ra)
-                dec2.append(p2.body.dec)
-        return ra1, dec1, ra2, dec2
+        return self.collect_coords(planets1, planets2)
 
     def calculate_conflicts(
         self,
@@ -213,13 +218,11 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
                 label = Gtk.Label()
                 label.xalign = 0
-                label.markup = f'<span {color}>{aspect.angle}°</span>'
+                label.markup = f"<span {color}>{aspect.angle}°</span>"
                 self.conflicts.attach(label, column, row, 1, 1)
                 label.show()
 
-    @staticmethod
-    def collect_love(date1: str, date2: str) -> tuple[list[float]]:
-        # TODO: REFACTOR
+    def collect_love(self, date1: str, date2: str) -> tuple[list[float]]:
         moon = get_planet("moon", date1)
         venus = get_planet("venus", date1)
         sun = get_planet("sun", date2)
@@ -227,19 +230,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
         planets1 = (moon, venus)
         planets2 = (sun, mars)
-
-        ra1 = []
-        dec1 = []
-        ra2 = []
-        dec2 = []
-
-        for p1 in planets1:
-            for p2 in planets2:
-                ra1.append(p1.body.ra)
-                dec1.append(p1.body.dec)
-                ra2.append(p2.body.ra)
-                dec2.append(p2.body.dec)
-        return ra1, dec1, ra2, dec2
+        return self.collect_coords(planets1, planets2)
 
     def calculate_love(self, date1: str, date2: str):
         moon = get_planet("moon", date1)
@@ -266,7 +257,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
                 label = Gtk.Label()
                 label.xalign = 0
-                label.markup = f'<span {color}>{aspect.angle}°</span>'
+                label.markup = f"<span {color}>{aspect.angle}°</span>"
                 self.love.attach(label, column, row, 1, 1)
                 label.show()
 
@@ -303,7 +294,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
                 label = Gtk.Label()
                 label.xalign = 0
-                label.markup = f'<span {color}>{aspect.angle}°</span>'
+                label.markup = f"<span {color}>{aspect.angle}°</span>"
                 self.friendship.attach(label, column, row, 1, 1)
                 label.show()
 
@@ -330,7 +321,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
             label = Gtk.Label()
             label.xalign = 0
-            label.markup = f'<span {color}>{aspect.angle}°</span>'
+            label.markup = f"<span {color}>{aspect.angle}°</span>"
             table.attach(label, 1, i + 1, 1, 1)
             label.show()
 
@@ -343,6 +334,6 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
             label = Gtk.Label()
             label.xalign = 0
-            label.markup = f'<span {color}>{aspect.angle}°</span>'
+            label.markup = f"<span {color}>{aspect.angle}°</span>"
             table.attach(label, 2, i + 1, 1, 1)
             label.show()
