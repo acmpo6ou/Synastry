@@ -261,6 +261,19 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 self.love.attach(label, column, row, 1, 1)
                 label.show()
 
+    def collect_friendship(self, date1: str, date2: str) -> tuple[list[float]]:
+        sun1 = get_planet("sun", date1)
+        moon1 = get_planet("moon", date1)
+        venus1 = get_planet("venus", date1)
+
+        sun2 = get_planet("sun", date2)
+        moon2 = get_planet("moon", date2)
+        venus2 = get_planet("venus", date2)
+
+        planets1 = (sun1, moon1, venus1)
+        planets2 = (sun2, moon2, venus2)
+        return self.collect_coords(planets1, planets2)
+
     def calculate_friendship(self, date1: str, date2: str):
         sun1 = get_planet("sun", date1)
         moon1 = get_planet("moon", date1)
@@ -297,6 +310,16 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 label.markup = f"<span {color}>{aspect.angle}°</span>"
                 self.friendship.attach(label, column, row, 1, 1)
                 label.show()
+
+    def collect_happiness(self, date1: str, date2: str) -> tuple[list[float]]:
+        sun1 = get_planet("sun", date1)
+        moon1 = get_planet("moon", date1)
+        jupiter2 = get_planet("jupiter", date2)
+        saturn2 = get_planet("saturn", date2)
+
+        planets1 = (sun1, moon1)
+        planets2 = (jupiter2, saturn2)
+        return self.collect_coords(planets1, planets2)
 
     @staticmethod
     def calculate_happiness(table: Gtk.Grid, date1: str, date2: str):
