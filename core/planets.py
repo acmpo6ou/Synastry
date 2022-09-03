@@ -40,20 +40,19 @@ def get_planet(name: str, date_time: str):
     return Planet(name, date_time)
 
 
-class Aspect:
-    def __init__(self, planet1: "Planet", planet2: "Planet"):
-        body1 = SkyCoord(planet1.body.ra, planet1.body.dec)
-        body2 = SkyCoord(planet2.body.ra, planet2.body.dec)
-        angle = body1.separation(body2).degree
-        self.angle = round(abs(angle), 1)
+def aspect_good(angle: float, planet1_good: bool, planet2_good: bool):
+    """
+    Decides if the angle represents a good aspect.
+    NOTE: returns None if the angle doesn't represent an aspect.
+    """
+    # TODO: round all the angles at once in main_window
+    angle = round(abs(angle), 1)
 
-        if 112 <= self.angle <= 128 or 52 <= self.angle <= 68:
-            self.good = True
-        elif 174 <= self.angle <= 186 or 84 <= self.angle <= 96:
-            self.good = False
-        elif 0 <= self.angle <= 8 and planet1.good and planet2.good:
-            self.good = True
-        elif 0 <= self.angle <= 6:
-            self.good = False
-        else:
-            self.good = None
+    if 112 <= angle <= 128 or 52 <= angle <= 68:
+        return True
+    elif 174 <= angle <= 186 or 84 <= angle <= 96:
+        return False
+    elif 0 <= angle <= 8 and planet1_good and planet2_good:
+        return True
+    elif 0 <= angle <= 6:
+        return False
