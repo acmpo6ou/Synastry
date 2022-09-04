@@ -22,7 +22,7 @@ from gi.repository import Gtk
 
 from core.date_time import DateTime
 from core.gtk_utils import GladeTemplate, clear_table
-from core.planets import Planet, get_planet, Aspect
+from core.planets import Planet, get_planet, aspect_good
 
 RED = "#f04b51"
 GREEN = "#6db442"
@@ -80,9 +80,9 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         self.calculate_happiness(self.happiness1, date1, date2)
         self.calculate_happiness(self.happiness2, date2, date1)
 
-    def calculate_angles(self, date1: str, date2: str) -> Angle:
+    def calculate_angles(self, date1: str, date2: str):
         """
-        Collects coordinates of appropriate pairs of planets,
+        Collects pairs of planets and their coordinates,
         and calculates angles between them.
         """
 
@@ -95,12 +95,14 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         happiness2 = self.collect_happiness(date2, date1)
         coords = (conf1, conf2, confs, friendship, love, happiness1, happiness2)
 
+        planet_pairs_all = []
         ra1_all = []
         dec1_all = []
         ra2_all = []
         dec2_all = []
 
-        for ra1, dec1, ra2, dec2 in coords:
+        for planet_pairs, ra1, dec1, ra2, dec2 in coords:
+            planet_pairs_all += planet_pairs
             ra1_all += ra1
             dec1_all += dec1
             ra2_all += ra2
@@ -108,13 +110,11 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
         coords1 = SkyCoord(ra1_all, dec1_all)
         coords2 = SkyCoord(ra2_all, dec2_all)
-        return coords1.separation(coords2)
+        return planet_pairs_all, coords1.separation(coords2)
 
     @staticmethod
-    def collect_coords(
-        planets1: tuple[Planet],
-        planets2: tuple[Planet],
-    ) -> tuple[list[float]]:
+    def collect_coords(planets1: tuple[Planet], planets2: tuple[Planet],):
+        planet_pairs = []
         ra1 = []
         dec1 = []
         ra2 = []
@@ -122,14 +122,15 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
         for p1 in planets1:
             for p2 in planets2:
+                planet_pairs.append((p1, p2))
                 ra1.append(p1.body.ra)
                 dec1.append(p1.body.dec)
                 ra2.append(p2.body.ra)
                 dec2.append(p2.body.dec)
-        return ra1, dec1, ra2, dec2
+        return planet_pairs, ra1, dec1, ra2, dec2
 
     @staticmethod
-    def collect_conflictedness(date_time: str) -> tuple[list[float]]:
+    def collect_conflictedness(date_time: str):
         mars = get_planet("mars", date_time)
         jupiter = get_planet("jupiter", date_time)
         saturn = get_planet("saturn", date_time)
@@ -138,6 +139,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         PLANETS = (mars, jupiter, saturn, pluto)
         planets = [mars, jupiter, saturn, pluto]
 
+        planet_pairs = []
         ra1 = []
         dec1 = []
         ra2 = []
@@ -146,11 +148,12 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         for p1 in PLANETS:
             planets.remove(p1)
             for p2 in planets:
+                planet_pairs.append((p1, p2))
                 ra1.append(p1.body.ra)
                 dec1.append(p1.body.dec)
                 ra2.append(p2.body.ra)
                 dec2.append(p2.body.dec)
-        return ra1, dec1, ra2, dec2
+        return planet_pairs, ra1, dec1, ra2, dec2
 
     @staticmethod
     def calculate_conflictedness(table: Gtk.Grid, date_time: str) -> list[str]:
