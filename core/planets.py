@@ -16,7 +16,7 @@
 #
 from functools import cache
 
-from astropy.coordinates import EarthLocation, solar_system_ephemeris, get_body, SkyCoord
+from astropy.coordinates import EarthLocation, solar_system_ephemeris, get_body
 from astropy.time import Time
 
 solar_system_ephemeris.set('de430')
@@ -33,6 +33,12 @@ class Planet:
     @property
     def good(self) -> bool:
         return self.name in ("sun", "venus", "moon", "jupiter")
+
+    def __str__(self):
+        return f"Planet({self.name}"
+
+    def __repr__(self):
+        return f"Planet({self.name})"
 
 
 @cache
