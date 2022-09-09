@@ -65,12 +65,13 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         date1 = self.date1.date_time
         date2 = self.date2.date_time
 
-        angles = self.calculate_angles(date1, date2)
-        pprint(angles)
+        planet_pairs, angles = self.calculate_angles(date1, date2)
+        conf1 = self.present_conflictedness(
+            self.conflicts1, planet_pairs[:6], angles[:6],
+        )
         print(perf_counter() - start)
         return
 
-        conf1 = self.calculate_conflictedness(self.conflicts1, date1)
         conf2 = self.calculate_conflictedness(self.conflicts2, date2)
         self.calculate_conflicts(date1, date2, conf1, conf2)
 
@@ -113,7 +114,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         return planet_pairs_all, coords1.separation(coords2)
 
     @staticmethod
-    def collect_coords(planets1: tuple[Planet], planets2: tuple[Planet],):
+    def collect_coords(planets1: tuple[Planet], planets2: tuple[Planet]):
         planet_pairs = []
         ra1 = []
         dec1 = []
@@ -156,7 +157,11 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         return planet_pairs, ra1, dec1, ra2, dec2
 
     @staticmethod
-    def calculate_conflictedness(table: Gtk.Grid, date_time: str) -> list[str]:
+    def present_conflictedness(
+        table: Gtk.Grid,
+        planet_pairs: list[tuple[Planet]],
+        angles: Angle,
+    ) -> list[str]:
         """
         Calculates conflictedness of a person.
         :returns: a list of conflicting planets of this person.
@@ -164,6 +169,30 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
         conflictedness = []
         clear_table(table)
+        PLANETS = ("mars", "jupiter", "saturn", "pluto")
+        angles = angles.deg.round(decimals=1)
+
+        for (p1, p2), angle in zip(planet_pairs, angles):
+            good = aspect_good(angle, p1.good, p2.good)
+            row = PLANETS.index(p1.name) + 1
+            column = PLANETS.index(p2.name)
+
+            if good is None or good:
+                color = ""
+            else:
+                conflictedness.extend((p1.name, p2.name))
+                color = f'foreground="{RED}"'
+
+                header1 = table.get_child_at(0, row)
+                header2 = table.get_child_at(column, 0)
+                header1.markup = f'<span foreground="{RED}">{header1.text}</span>'
+                header2.markup = f'<span foreground="{RED}">{header2.text}</span>'
+
+            label = Gtk.Label()
+            label.xalign = 0
+            label.markup = f'<span {color}>{angle}°</span>'
+            table.attach(label, column, row, 1, 1)
+            label.show()
 
         """
         for p1 in PLANETS:
@@ -173,22 +202,6 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 row = PLANETS.index(p1) + 1
                 column = PLANETS.index(p2)
 
-                if aspect.good is None or aspect.good:
-                    color = ""
-                else:
-                    conflictedness.extend((p1.name, p2.name))
-                    color = f'foreground="{RED}"'
-
-                    header1 = table.get_child_at(0, row)
-                    header2 = table.get_child_at(column, 0)
-                    header1.markup = f'<span foreground="{RED}">{header1.text}</span>'
-                    header2.markup = f'<span foreground="{RED}">{header2.text}</span>'
-
-                label = Gtk.Label()
-                label.xalign = 0
-                label.markup = f'<span {color}>{aspect.angle}°</span>'
-                table.attach(label, column, row, 1, 1)
-                label.show()
                 """
         return conflictedness
 
