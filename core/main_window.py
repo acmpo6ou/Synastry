@@ -66,6 +66,8 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         date2 = self.date2.date_time
 
         planet_pairs, angles = self.calculate_angles(date1, date2)
+        angles = angles.deg.round(decimals=1)
+
         conf1 = self.present_conflictedness(
             self.conflicts1, planet_pairs[:6], angles[:6],
         )
@@ -170,7 +172,6 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         conflictedness = []
         clear_table(table)
         PLANETS = ("mars", "jupiter", "saturn", "pluto")
-        angles = angles.deg.round(decimals=1)
 
         for (p1, p2), angle in zip(planet_pairs, angles):
             good = aspect_good(angle, p1.good, p2.good)
