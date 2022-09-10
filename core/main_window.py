@@ -67,9 +67,13 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
         planet_pairs, angles = self.calculate_angles(date1, date2)
         angles = angles.deg.round(decimals=1)
+        # TODO: convert angles to list
 
         conf1 = self.present_conflictedness(
             self.conflicts1, planet_pairs[:6], angles[:6],
+        )
+        conf2 = self.present_conflictedness(
+            self.conflicts2, planet_pairs[6:12], angles[6:12],
         )
         print(perf_counter() - start)
         return

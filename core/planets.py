@@ -51,6 +51,7 @@ def aspect_good(angle: float, planet1_good: bool, planet2_good: bool):
     Decides if the angle represents a good aspect.
     NOTE: returns None if the angle doesn't represent an aspect.
     """
+    # TODO: vectorize all computations
 
     if 112 <= angle <= 128 or 52 <= angle <= 68:
         return True
