@@ -18,6 +18,8 @@ from functools import cache
 
 from astropy.coordinates import EarthLocation, solar_system_ephemeris, get_body
 from astropy.time import Time
+import numpy as np
+import numpy.typing as npt
 
 solar_system_ephemeris.set('de430')
 
@@ -46,18 +48,30 @@ def get_planet(name: str, date_time: str):
     return Planet(name, date_time)
 
 
-def aspect_good(angle: float, planet1_good: bool, planet2_good: bool):
+def aspect_good(
+    angles: npt.ArrayLike,
+    planets1_good: npt.ArrayLike,
+    planets2_good: npt.ArrayLike,
+) -> npt.NDArray:
     """
-    Decides if the angle represents a good aspect.
-    NOTE: returns None if the angle doesn't represent an aspect.
-    """
-    # TODO: vectorize all computations
+    Decides if the angles represent good aspects.
 
-    if 112 <= angle <= 128 or 52 <= angle <= 68:
-        return True
-    elif 174 <= angle <= 186 or 84 <= angle <= 96:
-        return False
-    elif 0 <= angle <= 8 and planet1_good and planet2_good:
-        return True
-    elif 0 <= angle <= 6:
-        return False
+    Note: this function was contributed by Mad Physicist. Thank you.
+    https://stackoverflow.com/q/73672739/11004423
+
+    :returns: an array with values as follows:
+        1 – the angle is a good aspect
+        0 – the angle is a bad aspect
+       -1 – the angle doesn't represent an aspect
+    """
+    result = np.full_like(angles, -1, dtype=np.int8)
+
+    false_mask = np.abs(angles % 90) <= 6
+    result[false_mask] = 0
+
+    true_mask = (np.abs(angles - 180) <= 8) |\
+                (np.abs(angles - 90) <= 8) |\
+                ((np.abs(angles - 4) <= 4) & planets1_good & planets2_good)
+    result[true_mask] = 1
+
+    return result
