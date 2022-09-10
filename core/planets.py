@@ -48,7 +48,7 @@ def get_planet(name: str, date_time: str):
     return Planet(name, date_time)
 
 
-def aspect_good(
+def aspects_good(
     angles: npt.ArrayLike,
     planets1_good: npt.ArrayLike,
     planets2_good: npt.ArrayLike,
