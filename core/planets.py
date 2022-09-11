@@ -66,12 +66,12 @@ def aspects_good(
     """
     result = np.full_like(angles, -1, dtype=np.int8)
 
-    false_mask = np.abs(angles % 90) <= 6
-    result[false_mask] = 0
+    bad_mask = np.abs(angles % 90) <= 6
+    result[bad_mask] = 0
 
-    true_mask = (np.abs(angles - 180) <= 8) |\
-                (np.abs(angles - 90) <= 8) |\
+    good_mask = (np.abs(angles - 120) <= 8) |\
+                (np.abs(angles - 60) <= 8) |\
                 ((np.abs(angles - 4) <= 4) & planets1_good & planets2_good)
-    result[true_mask] = 1
+    result[good_mask] = 1
 
     return result
