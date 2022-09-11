@@ -1,6 +1,7 @@
 -r requirements.txt
 PyGobject-stubs
 pretty-errors
+rich
 
 pytest==7.1.2
 pytest-cov
