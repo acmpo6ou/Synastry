@@ -14,10 +14,34 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Synastry.  If not, see <https://www.gnu.org/licenses/>.
 #
-from core.planets import Planet, Aspect
-from tests.test_main_window import DATE
+import numpy as np
+
+from core.planets import Planet
 
 
+def test_aspects_good():
+    tests = np.array((
+        (120, True, False, True),
+        (60, True, False, True),
+        (180, True, False, False),
+        (90, True, False, False),
+
+        (121, True, False, -1),
+        (61, True, False, -1),
+        (181, True, False, -1),
+        (91, True, False, -1),
+
+        (0, True, True, True),
+        (0, True, False, False),
+        (0, False, True, False),
+        (0, False, False, False),
+
+        (7, False, False, -1),
+        (7, True, True, True),
+        (9, True, True, -1),
+    ))
+
+"""
 def test_aspect_120():
     p1 = Planet("sun", DATE)
     p2 = Planet("jupiter", DATE)
@@ -87,3 +111,4 @@ def test_no_aspect():
 
     aspect = Aspect(p1, p2)
     assert aspect.good is None
+"""
