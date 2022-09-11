@@ -3,7 +3,7 @@ PyGobject-stubs
 pretty-errors
 rich
 
-pytest==7.1.2
+pytest==7.1.3
 pytest-cov
 pytest-randomly
 pytest-mock
