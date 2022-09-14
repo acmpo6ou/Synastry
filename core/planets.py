@@ -64,6 +64,12 @@ def aspects_good(
         0 – the angle is a bad aspect
        -1 – the angle doesn't represent an aspect
     """
+
+    # sanitize data
+    angles = np.asanyarray(angles)
+    planets1_good = np.asanyarray(planets1_good, dtype=bool)
+    planets2_good = np.asanyarray(planets2_good, dtype=bool)
+
     result = np.full_like(angles, -1, dtype=np.int8)
 
     bad_mask = np.abs(angles % 90) <= 6
