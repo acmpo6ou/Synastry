@@ -15,100 +15,48 @@
 #   along with Synastry.  If not, see <https://www.gnu.org/licenses/>.
 #
 import numpy as np
+from rich.pretty import pprint
 
-from core.planets import Planet
+from core.planets import aspects_good
 
 
 def test_aspects_good():
-    tests = np.array((
-        (120, True, False, True),
-        (60, True, False, True),
-        (180, True, False, False),
-        (90, True, False, False),
+    tests = np.array([
+        [120, True, False, True],
+        [60, True, False, True],
+        [180, True, False, False],
+        [90, True, False, False],
 
-        (121, True, False, -1),
-        (61, True, False, -1),
-        (181, True, False, -1),
-        (91, True, False, -1),
+        [129, True, False, -1],
+        [111, True, False, -1],
+        [69, True, False, -1],
+        [51, True, False, -1],
+        [187, True, False, -1],
+        [173, True, False, -1],
+        [97, True, False, -1],
+        [83, True, False, -1],
 
-        (0, True, True, True),
-        (0, True, False, False),
-        (0, False, True, False),
-        (0, False, False, False),
+        [0, True, True, True],
+        [0, True, False, False],
+        [0, False, True, False],
+        [0, False, False, False],
 
-        (7, False, False, -1),
-        (7, True, True, True),
-        (9, True, True, -1),
-    ))
+        [7, False, False, -1],
+        [7, True, True, True],
+        [9, True, True, -1],
+    ])
 
-"""
-def test_aspect_120():
-    p1 = Planet("sun", DATE)
-    p2 = Planet("jupiter", DATE)
+    angles = tests[:, 0]
+    planets1_good = tests[:, 1]
+    planets2_good = tests[:, 2]
+    expected = tests[:, 3]
 
-    aspect = Aspect(p1, p2)
-    assert aspect.angle == 123.5
-    assert aspect.good
+    result = aspects_good(angles, planets1_good, planets2_good)
 
+    # for debugging
+    result = np.vstack(result)
+    expected = np.vstack(expected)
+    concat = np.concatenate((result, expected), axis=1)
+    pprint(concat)
 
-def test_aspect_60():
-    p1 = Planet("moon", DATE)
-    p2 = Planet("mercury", DATE)
-
-    aspect = Aspect(p1, p2)
-    assert aspect.angle == 60.6
-    assert aspect.good
-
-
-def test_aspect_180():
-    p1 = Planet("venus", "2022-08-06 12:00")
-    p2 = Planet("pluto", "2022-08-06 12:00")
-
-    aspect = Aspect(p1, p2)
-    assert aspect.angle == 176.1
-    assert not aspect.good
-
-
-def test_aspect_90():
-    p1 = Planet("moon", DATE)
-    p2 = Planet("pluto", DATE)
-
-    aspect = Aspect(p1, p2)
-    assert aspect.angle == 86.1
-    assert not aspect.good
-
-
-def test_aspect_0_good_good():
-    p1 = Planet("moon", "2022-07-29 00:00")
-    p2 = Planet("sun", "2022-07-29 00:00")
-
-    aspect = Aspect(p1, p2)
-    assert aspect.angle == 5.4
-    assert aspect.good
-
-
-def test_aspect_0_good_bad():
-    p1 = Planet("moon", "2022-08-10 07:00")
-    p2 = Planet("pluto", "2022-08-10 07:00")
-
-    aspect = Aspect(p1, p2)
-    assert aspect.angle == 5.3
-    assert not aspect.good
-
-
-def test_aspect_0_bad_bad():
-    p1 = Planet("mars", DATE)
-    p2 = Planet("uranus", DATE)
-
-    aspect = Aspect(p1, p2)
-    assert aspect.angle == 2.0
-    assert not aspect.good
-
-
-def test_no_aspect():
-    p1 = Planet("moon", DATE)
-    p2 = Planet("sun", DATE)
-
-    aspect = Aspect(p1, p2)
-    assert aspect.good is None
-"""
+    assert np.array_equal(result, expected)
