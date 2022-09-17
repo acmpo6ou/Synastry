@@ -81,9 +81,11 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         conf2 = self.present_conflictedness(
             self.conflicts2, planet_pairs[6:12], angles[6:12], good[6:12]
         )
+        self.present_conflicts(
+            conf1, conf2, planet_pairs[12:28], angles[12:28], good[12:28]
+        )
         print(perf_counter() - start)
         return
-        self.calculate_conflicts(date1, date2, conf1, conf2)
 
         self.calculate_love(date1, date2)
         self.calculate_friendship(date1, date2)
@@ -186,7 +188,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             row = PLANETS.index(p1.name) + 1
             column = PLANETS.index(p2.name)
 
-            if good is None or good:
+            if good == -1 or good:
                 color = ""
             else:
                 conflictedness.extend((p1.name, p2.name))
@@ -219,59 +221,44 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         planets2 = (mars2, jupiter2, saturn2, pluto2)
         return self.collect_coords(planets1, planets2)
 
-    def calculate_conflicts(
+    def present_conflicts(
         self,
-        date1: str,
-        date2: str,
         conflictedness1: list[str],
         conflictedness2: list[str],
+        planet_pairs: list[tuple[Planet]],
+        angles: Angle,
+        aspects_good: npt.NDArray[int],
     ):
-        mars1 = get_planet("mars", date1)
-        jupiter1 = get_planet("jupiter", date1)
-        saturn1 = get_planet("saturn", date1)
-        pluto1 = get_planet("pluto", date1)
-
-        mars2 = get_planet("mars", date2)
-        jupiter2 = get_planet("jupiter", date2)
-        saturn2 = get_planet("saturn", date2)
-        pluto2 = get_planet("pluto", date2)
-
+        # TODO: move to global scope
+        PLANETS = ("mars", "jupiter", "saturn", "pluto")
         clear_table(self.conflicts)
 
-        planets1 = (mars1, jupiter1, saturn1, pluto1)
-        planets2 = (mars2, jupiter2, saturn2, pluto2)
-
-        planet_names1 = [planet.name for planet in planets1]
-        planet_names2 = [planet.name for planet in planets2]
-
         for planet in conflictedness1:
-            i = planet_names1.index(planet) + 1
+            i = PLANETS.index(planet) + 1
             header = self.conflicts.get_child_at(0, i)
             header.markup = f'<span foreground="red">{header.text}</span>'
 
         for planet in conflictedness2:
-            i = planet_names2.index(planet) + 1
+            i = PLANETS.index(planet) + 1
             header = self.conflicts.get_child_at(i, 0)
             header.markup = f'<span foreground="red">{header.text}</span>'
 
-        for p1 in planets1:
-            for p2 in planets2:
-                aspect = Aspect(p1, p2)
-                row = planets1.index(p1) + 1
-                column = planets2.index(p2) + 1
+        for (p1, p2), angle, good in zip(planet_pairs, angles, aspects_good):
+            row = PLANETS.index(p1.name) + 1
+            column = PLANETS.index(p2.name) + 1
 
-                if aspect.good is None or aspect.good:
-                    color = ""
-                else:
-                    color = f'foreground="{RED}"'
-                    if p1.name in conflictedness1 or p2.name in conflictedness2:
-                        color = 'foreground="red"'
+            if good == -1 or good:
+                color = ""
+            else:
+                color = f'foreground="{RED}"'
+                if p1.name in conflictedness1 or p2.name in conflictedness2:
+                    color = 'foreground="red"'
 
-                label = Gtk.Label()
-                label.xalign = 0
-                label.markup = f"<span {color}>{aspect.angle}°</span>"
-                self.conflicts.attach(label, column, row, 1, 1)
-                label.show()
+            label = Gtk.Label()
+            label.xalign = 0
+            label.markup = f"<span {color}>{angle}°</span>"
+            self.conflicts.attach(label, column, row, 1, 1)
+            label.show()
 
     def collect_love(self, date1: str, date2: str) -> tuple[list[float]]:
         moon = get_planet("moon", date1)
