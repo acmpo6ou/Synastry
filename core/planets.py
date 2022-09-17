@@ -72,8 +72,10 @@ def aspects_good(
 
     result = np.full_like(angles, -1, dtype=np.int8)
 
-    bad_mask = np.abs(angles % 90) <= 6
-    result[bad_mask] = 0
+    bad_mask = (np.abs(angles - 180) <= 6) |\
+               (np.abs(angles - 90) <= 6) |\
+               (np.abs(angles - 3) <= 3)
+    result[np.flatnonzero(bad_mask)] = 0
 
     good_mask = (np.abs(angles - 120) <= 8) |\
                 (np.abs(angles - 60) <= 8) |\

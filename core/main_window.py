@@ -83,8 +83,6 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         )
         print(perf_counter() - start)
         return
-
-        conf2 = self.calculate_conflictedness(self.conflicts2, date2)
         self.calculate_conflicts(date1, date2, conf1, conf2)
 
         self.calculate_love(date1, date2)

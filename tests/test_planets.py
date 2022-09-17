@@ -28,13 +28,24 @@ def test_aspects_good():
         [90, True, False, False],
 
         [129, True, False, -1],
+        [128, True, False, True],
         [111, True, False, -1],
+        [112, True, False, True],
+
         [69, True, False, -1],
+        [68, True, False, True],
         [51, True, False, -1],
+        [52, True, False, True],
+
         [187, True, False, -1],
+        [186, True, False, False],
         [173, True, False, -1],
+        [174, True, False, False],
+
         [97, True, False, -1],
+        [96, True, False, False],
         [83, True, False, -1],
+        [84, True, False, False],
 
         [0, True, True, True],
         [0, True, False, False],
@@ -42,8 +53,11 @@ def test_aspects_good():
         [0, False, False, False],
 
         [7, False, False, -1],
+        [6, False, False, False],
         [7, True, True, True],
+
         [9, True, True, -1],
+        [8, True, True, True],
     ])
 
     angles = tests[:, 0]
