@@ -52,7 +52,7 @@ def aspects_good(
     angles: npt.ArrayLike,
     planets1_good: npt.ArrayLike,
     planets2_good: npt.ArrayLike,
-) -> npt.NDArray:
+) -> npt.NDArray[int]:
     """
     Decides if the angles represent good aspects.
 

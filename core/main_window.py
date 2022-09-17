@@ -14,15 +14,15 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Synastry.  If not, see <https://www.gnu.org/licenses/>.
 #
-from pprint import pprint
 from time import perf_counter
 
 from astropy.coordinates import SkyCoord, Angle
 from gi.repository import Gtk
+import numpy.typing as npt
 
 from core.date_time import DateTime
 from core.gtk_utils import GladeTemplate, clear_table
-from core.planets import Planet, get_planet, aspect_good
+from core.planets import Planet, get_planet, aspects_good
 
 RED = "#f04b51"
 GREEN = "#6db442"
@@ -67,13 +67,19 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
         planet_pairs, angles = self.calculate_angles(date1, date2)
         angles = angles.deg.round(decimals=1)
-        # TODO: convert angles to list
+
+        planets1_good = []
+        planets2_good = []
+        for p1, p2 in planet_pairs:
+            planets1_good.append(p1.good)
+            planets2_good.append(p2.good)
+        good = aspects_good(angles, planets1_good, planets2_good)
 
         conf1 = self.present_conflictedness(
-            self.conflicts1, planet_pairs[:6], angles[:6],
+            self.conflicts1, planet_pairs[:6], angles[:6], good[:6]
         )
         conf2 = self.present_conflictedness(
-            self.conflicts2, planet_pairs[6:12], angles[6:12],
+            self.conflicts2, planet_pairs[6:12], angles[6:12], good[6:12]
         )
         print(perf_counter() - start)
         return
@@ -167,6 +173,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         table: Gtk.Grid,
         planet_pairs: list[tuple[Planet]],
         angles: Angle,
+        aspects_good: npt.NDArray[int],
     ) -> list[str]:
         """
         Calculates conflictedness of a person.
@@ -177,8 +184,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         clear_table(table)
         PLANETS = ("mars", "jupiter", "saturn", "pluto")
 
-        for (p1, p2), angle in zip(planet_pairs, angles):
-            good = aspect_good(angle, p1.good, p2.good)
+        for (p1, p2), angle, good in zip(planet_pairs, angles, aspects_good):
             row = PLANETS.index(p1.name) + 1
             column = PLANETS.index(p2.name)
 
@@ -198,16 +204,6 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             label.markup = f'<span {color}>{angle}°</span>'
             table.attach(label, column, row, 1, 1)
             label.show()
-
-        """
-        for p1 in PLANETS:
-            planets.remove(p1)
-            for p2 in planets:
-                aspect = Aspect(p1, p2)
-                row = PLANETS.index(p1) + 1
-                column = PLANETS.index(p2)
-
-                """
         return conflictedness
 
     def collect_conflicts(self, date1: str, date2: str) -> tuple[list[float]]:
