@@ -75,15 +75,17 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             planets2_good.append(p2.good)
         good = aspects_good(angles, planets1_good, planets2_good)
 
+        planet_pairs = ArrayIter(planet_pairs)
+        angles = ArrayIter(angles)
+        good = ArrayIter(good)
+
         conf1 = self.present_conflictedness(
-            self.conflicts1, planet_pairs[:6], angles[:6], good[:6]
+            self.conflicts1, planet_pairs[6], angles[6], good[6]
         )
         conf2 = self.present_conflictedness(
-            self.conflicts2, planet_pairs[6:12], angles[6:12], good[6:12]
+            self.conflicts2, planet_pairs[6], angles[6], good[6]
         )
-        self.present_conflicts(
-            conf1, conf2, planet_pairs[12:28], angles[12:28], good[12:28]
-        )
+        self.present_conflicts(conf1, conf2, planet_pairs[16], angles[16], good[16])
         print(perf_counter() - start)
         return
 
@@ -201,7 +203,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
             label = Gtk.Label()
             label.xalign = 0
-            label.markup = f'<span {color}>{angle}°</span>'
+            label.markup = f"<span {color}>{angle}°</span>"
             table.attach(label, column, row, 1, 1)
             label.show()
         return conflictedness
@@ -398,3 +400,14 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             label.markup = f"<span {color}>{aspect.angle}°</span>"
             table.attach(label, 2, i + 1, 1, 1)
             label.show()
+
+
+class ArrayIter:
+    def __init__(self, array):
+        self.array = array
+        self.index = 0
+
+    def __getitem__(self, n):
+        res = self.array[self.index: self.index + n]
+        self.index += n
+        return res
