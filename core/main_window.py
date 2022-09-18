@@ -79,18 +79,18 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         angles = ArrayIter(angles)
         good = ArrayIter(good)
 
-        def get_data(n):
+        def data(n):
             return planet_pairs[n], angles[n], good[n]
 
-        conf1 = self.present_conflictedness(self.conflicts1, *get_data(6))
-        conf2 = self.present_conflictedness(self.conflicts2, *get_data(6))
-        self.present_conflicts(conf1, conf2, *get_data(16))
+        conf1 = self.present_conflictedness(self.conflicts1, *data(6))
+        conf2 = self.present_conflictedness(self.conflicts2, *data(6))
+        self.present_conflicts(conf1, conf2, *data(16))
 
-        self.present_love(*get_data(4))
+        self.present_love(*data(4))
+        self.present_friendship(*data(9))
 
         print(perf_counter() - start)
         return
-        self.calculate_friendship(date1, date2)
 
         self.calculate_happiness(self.happiness1, date1, date2)
         self.calculate_happiness(self.happiness2, date2, date1)
@@ -312,42 +312,36 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         planets2 = (sun2, moon2, venus2)
         return self.collect_coords(planets1, planets2)
 
-    def calculate_friendship(self, date1: str, date2: str):
-        sun1 = get_planet("sun", date1)
-        moon1 = get_planet("moon", date1)
-        venus1 = get_planet("venus", date1)
-
-        sun2 = get_planet("sun", date2)
-        moon2 = get_planet("moon", date2)
-        venus2 = get_planet("venus", date2)
-
+    def present_friendship(
+        self,
+        planet_pairs: list[tuple[Planet]],
+        angles: Angle,
+        aspects_good: npt.NDArray[int],
+    ):
         clear_table(self.friendship)
-        planets1 = (sun1, moon1, venus1)
-        planets2 = (sun2, moon2, venus2)
+        PLANETS = ("sun", "moon", "venus")
 
-        for p1 in planets1:
-            for p2 in planets2:
-                aspect = Aspect(p1, p2)
-                row = planets1.index(p1) + 1
-                column = planets2.index(p2) + 1
+        for (p1, p2), angle, good in zip(planet_pairs, angles, aspects_good):
+            row = PLANETS.index(p1.name) + 1
+            column = PLANETS.index(p2.name) + 1
 
-                # in the context of friendship we care only about
-                # aspects between Suns, other aspects of Sun
-                # (with Venus or Moon) are sexual and shouldn't
-                # be highlighted
-                if (p1.name == "sun" or p2.name == "sun") and p1.name != p2.name:
-                    aspect.good = None
+            # in the context of friendship we care only about
+            # aspects between Suns, other aspects of Sun
+            # (with Venus or Moon) are sexual and shouldn't
+            # be highlighted
+            if (p1.name == "sun" or p2.name == "sun") and p1.name != p2.name:
+                good = -1
 
-                if aspect.good is None or not aspect.good:
-                    color = ""
-                else:
-                    color = f'foreground="{GREEN}"'
+            if good == -1 or not good:
+                color = ""
+            else:
+                color = f'foreground="{GREEN}"'
 
-                label = Gtk.Label()
-                label.xalign = 0
-                label.markup = f"<span {color}>{aspect.angle}°</span>"
-                self.friendship.attach(label, column, row, 1, 1)
-                label.show()
+            label = Gtk.Label()
+            label.xalign = 0
+            label.markup = f"<span {color}>{angle}°</span>"
+            self.friendship.attach(label, column, row, 1, 1)
+            label.show()
 
     def collect_happiness(self, date1: str, date2: str) -> tuple[list[float]]:
         sun1 = get_planet("sun", date1)
