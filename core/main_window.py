@@ -79,17 +79,17 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         angles = ArrayIter(angles)
         good = ArrayIter(good)
 
-        conf1 = self.present_conflictedness(
-            self.conflicts1, planet_pairs[6], angles[6], good[6]
-        )
-        conf2 = self.present_conflictedness(
-            self.conflicts2, planet_pairs[6], angles[6], good[6]
-        )
-        self.present_conflicts(conf1, conf2, planet_pairs[16], angles[16], good[16])
+        def get_data(n):
+            return planet_pairs[n], angles[n], good[n]
+
+        conf1 = self.present_conflictedness(self.conflicts1, *get_data(6))
+        conf2 = self.present_conflictedness(self.conflicts2, *get_data(6))
+        self.present_conflicts(conf1, conf2, *get_data(16))
+
+        self.present_love(*get_data(4))
+
         print(perf_counter() - start)
         return
-
-        self.calculate_love(date1, date2)
         self.calculate_friendship(date1, date2)
 
         self.calculate_happiness(self.happiness1, date1, date2)
@@ -104,11 +104,11 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         conf1 = self.collect_conflictedness(date1)
         conf2 = self.collect_conflictedness(date2)
         confs = self.collect_conflicts(date1, date2)
-        friendship = self.collect_friendship(date1, date2)
         love = self.collect_love(date1, date2)
+        friendship = self.collect_friendship(date1, date2)
         happiness1 = self.collect_happiness(date1, date2)
         happiness2 = self.collect_happiness(date2, date1)
-        coords = (conf1, conf2, confs, friendship, love, happiness1, happiness2)
+        coords = (conf1, conf2, confs, love, friendship, happiness1, happiness2)
 
         planet_pairs_all = []
         ra1_all = []
@@ -262,7 +262,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             self.conflicts.attach(label, column, row, 1, 1)
             label.show()
 
-    def collect_love(self, date1: str, date2: str) -> tuple[list[float]]:
+    def collect_love(self, date1: str, date2: str):
         moon = get_planet("moon", date1)
         venus = get_planet("venus", date1)
         sun = get_planet("sun", date2)
@@ -272,34 +272,32 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         planets2 = (sun, mars)
         return self.collect_coords(planets1, planets2)
 
-    def calculate_love(self, date1: str, date2: str):
-        moon = get_planet("moon", date1)
-        venus = get_planet("venus", date1)
-        sun = get_planet("sun", date2)
-        mars = get_planet("mars", date2)
-
+    def present_love(
+        self,
+        planet_pairs: list[tuple[Planet]],
+        angles: Angle,
+        aspects_good: npt.NDArray[int],
+    ):
         clear_table(self.love)
-        planets1 = (moon, venus)
-        planets2 = (sun, mars)
+        planets1 = ("moon", "venus")
+        planets2 = ("sun", "mars")
 
-        for p1 in planets1:
-            for p2 in planets2:
-                aspect = Aspect(p1, p2)
-                row = planets1.index(p1) + 1
-                column = planets2.index(p2) + 1
+        for (p1, p2), angle, good in zip(planet_pairs, angles, aspects_good):
+            row = planets1.index(p1.name) + 1
+            column = planets2.index(p2.name) + 1
 
-                if aspect.good is None:
-                    color = ""
-                elif aspect.good:
-                    color = f'foreground="{GREEN}"'
-                else:
-                    color = f'foreground="{RED}"'
+            if good == -1:
+                color = ""
+            elif good:
+                color = f'foreground="{GREEN}"'
+            else:
+                color = f'foreground="{RED}"'
 
-                label = Gtk.Label()
-                label.xalign = 0
-                label.markup = f"<span {color}>{aspect.angle}°</span>"
-                self.love.attach(label, column, row, 1, 1)
-                label.show()
+            label = Gtk.Label()
+            label.xalign = 0
+            label.markup = f"<span {color}>{angle}°</span>"
+            self.love.attach(label, column, row, 1, 1)
+            label.show()
 
     def collect_friendship(self, date1: str, date2: str) -> tuple[list[float]]:
         sun1 = get_planet("sun", date1)
@@ -408,6 +406,6 @@ class ArrayIter:
         self.index = 0
 
     def __getitem__(self, n):
-        res = self.array[self.index: self.index + n]
+        res = self.array[self.index : self.index + n]
         self.index += n
         return res
