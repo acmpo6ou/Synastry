@@ -66,14 +66,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         date2 = self.date2.date_time
 
         planet_pairs, angles = self.calculate_angles(date1, date2)
-        angles = angles.deg.round(decimals=1)
-
-        planets1_good = []
-        planets2_good = []
-        for p1, p2 in planet_pairs:
-            planets1_good.append(p1.good)
-            planets2_good.append(p2.good)
-        good = aspects_good(angles, planets1_good, planets2_good)
+        good = self.aspects_good(angles, planet_pairs)
 
         planet_pairs = ArrayIter(planet_pairs)
         angles = ArrayIter(angles)
@@ -93,6 +86,16 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         self.present_happiness(self.happiness2, angles[4], good[4])
 
         print(perf_counter() - start)
+
+    @staticmethod
+    def aspects_good(angles, planet_pairs):
+        planets1_good = []
+        planets2_good = []
+        for p1, p2 in planet_pairs:
+            planets1_good.append(p1.good)
+            planets2_good.append(p2.good)
+        good = aspects_good(angles, planets1_good, planets2_good)
+        return good
 
     def calculate_angles(self, date1: str, date2: str):
         """
@@ -124,7 +127,8 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
         coords1 = SkyCoord(ra1_all, dec1_all)
         coords2 = SkyCoord(ra2_all, dec2_all)
-        return planet_pairs_all, coords1.separation(coords2)
+        angles = coords1.separation(coords2)
+        return planet_pairs_all, angles.deg.round(decimals=1)
 
     @staticmethod
     def collect_coords(planets1: tuple[Planet], planets2: tuple[Planet]):
