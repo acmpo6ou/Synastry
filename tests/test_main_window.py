@@ -14,27 +14,32 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Synastry.  If not, see <https://www.gnu.org/licenses/>.
 #
+from astropy.coordinates import SkyCoord
 
 from core.main_window import MainWindow, RED, GREEN
-from core.planets import Planet
 
 DATE = "2022-08-04 12:00"
 DATE2 = "2022-08-06 12:00"
 NO_COLOR = "<span >"
 
 
-def test_calculate_conflictedness():
+def test_present_conflictedness():
     window = MainWindow()
     grid = window.conflicts1
-    conflictedness = window.calculate_conflictedness(grid, DATE)
+
+    planet_pairs, ra1, dec1, ra2, dec2 = window.collect_conflictedness(DATE)
+    coords1 = SkyCoord(ra1, dec1)
+    coords2 = SkyCoord(ra2, dec2)
+    angles = coords1.separation(coords2).deg.round(decimals=1)
+    good = window.aspects_good(angles, planet_pairs)
+    confness = window.present_conflictedness(grid, planet_pairs, angles, good)
 
     label = grid.get_child_at(2, 1)
     assert label.text == "87.6°"
     assert RED in label.markup
-    assert conflictedness == ["mars", "saturn"]
+    assert confness == ["mars", "saturn"]
 
-    no_color = len([label for label in grid.children
-                    if NO_COLOR in label.markup])
+    no_color = len([label for label in grid.children if NO_COLOR in label.markup])
     assert no_color == 5
 
 
@@ -68,8 +73,9 @@ def test_calculate_conflicts():
     assert label.text == "88.9°"
     assert "red" in label.markup
 
-    no_color = len([label for label in window.conflicts.children
-                    if NO_COLOR in label.markup])
+    no_color = len(
+        [label for label in window.conflicts.children if NO_COLOR in label.markup]
+    )
     assert no_color == 11
 
 
@@ -81,8 +87,9 @@ def test_calculate_love():
     assert label.text == "59.6°"
     assert GREEN in label.markup
 
-    no_color = len([label for label in window.love.children
-                    if NO_COLOR in label.markup])
+    no_color = len(
+        [label for label in window.love.children if NO_COLOR in label.markup]
+    )
     assert no_color == 3
 
 
@@ -102,8 +109,9 @@ def test_calculate_friendship():
     assert label.text == "127.1°"
     assert GREEN in label.markup
 
-    no_color = len([label for label in window.friendship.children
-                    if NO_COLOR in label.markup])
+    no_color = len(
+        [label for label in window.friendship.children if NO_COLOR in label.markup]
+    )
     assert no_color == 6
 
 
@@ -119,6 +127,7 @@ def test_calculate_happiness():
     assert label.text == "84.4°"
     assert RED in label.markup
 
-    no_color = len([label for label in window.happiness2.children
-                    if NO_COLOR in label.markup])
+    no_color = len(
+        [label for label in window.happiness2.children if NO_COLOR in label.markup]
+    )
     assert no_color == 2
