@@ -89,11 +89,10 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         self.present_love(*data(4))
         self.present_friendship(*data(9))
 
-        print(perf_counter() - start)
-        return
+        self.present_happiness(self.happiness1, angles[4], good[4])
+        self.present_happiness(self.happiness2, angles[4], good[4])
 
-        self.calculate_happiness(self.happiness1, date1, date2)
-        self.calculate_happiness(self.happiness2, date2, date1)
+        print(perf_counter() - start)
 
     def calculate_angles(self, date1: str, date2: str):
         """
@@ -349,47 +348,45 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         jupiter2 = get_planet("jupiter", date2)
         saturn2 = get_planet("saturn", date2)
 
-        planets1 = (sun1, moon1)
-        planets2 = (jupiter2, saturn2)
+        planets1 = (jupiter2, saturn2)
+        planets2 = (sun1, moon1)
         return self.collect_coords(planets1, planets2)
 
     @staticmethod
-    def calculate_happiness(table: Gtk.Grid, date1: str, date2: str):
+    def present_happiness(
+        table: Gtk.Grid,
+        angles: Angle,
+        aspects_good: npt.NDArray[int],
+    ):
         """
         Calculates how happy/unhappy person with date2
         makes person with date1.
         """
-
-        sun1 = get_planet("sun", date1)
-        moon1 = get_planet("moon", date1)
-        jupiter2 = get_planet("jupiter", date2)
-        saturn2 = get_planet("saturn", date2)
-
         clear_table(table)
 
-        for i, planet in enumerate((sun1, moon1)):
-            aspect = Aspect(jupiter2, planet)
-            if aspect.good is None or not aspect.good:
+        data = zip(angles[:2], aspects_good[:2], range(2))
+        for angle, good, i in data:
+            if good == -1 or not good:
                 color = ""
             else:
                 color = f'foreground="{GREEN}"'
 
             label = Gtk.Label()
             label.xalign = 0
-            label.markup = f"<span {color}>{aspect.angle}°</span>"
+            label.markup = f"<span {color}>{angle}°</span>"
             table.attach(label, 1, i + 1, 1, 1)
             label.show()
 
-        for i, planet in enumerate((sun1, moon1)):
-            aspect = Aspect(saturn2, planet)
-            if aspect.good is None or aspect.good:
+        data = zip(angles[2:], aspects_good[2:], range(2))
+        for angle, good, i in data:
+            if good == -1 or good:
                 color = ""
             else:
                 color = f'foreground="{RED}"'
 
             label = Gtk.Label()
             label.xalign = 0
-            label.markup = f"<span {color}>{aspect.angle}°</span>"
+            label.markup = f"<span {color}>{angle}°</span>"
             table.attach(label, 2, i + 1, 1, 1)
             label.show()
 
