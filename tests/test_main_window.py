@@ -23,16 +23,20 @@ DATE2 = "2022-08-06 12:00"
 NO_COLOR = "<span >"
 
 
-def test_present_conflictedness():
-    window = MainWindow()
-    grid = window.conflicts1
-
-    planet_pairs, ra1, dec1, ra2, dec2 = window.collect_conflictedness(DATE)
+def get_data(window, collect):
+    planet_pairs, ra1, dec1, ra2, dec2 = collect()
     coords1 = SkyCoord(ra1, dec1)
     coords2 = SkyCoord(ra2, dec2)
     angles = coords1.separation(coords2).deg.round(decimals=1)
     good = window.aspects_good(angles, planet_pairs)
-    confness = window.present_conflictedness(grid, planet_pairs, angles, good)
+    return planet_pairs, angles, good
+
+
+def test_present_conflictedness():
+    window = MainWindow()
+    grid = window.conflicts1
+    data = get_data(window, lambda: window.collect_conflictedness(DATE))
+    confness = window.present_conflictedness(grid, *data)
 
     label = grid.get_child_at(2, 1)
     assert label.text == "87.6°"
