@@ -14,6 +14,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Synastry.  If not, see <https://www.gnu.org/licenses/>.
 #
+import itertools
 from time import perf_counter
 
 from astropy.coordinates import SkyCoord, Angle
@@ -26,6 +27,7 @@ from core.planets import Planet, get_planet, aspects_good
 
 RED = "#f04b51"
 GREEN = "#6db442"
+CONFLICT_PLANETS = ("mars", "jupiter", "saturn", "pluto")
 
 
 class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
@@ -138,13 +140,12 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         ra2 = []
         dec2 = []
 
-        for p1 in planets1:
-            for p2 in planets2:
-                planet_pairs.append((p1, p2))
-                ra1.append(p1.body.ra)
-                dec1.append(p1.body.dec)
-                ra2.append(p2.body.ra)
-                dec2.append(p2.body.dec)
+        for p1, p2 in itertools.product(planets1, planets2):
+            planet_pairs.append((p1, p2))
+            ra1.append(p1.body.ra)
+            dec1.append(p1.body.dec)
+            ra2.append(p2.body.ra)
+            dec2.append(p2.body.dec)
         return planet_pairs, ra1, dec1, ra2, dec2
 
     @staticmethod
@@ -187,11 +188,10 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
         conflictedness = []
         clear_table(table)
-        PLANETS = ("mars", "jupiter", "saturn", "pluto")
 
         for (p1, p2), angle, good in zip(planet_pairs, angles, aspects_good):
-            row = PLANETS.index(p1.name) + 1
-            column = PLANETS.index(p2.name)
+            row = CONFLICT_PLANETS.index(p1.name) + 1
+            column = CONFLICT_PLANETS.index(p2.name)
 
             if good == -1 or good:
                 color = ""
@@ -211,7 +211,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             label.show()
         return conflictedness
 
-    def collect_conflicts(self, date1: str, date2: str) -> tuple[list[float]]:
+    def collect_conflicts(self, date1: str, date2: str):
         mars1 = get_planet("mars", date1)
         jupiter1 = get_planet("jupiter", date1)
         saturn1 = get_planet("saturn", date1)
@@ -234,23 +234,21 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         angles: Angle,
         aspects_good: npt.NDArray[int],
     ):
-        # TODO: move to global scope
-        PLANETS = ("mars", "jupiter", "saturn", "pluto")
         clear_table(self.conflicts)
 
         for planet in conflictedness1:
-            i = PLANETS.index(planet) + 1
+            i = CONFLICT_PLANETS.index(planet) + 1
             header = self.conflicts.get_child_at(0, i)
             header.markup = f'<span foreground="red">{header.text}</span>'
 
         for planet in conflictedness2:
-            i = PLANETS.index(planet) + 1
+            i = CONFLICT_PLANETS.index(planet) + 1
             header = self.conflicts.get_child_at(i, 0)
             header.markup = f'<span foreground="red">{header.text}</span>'
 
         for (p1, p2), angle, good in zip(planet_pairs, angles, aspects_good):
-            row = PLANETS.index(p1.name) + 1
-            column = PLANETS.index(p2.name) + 1
+            row = CONFLICT_PLANETS.index(p1.name) + 1
+            column = CONFLICT_PLANETS.index(p2.name) + 1
 
             if good == -1 or good:
                 color = ""
@@ -302,7 +300,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             self.love.attach(label, column, row, 1, 1)
             label.show()
 
-    def collect_friendship(self, date1: str, date2: str) -> tuple[list[float]]:
+    def collect_friendship(self, date1: str, date2: str):
         sun1 = get_planet("sun", date1)
         moon1 = get_planet("moon", date1)
         venus1 = get_planet("venus", date1)
@@ -346,7 +344,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             self.friendship.attach(label, column, row, 1, 1)
             label.show()
 
-    def collect_happiness(self, date1: str, date2: str) -> tuple[list[float]]:
+    def collect_happiness(self, date1: str, date2: str):
         sun1 = get_planet("sun", date1)
         moon1 = get_planet("moon", date1)
         jupiter2 = get_planet("jupiter", date2)
