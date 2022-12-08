@@ -34,3 +34,15 @@ def test_gmt():
     date_time.gmt.value = -5
     assert date_time.date_time == "2000-01-01 17:00"
 
+
+def test_gmt_boundaries():
+    window = MainWindow()
+    date_time = DateTime(window)
+
+    date_time.hours.value = 0
+    date_time.gmt.value = +2
+    assert date_time.date_time == "1999-12-31 22:00"
+
+    date_time.hours.value = 23
+    date_time.gmt.value = -5
+    assert date_time.date_time == "2000-01-02 04:00"

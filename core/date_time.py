@@ -14,6 +14,8 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Synastry.  If not, see <https://www.gnu.org/licenses/>.
 #
+from datetime import datetime, timedelta
+
 from gi.repository import Gtk
 
 from core.gtk_utils import GladeTemplate
@@ -50,8 +52,10 @@ class DateTime(GladeTemplate):
     def date_time(self) -> str:
         hours = int(self.hours.value)
         minutes = int(self.minutes.value)
-        gmt = int(self.gmt.value)
         day = int(self.day.value)
         month = int(self.month.value)
         year = int(self.year.value)
-        return f"{year}-{month:02}-{day:02} {hours-gmt:02}:{minutes:02}"
+
+        date = datetime(year, month, day, hours, minutes)
+        date -= timedelta(hours=int(self.gmt.value))
+        return date.strftime("%Y-%m-%d %H:%M")
