@@ -120,7 +120,8 @@ def test_present_friendship():
 
 def test_calculate_happiness():
     window = MainWindow()
-    window.calculate_happiness(window.happiness2, DATE2, DATE)
+    data = get_data(window, lambda: window.collect_happiness(DATE2, DATE))
+    window.present_happiness(window.happiness2, *data[1:])
 
     label = window.happiness2.get_child_at(1, 1)
     assert label.text == "125.4°"
@@ -130,7 +131,5 @@ def test_calculate_happiness():
     assert label.text == "84.4°"
     assert RED in label.markup
 
-    no_color = len(
-        [label for label in window.happiness2.children if NO_COLOR in label.markup]
-    )
-    assert no_color == 2
+    no_color = [label for label in window.happiness2.children if NO_COLOR in label.markup]
+    assert len(no_color) == 2
