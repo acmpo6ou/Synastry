@@ -47,11 +47,14 @@ def test_present_conflictedness():
     assert no_color == 5
 
 
-def test_calculate_conflicts():
+def test_present_conflicts():
     window = MainWindow()
-    conf1 = window.calculate_conflictedness(window.conflicts1, DATE)
-    conf2 = window.calculate_conflictedness(window.conflicts2, DATE2)
-    window.calculate_conflicts(DATE, DATE2, conf1, conf2)
+    data1 = get_data(window, lambda: window.collect_conflictedness(DATE))
+    conf1 = window.present_conflictedness(window.conflicts1, *data1)
+    data2 = get_data(window, lambda: window.collect_conflictedness(DATE2))
+    conf2 = window.present_conflictedness(window.conflicts2, *data2)
+    data = get_data(window, lambda: window.collect_conflicts(DATE, DATE2))
+    window.present_conflicts(conf1, conf2, *data)
 
     label = window.conflicts.get_child_at(1, 1)
     assert label.text == "1.3°"
