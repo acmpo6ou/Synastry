@@ -97,9 +97,10 @@ def test_present_love():
     assert len(no_color) == 3
 
 
-def test_calculate_friendship():
+def test_present_friendship():
     window = MainWindow()
-    window.calculate_friendship(DATE, DATE2)
+    data = get_data(window, lambda: window.collect_friendship(DATE, DATE2))
+    window.present_friendship(*data)
 
     label = window.friendship.get_child_at(1, 1)
     assert label.text == "1.9°"
@@ -113,10 +114,8 @@ def test_calculate_friendship():
     assert label.text == "127.1°"
     assert GREEN in label.markup
 
-    no_color = len(
-        [label for label in window.friendship.children if NO_COLOR in label.markup]
-    )
-    assert no_color == 6
+    no_color = [label for label in window.friendship.children if NO_COLOR in label.markup]
+    assert len(no_color) == 6
 
 
 def test_calculate_happiness():
