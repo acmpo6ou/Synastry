@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.9
+#!/usr/bin/env python3.10
 
 #  Copyright (c) 2021-2022. Bohdan Kolvakh
 #  This file is part of PyAccounts.
@@ -26,7 +26,7 @@ See _getattr and _setattr from gtk_utils module for more details.
 import re
 import shutil
 
-GTK_STUBS_PATH = "venv/lib/python3.9/site-packages/gi-stubs/repository/"
+GTK_STUBS_PATH = "venv/lib/python3.10/site-packages/gi-stubs/repository/"
 
 for module in ("Gtk", "Gdk", "Gio"):
     _in = open(f"{GTK_STUBS_PATH}/{module}.pyi")
