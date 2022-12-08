@@ -37,10 +37,9 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
     love: Gtk.Grid
     friendship: Gtk.Grid
     happiness1: Gtk.Grid
-    happiness2: Gtk.Grid
     conflicts2: Gtk.Grid
     conflicts: Gtk.Grid
-
+    happiness2: Gtk.Grid
     # </editor-fold>
     def __init__(self, *args, **kwargs):
         Gtk.ApplicationWindow.__init__(self, *args, **kwargs)

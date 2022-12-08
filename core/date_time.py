@@ -22,6 +22,7 @@ from core.gtk_utils import GladeTemplate
 class DateTime(GladeTemplate):
     # <editor-fold>
     days: Gtk.Adjustment
+    gmta: Gtk.Adjustment
     hour: Gtk.Adjustment
     minute: Gtk.Adjustment
     months: Gtk.Adjustment
@@ -29,6 +30,7 @@ class DateTime(GladeTemplate):
     parent_widget: Gtk.Box
     hours: Gtk.SpinButton
     minutes: Gtk.SpinButton
+    gmt: Gtk.SpinButton
     day: Gtk.SpinButton
     month: Gtk.SpinButton
     year: Gtk.SpinButton
@@ -38,6 +40,12 @@ class DateTime(GladeTemplate):
         GladeTemplate.__init__(self, "date_time")
         self.main_window = main_window
 
+    @staticmethod
+    def show_leading_plus(gmt_field: Gtk.SpinButton):
+        value = int(gmt_field.adjustment.value)
+        gmt_field.text = f"+{value}" if value >= 0 else str(value)
+        return True
+
     @property
     def date_time(self) -> str:
         hours = int(self.hours.value)
@@ -45,4 +53,5 @@ class DateTime(GladeTemplate):
         day = int(self.day.value)
         month = int(self.month.value)
         year = int(self.year.value)
+        # TODO: account for GMT
         return f"{year}-{month:02}-{day:02} {hours:02}:{minutes:02}"
