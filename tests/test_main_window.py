@@ -43,8 +43,8 @@ def test_present_conflictedness():
     assert RED in label.markup
     assert confness == ["mars", "saturn"]
 
-    no_color = len([label for label in grid.children if NO_COLOR in label.markup])
-    assert no_color == 5
+    no_color = [label for label in grid.children if NO_COLOR in label.markup]
+    assert len(no_color) == 5
 
 
 def test_present_conflicts():
@@ -80,24 +80,21 @@ def test_present_conflicts():
     assert label.text == "88.9°"
     assert "red" in label.markup
 
-    no_color = len(
-        [label for label in window.conflicts.children if NO_COLOR in label.markup]
-    )
-    assert no_color == 11
+    no_color = [label for label in window.conflicts.children if NO_COLOR in label.markup]
+    assert len(no_color) == 11
 
 
-def test_calculate_love():
+def test_present_love():
     window = MainWindow()
-    window.calculate_love(DATE, DATE2)
+    data = get_data(window, lambda: window.collect_love(DATE, DATE2))
+    window.present_love(*data)
 
     label = window.love.get_child_at(2, 2)
     assert label.text == "59.6°"
     assert GREEN in label.markup
 
-    no_color = len(
-        [label for label in window.love.children if NO_COLOR in label.markup]
-    )
-    assert no_color == 3
+    no_color = [label for label in window.love.children if NO_COLOR in label.markup]
+    assert len(no_color) == 3
 
 
 def test_calculate_friendship():
