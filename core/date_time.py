@@ -50,8 +50,8 @@ class DateTime(GladeTemplate):
     def date_time(self) -> str:
         hours = int(self.hours.value)
         minutes = int(self.minutes.value)
+        gmt = int(self.gmt.value)
         day = int(self.day.value)
         month = int(self.month.value)
         year = int(self.year.value)
-        # TODO: account for GMT
-        return f"{year}-{month:02}-{day:02} {hours:02}:{minutes:02}"
+        return f"{year}-{month:02}-{day:02} {hours-gmt:02}:{minutes:02}"

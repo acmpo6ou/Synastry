@@ -22,3 +22,17 @@ def test_date_time():
     window = MainWindow()
     date_time = DateTime(window)
     assert date_time.date_time == "2000-01-01 12:00"
+
+
+def test_gmt_plus():
+    window = MainWindow()
+    date_time = DateTime(window)
+    date_time.gmt.value = +2
+    assert date_time.date_time == "2000-01-01 10:00"
+
+
+def test_gmt_minus():
+    window = MainWindow()
+    date_time = DateTime(window)
+    date_time.gmt.value = -5
+    assert date_time.date_time == "2000-01-01 17:00"
