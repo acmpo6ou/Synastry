@@ -37,6 +37,7 @@ class DateTime(GladeTemplate):
     month: Gtk.SpinButton
     year: Gtk.SpinButton
     possibilities: Gtk.CheckButton
+
     # </editor-fold>
 
     def __init__(self, main_window):
@@ -55,9 +56,7 @@ class DateTime(GladeTemplate):
         gmt = int(self.gmt.value)
         self.possibilities.active = hours == 12 and minutes == 0 and gmt == 0
 
-    @property
-    def date_time(self) -> str:
-        hours = int(self.hours.value)
+    def format_datetime(self, hours):
         minutes = int(self.minutes.value)
         day = int(self.day.value)
         month = int(self.month.value)
@@ -66,3 +65,11 @@ class DateTime(GladeTemplate):
         date = datetime(year, month, day, hours, minutes)
         date -= timedelta(hours=int(self.gmt.value))
         return date.strftime("%Y-%m-%d %H:%M")
+
+    @property
+    def date_time(self) -> str:
+        hours = int(self.hours.value)
+        return self.format_datetime(hours)
+
+    def get_possibilities(self) -> list[str]:
+        return [self.format_datetime(hour) for hour in range(24)]
