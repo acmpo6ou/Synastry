@@ -41,6 +41,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
     conflicts: Gtk.Grid
     happiness2: Gtk.Grid
     # </editor-fold>
+
     def __init__(self, *args, **kwargs):
         Gtk.ApplicationWindow.__init__(self, *args, **kwargs)
         GladeTemplate.__init__(self, "main_window")
@@ -104,6 +105,34 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         and calculates angles between them.
         """
 
+        dates1 = [date1]
+        if self.date1.possibilities.active:
+            dates1 = self.date1.get_possibilities()
+
+        dates2 = [date2]
+        if self.date2.possibilities.active:
+            dates2 = self.date2.get_possibilities()
+
+        planet_pairs_all = []
+        ra1_all = []
+        dec1_all = []
+        ra2_all = []
+        dec2_all = []
+
+        for date1, date2 in zip(dates1, dates2):
+            planet_pairs, ra1, dec1, ra2, dec2 = self.collect_all_coords(date1, date2)
+            planet_pairs_all += planet_pairs
+            ra1_all += ra1
+            dec1_all += dec1
+            ra2_all += ra2
+            dec2_all += dec2
+
+        coords1 = SkyCoord(ra1_all, dec1_all)
+        coords2 = SkyCoord(ra2_all, dec2_all)
+        angles = coords1.separation(coords2)
+        return planet_pairs_all, angles.deg.round(decimals=1)
+
+    def collect_all_coords(self, date1: str, date2: str):
         conf1 = self.collect_conflictedness(date1)
         conf2 = self.collect_conflictedness(date2)
         confs = self.collect_conflicts(date1, date2)
@@ -125,11 +154,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             dec1_all += dec1
             ra2_all += ra2
             dec2_all += dec2
-
-        coords1 = SkyCoord(ra1_all, dec1_all)
-        coords2 = SkyCoord(ra2_all, dec2_all)
-        angles = coords1.separation(coords2)
-        return planet_pairs_all, angles.deg.round(decimals=1)
+        return planet_pairs_all, ra1_all, dec1_all, ra2_all, dec2_all
 
     @staticmethod
     def collect_coords(planets1: tuple[Planet], planets2: tuple[Planet]):
