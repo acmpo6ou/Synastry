@@ -17,6 +17,7 @@
 import itertools
 from time import perf_counter
 
+import numpy as np
 from astropy.coordinates import SkyCoord, Angle
 from gi.repository import Gtk
 import numpy.typing as npt
@@ -33,9 +34,14 @@ CONFLICT_PLANETS = ("mars", "jupiter", "saturn", "pluto")
 class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
     # <editor-fold>
     parent_widget: Gtk.Box
+    conflicts_header: Gtk.Label
     conflicts1: Gtk.Grid
     love: Gtk.Grid
     friendship: Gtk.Grid
+    love_header: Gtk.Label
+    friendship_header: Gtk.Label
+    happiness1_header: Gtk.Label
+    happiness2_header: Gtk.Label
     happiness1: Gtk.Grid
     conflicts2: Gtk.Grid
     conflicts: Gtk.Grid
@@ -67,8 +73,18 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         date1 = self.date1.date_time
         date2 = self.date2.date_time
 
-        planet_pairs, angles = self.calculate_angles(date1, date2)
+        dates1 = [date1]
+        if self.date1.possibilities.active:
+            dates1 = self.date1.get_possibilities()
+
+        dates2 = [date2]
+        if self.date2.possibilities.active:
+            dates2 = self.date2.get_possibilities()
+
+        planet_pairs, angles = self.calculate_angles(dates1, dates2)
         good = self.aspects_good(angles, planet_pairs)
+
+        self.present_conflicts_header(good)
 
         planet_pairs = ArrayIter(planet_pairs)
         angles = ArrayIter(angles)
@@ -77,6 +93,8 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         def data(n):
             return planet_pairs[n], angles[n], good[n]
 
+        # TODO: get current block of angles or set hours to 0 where
+        #  "calculate possibilities" is checked
         conf1 = self.present_conflictedness(self.conflicts1, *data(6))
         conf2 = self.present_conflictedness(self.conflicts2, *data(6))
         self.present_conflicts(conf1, conf2, *data(16))
@@ -99,19 +117,11 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         good = aspects_good(angles, planets1_good, planets2_good)
         return good
 
-    def calculate_angles(self, date1: str, date2: str):
+    def calculate_angles(self, dates1: list[str], dates2: list[str]):
         """
         Collects pairs of planets and their coordinates,
         and calculates angles between them.
         """
-
-        dates1 = [date1]
-        if self.date1.possibilities.active:
-            dates1 = self.date1.get_possibilities()
-
-        dates2 = [date2]
-        if self.date2.possibilities.active:
-            dates2 = self.date2.get_possibilities()
 
         planet_pairs_all = []
         ra1_all = []
@@ -119,7 +129,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         ra2_all = []
         dec2_all = []
 
-        for date1, date2 in zip(dates1, dates2):
+        for date1, date2 in itertools.product(dates1, dates2):
             planet_pairs, ra1, dec1, ra2, dec2 = self.collect_all_coords(date1, date2)
             planet_pairs_all += planet_pairs
             ra1_all += ra1
@@ -249,6 +259,20 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         planets1 = (mars1, jupiter1, saturn1, pluto1)
         planets2 = (mars2, jupiter2, saturn2, pluto2)
         return self.collect_coords(planets1, planets2)
+
+    def present_conflicts_header(self, aspects_good: npt.NDArray[int]):
+        conflicts = aspects_good.reshape(-1, 49)[:, 12:28]
+        conflicts = (conflicts == 0).any(1)
+
+        header = "Conflicts: <span foreground='{}'>{}</span>"
+        if conflicts.all():
+            color, text = "red", "definitely yes"
+        elif (num := np.count_nonzero(conflicts)) > 0:
+            percentage = num * 100 / len(conflicts)
+            color, text = RED, f"maybe ({int(percentage)}%)"
+        else:
+            color, text = GREEN, "definitely no"
+        self.conflicts_header.markup = header.format(color, text)
 
     def present_conflicts(
         self,

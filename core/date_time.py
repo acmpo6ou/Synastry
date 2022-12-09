@@ -37,7 +37,6 @@ class DateTime(GladeTemplate):
     month: Gtk.SpinButton
     year: Gtk.SpinButton
     possibilities: Gtk.CheckButton
-
     # </editor-fold>
 
     def __init__(self, main_window):
