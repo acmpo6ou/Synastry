@@ -14,20 +14,23 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Synastry.  If not, see <https://www.gnu.org/licenses/>.
 #
+import pytest
+
 from core.date_time import DateTime
 from core.main_window import MainWindow
 
 
-def test_date_time():
+@pytest.fixture
+def date_time():
     window = MainWindow()
-    date_time = DateTime(window)
+    return DateTime(window)
+
+
+def test_date_time(date_time):
     assert date_time.date_time == "2000-01-01 12:00"
 
 
-def test_gmt():
-    window = MainWindow()
-    date_time = DateTime(window)
-
+def test_gmt(date_time):
     date_time.gmt.value = +2
     assert date_time.date_time == "2000-01-01 10:00"
 
@@ -35,10 +38,7 @@ def test_gmt():
     assert date_time.date_time == "2000-01-01 17:00"
 
 
-def test_gmt_boundaries():
-    window = MainWindow()
-    date_time = DateTime(window)
-
+def test_gmt_boundaries(date_time):
     date_time.hours.value = 0
     date_time.gmt.value = +2
     assert date_time.date_time == "1999-12-31 22:00"
@@ -46,3 +46,7 @@ def test_gmt_boundaries():
     date_time.hours.value = 23
     date_time.gmt.value = -5
     assert date_time.date_time == "2000-01-02 04:00"
+
+
+def test_calculate_possibilities_state(date_time):
+    ...
