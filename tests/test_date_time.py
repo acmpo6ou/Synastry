@@ -49,4 +49,8 @@ def test_gmt_boundaries(date_time):
 
 
 def test_calculate_possibilities_state(date_time):
-    ...
+    assert date_time.possibilities.active
+    date_time.hours.value = 2
+    assert not date_time.possibilities.active
+    date_time.hours.value = 12
+    assert date_time.possibilities.active

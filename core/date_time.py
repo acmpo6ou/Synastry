@@ -36,8 +36,9 @@ class DateTime(GladeTemplate):
     day: Gtk.SpinButton
     month: Gtk.SpinButton
     year: Gtk.SpinButton
-
+    possibilities: Gtk.CheckButton
     # </editor-fold>
+
     def __init__(self, main_window):
         GladeTemplate.__init__(self, "date_time")
         self.main_window = main_window
@@ -47,6 +48,12 @@ class DateTime(GladeTemplate):
         value = int(gmt_field.adjustment.value)
         gmt_field.text = f"+{value}" if value >= 0 else str(value)
         return True
+
+    def on_time_changed(self, _):
+        hours = int(self.hours.value)
+        minutes = int(self.minutes.value)
+        gmt = int(self.gmt.value)
+        self.possibilities.active = hours == 12 and minutes == 0 and gmt == 0
 
     @property
     def date_time(self) -> str:
