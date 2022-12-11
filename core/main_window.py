@@ -85,6 +85,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         good = self.aspects_good(angles, planet_pairs)
 
         self.present_conflicts_header(good)
+        self.present_love_header(good)
 
         planet_pairs = ArrayIter(planet_pairs)
         angles = ArrayIter(angles)
@@ -320,6 +321,20 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         planets1 = (moon, venus)
         planets2 = (sun, mars)
         return self.collect_coords(planets1, planets2)
+
+    def present_love_header(self, aspects_good: npt.NDArray[int]):
+        love = aspects_good.reshape(-1, 49)[:, 28:32]
+        love = (love != -1).any(1)
+
+        header = "Love: <span foreground='{}'>{}</span>"
+        if love.all():
+            color, text = GREEN, "definitely yes"
+        elif (num := np.count_nonzero(love)) > 0:
+            percentage = num * 100 / len(love)
+            color, text = GREEN, f"maybe ({int(percentage)}%)"
+        else:
+            color, text = RED, "definitely no"
+        self.love_header.markup = header.format(color, text)
 
     def present_love(
         self,
