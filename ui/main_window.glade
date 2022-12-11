@@ -14,7 +14,7 @@
       <placeholder/>
     </child>
     <child>
-      <!-- n-columns=3 n-rows=6 -->
+      <!-- n-columns=3 n-rows=7 -->
       <object class="GtkGrid">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -346,6 +346,7 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="label" translatable="yes">Love</property>
+            <property name="xalign">0</property>
             <attributes>
               <attribute name="font-desc" value="Ubuntu Bold 16"/>
             </attributes>
@@ -360,6 +361,7 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="label" translatable="yes">Friendship</property>
+            <property name="xalign">0</property>
             <attributes>
               <attribute name="font-desc" value="Ubuntu Bold 16"/>
             </attributes>
@@ -374,6 +376,7 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="label" translatable="yes">Happiness 1</property>
+            <property name="xalign">0</property>
             <attributes>
               <attribute name="font-desc" value="Ubuntu Bold 16"/>
             </attributes>
@@ -388,6 +391,7 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="label" translatable="yes">Happiness 2</property>
+            <property name="xalign">0</property>
             <attributes>
               <attribute name="font-desc" value="Ubuntu Bold 16"/>
             </attributes>
@@ -470,7 +474,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">5</property>
+            <property name="top-attach">6</property>
           </packing>
         </child>
         <child>
@@ -821,8 +825,41 @@
           </object>
           <packing>
             <property name="left-attach">1</property>
+            <property name="top-attach">6</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="unhappiness1_header">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Unhappiness 1</property>
+            <property name="xalign">0</property>
+            <attributes>
+              <attribute name="font-desc" value="Ubuntu Bold 16"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
             <property name="top-attach">5</property>
           </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="unhappiness2_header">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Unhappiness 2</property>
+            <property name="xalign">0</property>
+            <attributes>
+              <attribute name="font-desc" value="Ubuntu Bold 16"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">5</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
         </child>
         <child>
           <placeholder/>

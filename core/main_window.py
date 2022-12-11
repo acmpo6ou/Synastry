@@ -46,6 +46,8 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
     conflicts2: Gtk.Grid
     conflicts: Gtk.Grid
     happiness2: Gtk.Grid
+    unhappiness1_header: Gtk.Label
+    unhappiness2_header: Gtk.Label
     # </editor-fold>
 
     def __init__(self, *args, **kwargs):
@@ -87,6 +89,12 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         self.present_conflicts_header(good)
         self.present_love_header(good)
         self.present_friendship_header(good)
+        self.present_happiness_header(
+            self.happiness1_header, 1, 41, 43, good,
+        )
+        self.present_happiness_header(
+            self.happiness2_header, 2, 45, 47, good,
+        )
 
         planet_pairs = ArrayIter(planet_pairs)
         angles = ArrayIter(angles)
@@ -386,6 +394,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             color, text = GREEN, "definitely yes"
         elif (num := np.count_nonzero(friendship)) > 0:
             percentage = num * 100 / len(friendship)
+            # TODO: use dark green (button depressed)
             color, text = GREEN, f"maybe ({int(percentage)}%)"
         else:
             color, text = RED, "definitely no"
@@ -431,6 +440,29 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         planets1 = (jupiter2, saturn2)
         planets2 = (sun1, moon1)
         return self.collect_coords(planets1, planets2)
+
+    @staticmethod
+    def present_happiness_header(
+        header: Gtk.Label,
+        number: int,
+        start: int,
+        end: int,
+        aspects_good: npt.NDArray[int],
+    ):
+        happiness = aspects_good.reshape(-1, 49)[:, start:end]
+        happiness = (happiness == 1).any(1)
+
+        header_text = "Happiness {}: <span foreground='{}'>{}</span>"
+        if happiness.all():
+            color, text = GREEN, "definitely yes"
+        elif (num := np.count_nonzero(happiness)) > 0:
+            percentage = num * 100 / len(happiness)
+            # TODO: use dark green (button depressed)
+            color, text = GREEN, f"maybe ({int(percentage)}%)"
+        else:
+            header.markup = f"Happiness {number}: definitely no"
+            return
+        header.markup = header_text.format(number, color, text)
 
     @staticmethod
     def present_happiness(
