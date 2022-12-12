@@ -28,6 +28,7 @@ from core.planets import Planet, get_planet, aspects_good
 
 RED = "#f04b51"
 GREEN = "#6db442"
+DARK_GREEN = "#568F34"
 CONFLICT_PLANETS = ("mars", "jupiter", "saturn", "pluto")
 
 
@@ -348,7 +349,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             color, text = GREEN, "definitely yes"
         elif (num := np.count_nonzero(love)) > 0:
             percentage = num * 100 / len(love)
-            color, text = GREEN, f"maybe ({int(percentage)}%)"
+            color, text = DARK_GREEN, f"maybe ({int(percentage)}%)"
         else:
             color, text = RED, "definitely no"
         self.love_header.markup = header.format(color, text)
@@ -402,8 +403,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             color, text = GREEN, "definitely yes"
         elif (num := np.count_nonzero(friendship)) > 0:
             percentage = num * 100 / len(friendship)
-            # TODO: use dark green (button depressed)
-            color, text = GREEN, f"maybe ({int(percentage)}%)"
+            color, text = DARK_GREEN, f"maybe ({int(percentage)}%)"
         else:
             color, text = RED, "definitely no"
         self.friendship_header.markup = header.format(color, text)
@@ -465,8 +465,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             color, text = GREEN, "definitely yes"
         elif (num := np.count_nonzero(happiness)) > 0:
             percentage = num * 100 / len(happiness)
-            # TODO: use dark green (button depressed)
-            color, text = GREEN, f"maybe ({int(percentage)}%)"
+            color, text = DARK_GREEN, f"maybe ({int(percentage)}%)"
         else:
             header.markup = f"Happiness {number}: definitely no"
             return
