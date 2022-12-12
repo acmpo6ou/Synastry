@@ -89,11 +89,19 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         self.present_conflicts_header(good)
         self.present_love_header(good)
         self.present_friendship_header(good)
+
         self.present_happiness_header(
             self.happiness1_header, 1, 41, 43, good,
         )
         self.present_happiness_header(
             self.happiness2_header, 2, 45, 47, good,
+        )
+
+        self.present_unhappiness_header(
+            self.unhappiness1_header, 1, 43, 45, good,
+        )
+        self.present_unhappiness_header(
+            self.unhappiness2_header, 2, 47, 49, good,
         )
 
         planet_pairs = ArrayIter(planet_pairs)
@@ -462,6 +470,27 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         else:
             header.markup = f"Happiness {number}: definitely no"
             return
+        header.markup = header_text.format(number, color, text)
+
+    @staticmethod
+    def present_unhappiness_header(
+        header: Gtk.Label,
+        number: int,
+        start: int,
+        end: int,
+        aspects_good: npt.NDArray[int],
+    ):
+        unhappiness = aspects_good.reshape(-1, 49)[:, start:end]
+        unhappiness = (unhappiness == 0).any(1)
+
+        header_text = "Unhappiness {}: <span foreground='{}'>{}</span>"
+        if unhappiness.all():
+            color, text = "red", "definitely yes"
+        elif (num := np.count_nonzero(unhappiness)) > 0:
+            percentage = num * 100 / len(unhappiness)
+            color, text = RED, f"maybe ({int(percentage)}%)"
+        else:
+            color, text = GREEN, "definitely no"
         header.markup = header_text.format(number, color, text)
 
     @staticmethod
