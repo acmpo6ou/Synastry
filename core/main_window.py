@@ -396,6 +396,8 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
     def present_friendship_header(self, aspects_good: npt.NDArray[int]):
         friendship = aspects_good.reshape(-1, 49)[:, 32:41]
+        friendship[:, 1:4] = -1  # don't count aspects of Sun and Moon/Venus
+        friendship[:, 6] = -1
         friendship = (friendship == 1).any(1)
 
         header = "Friendship: <span foreground='{}'>{}</span>"
