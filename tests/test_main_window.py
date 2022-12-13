@@ -20,6 +20,8 @@ from core.main_window import MainWindow, RED, GREEN
 
 DATE = "2022-08-04 12:00"
 DATE2 = "2022-08-06 12:00"
+BART = "1993-11-03 12:00"
+NYNKE = "1997-12-03 12:00"
 NO_COLOR = "<span >"
 
 
@@ -45,6 +47,19 @@ def test_present_conflictedness():
 
     no_color = [label for label in grid.children if NO_COLOR in label.markup]
     assert len(no_color) == 5
+
+
+def test_present_conflicts_header():
+    window = MainWindow()
+    _, __, good = get_data(window, lambda: window.collect_conflicts(DATE, DATE2))
+    window.present_conflicts_header(good)
+    assert "definitely yes" in window.conflicts_header
+    assert "red" in window.conflicts_header
+
+    _, __, good = get_data(window, lambda: window.collect_conflicts(BART, NYNKE))
+    window.present_conflicts_header(good)
+    assert "definitely no" in window.conflicts_header
+    assert GREEN in window.conflicts_header
 
 
 def test_present_conflicts():
