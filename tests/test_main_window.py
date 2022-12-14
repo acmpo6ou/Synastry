@@ -14,9 +14,11 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Synastry.  If not, see <https://www.gnu.org/licenses/>.
 #
+import numpy as np
 from astropy.coordinates import SkyCoord
 
 from core.main_window import MainWindow, RED, GREEN
+import numpy.typing as npt
 
 DATE = "2022-08-04 12:00"
 DATE2 = "2022-08-06 12:00"
@@ -32,6 +34,10 @@ def get_data(window, collect):
     angles = coords1.separation(coords2).deg.round(decimals=1)
     good = window.aspects_good(angles, planet_pairs)
     return planet_pairs, angles, good
+
+
+def add_padding(array: npt.NDArray[int], start, end):
+    return np.hstack((np.zeros(start), array, np.zeros(49-end)))
 
 
 def test_present_conflictedness():
@@ -52,14 +58,16 @@ def test_present_conflictedness():
 def test_present_conflicts_header():
     window = MainWindow()
     _, __, good = get_data(window, lambda: window.collect_conflicts(DATE, DATE2))
+    good = add_padding(good, 12, 28)
     window.present_conflicts_header(good)
-    assert "definitely yes" in window.conflicts_header
-    assert "red" in window.conflicts_header
+    assert "definitely yes" in window.conflicts_header.markup
+    assert "red" in window.conflicts_header.markup
 
     _, __, good = get_data(window, lambda: window.collect_conflicts(BART, NYNKE))
+    good = add_padding(good, 12, 28)
     window.present_conflicts_header(good)
-    assert "definitely no" in window.conflicts_header
-    assert GREEN in window.conflicts_header
+    assert "definitely no" in window.conflicts_header.markup
+    assert GREEN in window.conflicts_header.markup
 
 
 def test_present_conflicts():
