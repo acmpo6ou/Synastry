@@ -22,8 +22,8 @@ import numpy.typing as npt
 
 DATE = "2022-08-04 12:00"
 DATE2 = "2022-08-06 12:00"
-BART = "1993-11-03 12:00"
-NYNKE = "1997-12-03 12:00"
+BART = "1993-12-03 12:00"
+NYNKE = "1997-11-03 12:00"
 NO_COLOR = "<span >"
 
 
@@ -68,6 +68,7 @@ def test_present_conflicts_header():
     window.present_conflicts_header(good)
     assert "definitely no" in window.conflicts_header.markup
     assert GREEN in window.conflicts_header.markup
+    # TODO: test "maybe"
 
 
 def test_present_conflicts():
@@ -105,6 +106,21 @@ def test_present_conflicts():
 
     no_color = [label for label in window.conflicts.children if NO_COLOR in label.markup]
     assert len(no_color) == 11
+
+
+def test_present_love_header():
+    window = MainWindow()
+    _, __, good = get_data(window, lambda: window.collect_love(DATE, DATE2))
+    good = add_padding(good, 12, 28)
+    window.present_love_header(good)
+    assert "definitely yes" in window.love_header.markup
+    assert GREEN in window.love_header.markup
+
+    _, __, good = get_data(window, lambda: window.collect_love(BART, NYNKE))
+    good = add_padding(good, 12, 28)
+    window.present_love_header(good)
+    assert "definitely no" in window.love_header.markup
+    assert RED in window.love_header.markup
 
 
 def test_present_love():
