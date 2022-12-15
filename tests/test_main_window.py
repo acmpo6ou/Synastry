@@ -139,6 +139,24 @@ def test_present_love():
     assert len(no_color) == 3
 
 
+def test_present_friendship_header():
+    window = MainWindow()
+    _, __, good = get_data(window, lambda: window.collect_friendship(DATE, DATE2))
+    good = add_padding(good, 32, 41)
+    window.present_friendship_header(good)
+    assert "definitely yes" in window.friendship_header.markup
+    assert GREEN in window.friendship_header.markup
+
+    _, __, good = get_data(
+        window, lambda: window.collect_friendship(DATE, "2022-08-15 12:00")
+    )
+    good = add_padding(good, 32, 41)
+    window.present_friendship_header(good)
+    assert "definitely no" in window.friendship_header.markup
+    assert RED in window.friendship_header.markup
+    # TODO: test "maybe"
+
+
 def test_present_friendship():
     window = MainWindow()
     data = get_data(window, lambda: window.collect_friendship(DATE, DATE2))
