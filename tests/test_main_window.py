@@ -178,7 +178,29 @@ def test_present_friendship():
     assert len(no_color) == 6
 
 
-def test_calculate_happiness():
+def test_present_happiness_header():
+    window = MainWindow()
+    _, __, good = get_data(window, lambda: window.collect_happiness(DATE2, DATE))
+    good = add_padding(good, 41, 45)
+    window.present_happiness_header(
+        window.happiness1_header, 1, 41, 43, good,
+    )
+    assert "definitely yes" in window.happiness1_header.markup
+    assert GREEN in window.happiness1_header.markup
+
+    date = "2000-01-01 12:00"
+    _, __, good = get_data(
+        window, lambda: window.collect_happiness(date, date)
+    )
+    good = add_padding(good, 45, 49)
+    window.present_happiness_header(
+        window.happiness2_header, 2, 45, 47, good,
+    )
+    assert "definitely no" in window.happiness2_header.markup
+    # TODO: test "maybe"
+
+
+def test_present_happiness():
     window = MainWindow()
     data = get_data(window, lambda: window.collect_happiness(DATE2, DATE))
     window.present_happiness(window.happiness2, *data[1:])
