@@ -111,16 +111,19 @@ def test_present_conflicts():
 def test_present_love_header():
     window = MainWindow()
     _, __, good = get_data(window, lambda: window.collect_love(DATE, DATE2))
-    good = add_padding(good, 12, 28)
+    good = add_padding(good, 28, 32)
     window.present_love_header(good)
     assert "definitely yes" in window.love_header.markup
     assert GREEN in window.love_header.markup
 
-    _, __, good = get_data(window, lambda: window.collect_love(BART, NYNKE))
-    good = add_padding(good, 12, 28)
+    _, __, good = get_data(
+        window, lambda: window.collect_love(BART, "1997-11-07 12:00")
+    )
+    good = add_padding(good, 28, 32)
     window.present_love_header(good)
     assert "definitely no" in window.love_header.markup
     assert RED in window.love_header.markup
+    # TODO: test "maybe"
 
 
 def test_present_love():
