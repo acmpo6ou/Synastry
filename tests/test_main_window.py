@@ -24,6 +24,8 @@ DATE = "2022-08-04 12:00"
 DATE2 = "2022-08-06 12:00"
 BART = "1993-12-03 12:00"
 NYNKE = "1997-11-03 12:00"
+MARK = "1990-01-25 12:00"
+MARJOLEIN = "1991-10-21 12:00"
 NO_COLOR = "<span >"
 
 
@@ -197,6 +199,28 @@ def test_present_happiness_header():
         window.happiness2_header, 2, 45, 47, good,
     )
     assert "definitely no" in window.happiness2_header.markup
+    # TODO: test "maybe"
+
+
+def test_present_unhappiness_header():
+    window = MainWindow()
+    _, __, good = get_data(window, lambda: window.collect_happiness(MARK, MARJOLEIN))
+    good = add_padding(good, 41, 45)
+    window.present_unhappiness_header(
+        window.unhappiness1_header, 1, 43, 45, good,
+    )
+    assert "definitely yes" in window.unhappiness1_header.markup
+    assert "red" in window.unhappiness1_header.markup
+
+    _, __, good = get_data(
+        window, lambda: window.collect_happiness(DATE, DATE2)
+    )
+    good = add_padding(good, 45, 49)
+    window.present_unhappiness_header(
+        window.unhappiness2_header, 2, 47, 49, good,
+    )
+    assert "definitely no" in window.unhappiness2_header.markup
+    assert GREEN in window.unhappiness2_header.markup
     # TODO: test "maybe"
 
 
