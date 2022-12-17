@@ -47,7 +47,7 @@ def test_maybe_headers():
     window = MainWindow()
     window.date1.date_time = BART
     window.date2.date_time = "1997-11-01 12:00"
-    window.on_date_changed()
+    window.on_calculate()
 
     assert "maybe (6%)" in window.conflicts_header.markup
     assert RED in window.conflicts_header.markup
