@@ -71,7 +71,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         hbox.pack_end(self.date2, False, True, 0)
         self.parent_widget.pack_start(hbox, False, True, 0)
 
-    def on_date_changed(self, _):
+    def on_date_changed(self, _=None):
         start = perf_counter()
         date1 = self.date1.date_time
         date2 = self.date2.date_time

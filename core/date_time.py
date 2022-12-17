@@ -70,5 +70,14 @@ class DateTime(GladeTemplate):
         hours = int(self.hours.value)
         return self.format_datetime(hours)
 
+    @date_time.setter
+    def date_time(self, value: str):
+        date = datetime.strptime(value, "%Y-%m-%d %H:%M")
+        self.year.value = date.year
+        self.month.value = date.month
+        self.day.value = date.day
+        self.hours.value = date.hour
+        self.minutes.value = date.minute
+
     def get_possibilities(self) -> list[str]:
         return [self.format_datetime(hour) for hour in range(24)]

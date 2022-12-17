@@ -14,11 +14,12 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Synastry.  If not, see <https://www.gnu.org/licenses/>.
 #
+
 import numpy as np
+import numpy.typing as npt
 from astropy.coordinates import SkyCoord
 
-from core.main_window import MainWindow, RED, GREEN
-import numpy.typing as npt
+from core.main_window import MainWindow, RED, GREEN, DARK_GREEN
 
 DATE = "2022-08-04 12:00"
 DATE2 = "2022-08-06 12:00"
@@ -40,6 +41,25 @@ def get_data(window, collect):
 
 def add_padding(array: npt.NDArray[int], start, end):
     return np.hstack((np.zeros(start), array, np.zeros(49-end)))
+
+
+def test_maybe_headers():
+    window = MainWindow()
+    window.date1.date_time = BART
+    window.date2.date_time = "1997-11-01 12:00"
+    window.on_date_changed()
+
+    assert "maybe (6%)" in window.conflicts_header.markup
+    assert RED in window.conflicts_header.markup
+
+    assert "maybe (35%)" in window.love_header.markup
+    assert DARK_GREEN in window.love_header.markup
+
+    assert "maybe (47%)" in window.friendship_header.markup
+    assert DARK_GREEN in window.friendship_header.markup
+
+    assert "maybe (75%)" in window.unhappiness2_header.markup
+    assert RED in window.unhappiness2_header.markup
 
 
 def test_present_conflictedness():
@@ -70,7 +90,6 @@ def test_present_conflicts_header():
     window.present_conflicts_header(good)
     assert "definitely no" in window.conflicts_header.markup
     assert GREEN in window.conflicts_header.markup
-    # TODO: test "maybe"
 
 
 def test_present_conflicts():
