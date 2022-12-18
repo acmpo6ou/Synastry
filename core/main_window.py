@@ -88,6 +88,14 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         planet_pairs, angles = self.calculate_angles(self.dates1, self.dates2)
         good = self.aspects_good(angles, planet_pairs)
 
+        planet_pairs = [planet_pairs[i:i + 49] for i in range(0, len(planet_pairs), 49)]
+        angles = angles.reshape(-1, 49)
+        good = good.reshape(-1, 49)
+
+        self.planet_pairs = planet_pairs
+        self.angles = angles
+        self.good = good
+
         self.present_conflicts_header(good)
         self.present_love_header(good)
         self.present_friendship_header(good)
@@ -106,9 +114,13 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             self.unhappiness2_header, 2, 47, 49, good,
         )
 
-        planet_pairs = ArrayIter(planet_pairs)
-        angles = ArrayIter(angles)
-        good = ArrayIter(good)
+        self.present_all_tables(0)
+        print(perf_counter() - start)
+
+    def present_all_tables(self, index):
+        planet_pairs = ArrayIter(self.planet_pairs[index])
+        angles = ArrayIter(self.angles[index])
+        good = ArrayIter(self.good[index])
 
         def data(n):
             return planet_pairs[n], angles[n], good[n]
@@ -124,8 +136,6 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
         self.present_happiness(self.happiness1, angles[4], good[4])
         self.present_happiness(self.happiness2, angles[4], good[4])
-
-        print(perf_counter() - start)
 
     @staticmethod
     def aspects_good(angles, planet_pairs):
@@ -318,8 +328,14 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 column += 1
 
             button = Gtk.Button(f"{time1}/{time2}")
-            self.conflict_times.attach(button, column, row, 1, 1)
             button.show_all()
+            # button.connect("clicked")
+
+            date1_i = self.dates1.index(date1)
+            date2_i = self.dates2.index(date2)
+            time_i = date1_i * 24 + date2_i
+
+            self.conflict_times.attach(button, column, row, 1, 1)
             row += 1
 
     def present_conflicts(
