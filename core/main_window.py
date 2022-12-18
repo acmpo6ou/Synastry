@@ -296,14 +296,31 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         self.conflicts_header.markup = header.format(color, text)
 
     def present_conflict_times(self, conflicts: npt.NDArray[int]):
-        # TODO: clear conflict_times
+        self.conflict_times.foreach(lambda x: x.destroy())
         data = zip(itertools.product(self.dates1, self.dates2), conflicts)
+        column, row = 0, -1
+        row_value = ""
+        presented = []
+
         for (date1, date2), conflict in data:
+            in_list = np.any(np.all(conflict == presented))
+            if in_list:
+                continue
+            presented.append(conflict)
+
             time1 = date1.split()[1]
             time2 = date2.split()[1]
+
+            # TODO: comment
+            if time1 != row_value:
+                row_value = time1
+                row = 0
+                column += 1
+
             button = Gtk.Button(f"{time1}/{time2}")
-            self.conflict_times.add(button)
+            self.conflict_times.attach(button, column, row, 1, 1)
             button.show_all()
+            row += 1
 
     def present_conflicts(
         self,
