@@ -299,7 +299,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         self.conflict_times.foreach(lambda x: x.destroy())
         data = zip(itertools.product(self.dates1, self.dates2), conflicts)
         column, row = 0, -1
-        row_value = ""
+        column_value = ""
         presented = []
 
         for (date1, date2), conflict in data:
@@ -311,9 +311,9 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             time1 = date1.split()[1]
             time2 = date2.split()[1]
 
-            # TODO: comment
-            if time1 != row_value:
-                row_value = time1
+            # align items such that each column has the same time1
+            if time1 != column_value:
+                column_value = time1
                 row = 0
                 column += 1
 
