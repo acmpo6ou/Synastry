@@ -36,19 +36,20 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
     # <editor-fold>
     parent_widget: Gtk.Box
     conflicts_header: Gtk.Label
-    conflicts1: Gtk.Grid
-    love: Gtk.Grid
-    friendship: Gtk.Grid
-    love_header: Gtk.Label
-    friendship_header: Gtk.Label
-    happiness1_header: Gtk.Label
-    happiness2_header: Gtk.Label
-    happiness1: Gtk.Grid
-    conflicts2: Gtk.Grid
     conflicts: Gtk.Grid
-    happiness2: Gtk.Grid
+    happiness1: Gtk.Grid
     unhappiness1_header: Gtk.Label
+    happiness1_header: Gtk.Label
+    love: Gtk.Grid
+    love_header: Gtk.Label
+    conflicts1: Gtk.Grid
+    happiness2: Gtk.Grid
     unhappiness2_header: Gtk.Label
+    happiness2_header: Gtk.Label
+    friendship: Gtk.Grid
+    friendship_header: Gtk.Label
+    conflicts2: Gtk.Grid
+    conflict_times: Gtk.Grid
     # </editor-fold>
 
     def __init__(self, *args, **kwargs):
@@ -76,15 +77,15 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         date1 = self.date1.date_time
         date2 = self.date2.date_time
 
-        dates1 = [date1]
+        self.dates1 = [date1]
         if self.date1.possibilities.active:
-            dates1 = self.date1.get_possibilities()
+            self.dates1 = self.date1.get_possibilities()
 
-        dates2 = [date2]
+        self.dates2 = [date2]
         if self.date2.possibilities.active:
-            dates2 = self.date2.get_possibilities()
+            self.dates2 = self.date2.get_possibilities()
 
-        planet_pairs, angles = self.calculate_angles(dates1, dates2)
+        planet_pairs, angles = self.calculate_angles(self.dates1, self.dates2)
         good = self.aspects_good(angles, planet_pairs)
 
         self.present_conflicts_header(good)
@@ -281,6 +282,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
     def present_conflicts_header(self, aspects_good: npt.NDArray[int]):
         conflicts = aspects_good.reshape(-1, 49)[:, 12:28]
+        self.present_conflict_times(conflicts)
         conflicts = (conflicts == 0).any(1)
 
         header = "Conflicts: <span foreground='{}'>{}</span>"
@@ -292,6 +294,16 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         else:
             color, text = GREEN, "definitely no"
         self.conflicts_header.markup = header.format(color, text)
+
+    def present_conflict_times(self, conflicts: npt.NDArray[int]):
+        # TODO: clear conflict_times
+        data = zip(itertools.product(self.dates1, self.dates2), conflicts)
+        for (date1, date2), conflict in data:
+            time1 = date1.split()[1]
+            time2 = date2.split()[1]
+            button = Gtk.Button(f"{time1}/{time2}")
+            self.conflict_times.add(button)
+            button.show_all()
 
     def present_conflicts(
         self,
