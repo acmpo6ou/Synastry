@@ -291,7 +291,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         return self.collect_coords(planets1, planets2)
 
     def present_conflicts_header(self, aspects_good: npt.NDArray[int]):
-        conflicts = aspects_good.reshape(-1, 49)[:, 12:28]
+        conflicts = aspects_good[:, 12:28]
         self.present_conflict_times(conflicts)
         conflicts = (conflicts == 0).any(1)
 
@@ -329,14 +329,22 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
             button = Gtk.Button(f"{time1}/{time2}")
             button.show_all()
-            # button.connect("clicked")
 
             date1_i = self.dates1.index(date1)
             date2_i = self.dates2.index(date2)
             time_i = date1_i * 24 + date2_i
+            button.connect(
+                "clicked",
+                lambda _, i=time_i, date1=date1, date2=date2: self.set_time(i, date1, date2),
+            )
 
             self.conflict_times.attach(button, column, row, 1, 1)
             row += 1
+
+    def set_time(self, i, date1, date2):
+        self.date1.date_time = date1
+        self.date2.date_time = date2
+        self.present_all_tables(i)
 
     def present_conflicts(
         self,
@@ -386,7 +394,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         return self.collect_coords(planets1, planets2)
 
     def present_love_header(self, aspects_good: npt.NDArray[int]):
-        love = aspects_good.reshape(-1, 49)[:, 28:32]
+        love = aspects_good[:, 28:32]
         love = (love != -1).any(1)
 
         header = "Love: <span foreground='{}'>{}</span>"
@@ -440,7 +448,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         return self.collect_coords(planets1, planets2)
 
     def present_friendship_header(self, aspects_good: npt.NDArray[int]):
-        friendship = aspects_good.reshape(-1, 49)[:, 32:41]
+        friendship = aspects_good[:, 32:41]
         friendship[:, 1:4] = -1  # don't count aspects of Sun and Moon/Venus
         friendship[:, 6] = -1
         friendship = (friendship == 1).any(1)
@@ -504,7 +512,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         end: int,
         aspects_good: npt.NDArray[int],
     ):
-        happiness = aspects_good.reshape(-1, 49)[:, start:end]
+        happiness = aspects_good[:, start:end]
         happiness = (happiness == 1).any(1)
 
         header_text = "Happiness {}: <span foreground='{}'>{}</span>"
@@ -526,7 +534,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         end: int,
         aspects_good: npt.NDArray[int],
     ):
-        unhappiness = aspects_good.reshape(-1, 49)[:, start:end]
+        unhappiness = aspects_good[:, start:end]
         unhappiness = (unhappiness == 0).any(1)
 
         header_text = "Unhappiness {}: <span foreground='{}'>{}</span>"
