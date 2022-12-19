@@ -292,7 +292,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
     def present_conflicts_header(self, aspects_good: npt.NDArray[int]):
         conflicts = aspects_good[:, 12:28]
-        self.present_conflict_times(conflicts)
+        self.present_times(conflicts, self.conflict_times)
         conflicts = (conflicts == 0).any(1)
 
         header = "Conflicts: <span foreground='{}'>{}</span>"
@@ -305,9 +305,9 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             color, text = GREEN, "definitely no"
         self.conflicts_header.markup = header.format(color, text)
 
-    def present_conflict_times(self, conflicts: npt.NDArray[int]):
-        self.conflict_times.foreach(lambda x: x.destroy())
-        data = zip(itertools.product(self.dates1, self.dates2), conflicts)
+    def present_times(self, good: npt.NDArray[int], table: Gtk.Grid):
+        table.foreach(lambda x: x.destroy())
+        data = zip(itertools.product(self.dates1, self.dates2), good)
         column, row = 0, -1
         column_value = ""
         presented = []
@@ -341,7 +341,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 lambda _, i=time_i, date1=date1, date2=date2: self.set_time(i, date1, date2),
             )
 
-            self.conflict_times.attach(button, column, row, 1, 1)
+            table.attach(button, column, row, 1, 1)
             row += 1
 
     def set_time(self, i, date1, date2):
