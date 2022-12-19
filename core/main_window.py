@@ -18,9 +18,9 @@ import itertools
 from time import perf_counter
 
 import numpy as np
+import numpy.typing as npt
 from astropy.coordinates import SkyCoord, Angle
 from gi.repository import Gtk
-import numpy.typing as npt
 
 from core.date_time import DateTime
 from core.gtk_utils import GladeTemplate, clear_table
@@ -313,8 +313,8 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         presented = []
 
         for (date1, date2), conflict in data:
-            in_list = np.any(np.all(conflict == presented))
-            if in_list:
+            conflict = list(conflict)
+            if conflict in presented:
                 continue
             presented.append(conflict)
 
