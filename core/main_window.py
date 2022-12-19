@@ -36,20 +36,26 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
     # <editor-fold>
     parent_widget: Gtk.Box
     conflicts_header: Gtk.Label
-    conflicts: Gtk.Grid
-    happiness1: Gtk.Grid
-    unhappiness1_header: Gtk.Label
-    happiness1_header: Gtk.Label
-    love: Gtk.Grid
     love_header: Gtk.Label
     conflicts1: Gtk.Grid
+    friendship_header: Gtk.Label
+    conflicts2: Gtk.Grid
+    conflicts: Gtk.Grid
+    conflict_times: Gtk.Grid
+    happiness1: Gtk.Grid
+    happiness1_header: Gtk.Label
+    unhappiness1_header: Gtk.Label
+    love: Gtk.Grid
     happiness2: Gtk.Grid
     unhappiness2_header: Gtk.Label
     happiness2_header: Gtk.Label
     friendship: Gtk.Grid
-    friendship_header: Gtk.Label
-    conflicts2: Gtk.Grid
-    conflict_times: Gtk.Grid
+    love_times: Gtk.Grid
+    frienship_times: Gtk.Grid
+    happiness1_times: Gtk.Grid
+    happiness2_times: Gtk.Grid
+    unhappiness2_times: Gtk.Grid
+    unhappiness1_times: Gtk.Grid
     # </editor-fold>
 
     def __init__(self, *args, **kwargs):
@@ -101,17 +107,17 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         self.present_friendship_header(good)
 
         self.present_happiness_header(
-            self.happiness1_header, 1, 41, 43, good,
+            self.happiness1_header, 1, 41, 43, good, self.happiness1_times
         )
         self.present_happiness_header(
-            self.happiness2_header, 2, 45, 47, good,
+            self.happiness2_header, 2, 45, 47, good, self.happiness2_times
         )
 
         self.present_unhappiness_header(
-            self.unhappiness1_header, 1, 43, 45, good,
+            self.unhappiness1_header, 1, 43, 45, good, self.unhappiness1_times
         )
         self.present_unhappiness_header(
-            self.unhappiness2_header, 2, 47, 49, good,
+            self.unhappiness2_header, 2, 47, 49, good, self.unhappiness2_times
         )
 
         self.present_all_tables(0)
@@ -398,6 +404,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
     def present_love_header(self, aspects_good: npt.NDArray[int]):
         love = aspects_good[:, 28:32]
+        self.present_times(love, self.love_times)
         love = (love != -1).any(1)
 
         header = "Love: <span foreground='{}'>{}</span>"
@@ -454,6 +461,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         friendship = aspects_good[:, 32:41]
         friendship[:, 1:4] = -1  # don't count aspects of Sun and Moon/Venus
         friendship[:, 6] = -1
+        self.present_times(friendship, self.frienship_times)
         friendship = (friendship == 1).any(1)
 
         header = "Friendship: <span foreground='{}'>{}</span>"
@@ -507,15 +515,17 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         planets2 = (sun1, moon1)
         return self.collect_coords(planets1, planets2)
 
-    @staticmethod
     def present_happiness_header(
+        self,
         header: Gtk.Label,
         number: int,
         start: int,
         end: int,
         aspects_good: npt.NDArray[int],
+        happiness_times: Gtk.Grid,
     ):
         happiness = aspects_good[:, start:end]
+        self.present_times(happiness, happiness_times)
         happiness = (happiness == 1).any(1)
 
         header_text = "Happiness {}: <span foreground='{}'>{}</span>"
@@ -529,15 +539,17 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             return
         header.markup = header_text.format(number, color, text)
 
-    @staticmethod
     def present_unhappiness_header(
+        self,
         header: Gtk.Label,
         number: int,
         start: int,
         end: int,
         aspects_good: npt.NDArray[int],
+        unhappiness_times: Gtk.Grid,
     ):
         unhappiness = aspects_good[:, start:end]
+        self.present_times(unhappiness, unhappiness_times)
         unhappiness = (unhappiness == 0).any(1)
 
         header_text = "Unhappiness {}: <span foreground='{}'>{}</span>"
