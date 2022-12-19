@@ -313,6 +313,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         presented = []
 
         for (date1, date2), conflict in data:
+            # show only times that have different aspects
             conflict = list(conflict)
             if conflict in presented:
                 continue
@@ -322,6 +323,8 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             time2 = date2.split()[1]
 
             # align items such that each column has the same time1
+            # so we'll have a separate column where time1 is 00:00,
+            # a separate one for time1 01:00, etc.
             if time1 != column_value:
                 column_value = time1
                 row = 0
