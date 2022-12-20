@@ -298,6 +298,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
     def present_conflicts_header(self, aspects_good: npt.NDArray[int]):
         conflicts = aspects_good[:, 12:28]
+        conflicts[conflicts == 1] = -1
         self.present_times(conflicts, self.conflict_times)
         conflicts = (conflicts == 0).any(1)
 
@@ -461,6 +462,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         friendship = aspects_good[:, 32:41]
         friendship[:, 1:4] = -1  # don't count aspects of Sun and Moon/Venus
         friendship[:, 6] = -1
+        friendship[friendship == 0] = -1
         self.present_times(friendship, self.frienship_times)
         friendship = (friendship == 1).any(1)
 
@@ -525,6 +527,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         happiness_times: Gtk.Grid,
     ):
         happiness = aspects_good[:, start:end]
+        happiness[happiness == 0] = -1
         self.present_times(happiness, happiness_times)
         happiness = (happiness == 1).any(1)
 
@@ -549,6 +552,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         unhappiness_times: Gtk.Grid,
     ):
         unhappiness = aspects_good[:, start:end]
+        unhappiness[unhappiness == 1] = -1
         self.present_times(unhappiness, unhappiness_times)
         unhappiness = (unhappiness == 0).any(1)
 
