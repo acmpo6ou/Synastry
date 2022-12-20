@@ -43,12 +43,13 @@ def add_padding(array: npt.NDArray[int], start, end):
     return np.hstack((np.zeros(start), array, np.zeros(49-end)))
 
 
-def test_maybe_headers():
+def test_maybe(check):
     window = MainWindow()
     window.date1.date_time = BART
     window.date2.date_time = "1997-11-01 12:00"
     window.on_calculate()
 
+    # the headers should be correct
     assert "maybe (6%)" in window.conflicts_header.markup
     assert RED in window.conflicts_header.markup
 
@@ -60,6 +61,28 @@ def test_maybe_headers():
 
     assert "maybe (75%)" in window.unhappiness2_header.markup
     assert RED in window.unhappiness2_header.markup
+
+    # the time buttons should be correct as well
+    times = [button.label for button in window.conflict_times.children]
+    assert times == ["16:00/00:00", "00:00/00:00"]
+
+    times = [button.label for button in window.love_times.children]
+    assert times == ["15:00/00:00", "00:00/00:00"]
+
+    times = [button.label for button in window.frienship_times.children]
+    assert times == ["14:00/18:00", "00:00/16:00", "00:00/03:00", "00:00/00:00"]
+
+    times = [button.label for button in window.happiness1_times.children]
+    assert times == ["00:00/00:00"]
+
+    times = [button.label for button in window.happiness2_times.children]
+    assert times == ["00:00/00:00"]
+
+    times = [button.label for button in window.unhappiness1_times.children]
+    assert times == ["00:00/00:00"]
+
+    times = [button.label for button in window.unhappiness2_times.children]
+    assert times == ["00:00/06:00", "00:00/00:00"]
 
 
 def test_present_conflictedness():
