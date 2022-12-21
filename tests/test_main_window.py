@@ -17,7 +17,9 @@
 
 import numpy as np
 import numpy.typing as npt
+import pytest
 from astropy.coordinates import SkyCoord
+from gi.repository import Gtk
 
 from core.main_window import MainWindow, RED, GREEN, DARK_GREEN
 
@@ -40,7 +42,15 @@ def get_data(window, collect):
 
 
 def add_padding(array: npt.NDArray[int], start, end):
-    return np.hstack((np.zeros(start), array, np.zeros(49-end)))
+    return np.hstack((np.zeros(start), array, np.zeros(49-end))).reshape(-1, 49)
+
+
+@pytest.fixture
+def window():
+    window = MainWindow()
+    window.dates1 = [window.date1.date_time]
+    window.dates2 = [window.date2.date_time]
+    return window
 
 
 def test_maybe(check):
@@ -100,8 +110,7 @@ def test_present_conflictedness():
     assert len(no_color) == 5
 
 
-def test_present_conflicts_header():
-    window = MainWindow()
+def test_present_conflicts_header(window):
     _, __, good = get_data(window, lambda: window.collect_conflicts(DATE, DATE2))
     good = add_padding(good, 12, 28)
     window.present_conflicts_header(good)
@@ -152,8 +161,7 @@ def test_present_conflicts():
     assert len(no_color) == 11
 
 
-def test_present_love_header():
-    window = MainWindow()
+def test_present_love_header(window):
     _, __, good = get_data(window, lambda: window.collect_love(DATE, DATE2))
     good = add_padding(good, 28, 32)
     window.present_love_header(good)
@@ -167,7 +175,6 @@ def test_present_love_header():
     window.present_love_header(good)
     assert "definitely no" in window.love_header.markup
     assert RED in window.love_header.markup
-    # TODO: test "maybe"
 
 
 def test_present_love():
@@ -183,8 +190,7 @@ def test_present_love():
     assert len(no_color) == 3
 
 
-def test_present_friendship_header():
-    window = MainWindow()
+def test_present_friendship_header(window):
     _, __, good = get_data(window, lambda: window.collect_friendship(DATE, DATE2))
     good = add_padding(good, 32, 41)
     window.present_friendship_header(good)
@@ -198,7 +204,6 @@ def test_present_friendship_header():
     window.present_friendship_header(good)
     assert "definitely no" in window.friendship_header.markup
     assert RED in window.friendship_header.markup
-    # TODO: test "maybe"
 
 
 def test_present_friendship():
@@ -222,12 +227,11 @@ def test_present_friendship():
     assert len(no_color) == 6
 
 
-def test_present_happiness_header():
-    window = MainWindow()
+def test_present_happiness_header(window):
     _, __, good = get_data(window, lambda: window.collect_happiness(DATE2, DATE))
     good = add_padding(good, 41, 45)
     window.present_happiness_header(
-        window.happiness1_header, 1, 41, 43, good,
+        window.happiness1_header, 1, 41, 43, good, Gtk.Grid()
     )
     assert "definitely yes" in window.happiness1_header.markup
     assert GREEN in window.happiness1_header.markup
@@ -238,18 +242,16 @@ def test_present_happiness_header():
     )
     good = add_padding(good, 45, 49)
     window.present_happiness_header(
-        window.happiness2_header, 2, 45, 47, good,
+        window.happiness2_header, 2, 45, 47, good, Gtk.Grid()
     )
     assert "definitely no" in window.happiness2_header.markup
-    # TODO: test "maybe"
 
 
-def test_present_unhappiness_header():
-    window = MainWindow()
+def test_present_unhappiness_header(window):
     _, __, good = get_data(window, lambda: window.collect_happiness(MARK, MARJOLEIN))
     good = add_padding(good, 41, 45)
     window.present_unhappiness_header(
-        window.unhappiness1_header, 1, 43, 45, good,
+        window.unhappiness1_header, 1, 43, 45, good, Gtk.Grid()
     )
     assert "definitely yes" in window.unhappiness1_header.markup
     assert "red" in window.unhappiness1_header.markup
@@ -259,11 +261,10 @@ def test_present_unhappiness_header():
     )
     good = add_padding(good, 45, 49)
     window.present_unhappiness_header(
-        window.unhappiness2_header, 2, 47, 49, good,
+        window.unhappiness2_header, 2, 47, 49, good, Gtk.Grid()
     )
     assert "definitely no" in window.unhappiness2_header.markup
     assert GREEN in window.unhappiness2_header.markup
-    # TODO: test "maybe"
 
 
 def test_present_happiness():
