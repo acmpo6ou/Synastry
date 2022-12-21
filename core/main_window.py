@@ -131,8 +131,6 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         def data(n):
             return planet_pairs[n], angles[n], good[n]
 
-        # TODO: get current block of angles or set hours to 0 where
-        #  "calculate possibilities" is checked
         conf1 = self.present_conflictedness(self.conflicts1, *data(6))
         conf2 = self.present_conflictedness(self.conflicts2, *data(6))
         self.present_conflicts(conf1, conf2, *data(16))
