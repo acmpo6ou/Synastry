@@ -23,7 +23,7 @@ from astropy.coordinates import SkyCoord, Angle
 from gi.repository import Gtk
 
 from core.date_time import DateTime
-from core.gtk_utils import GladeTemplate, clear_table
+from core.gtk_utils import GladeTemplate, clear_table, insert_label
 from core.planets import Planet, get_planet, aspects_good
 
 RED = "#f04b51"
@@ -242,8 +242,8 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 dec2.append(p2.body.dec)
         return planet_pairs, ra1, dec1, ra2, dec2
 
-    @staticmethod
     def present_conflictedness(
+        self,
         table: Gtk.Grid,
         planet_pairs: list[tuple[Planet]],
         angles: Angle,
@@ -272,11 +272,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 header1.markup = f'<span foreground="{RED}">{header1.text}</span>'
                 header2.markup = f'<span foreground="{RED}">{header2.text}</span>'
 
-            label = Gtk.Label()
-            label.xalign = 0
-            label.markup = f"<span {color}>{angle}°</span>"
-            table.attach(label, column, row, 1, 1)
-            label.show()
+            insert_label(color, angle, table, column, row)
         return conflictedness
 
     def collect_conflicts(self, date1: str, date2: str):
@@ -385,11 +381,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 if p1.name in conflictedness1 or p2.name in conflictedness2:
                     color = 'foreground="red"'
 
-            label = Gtk.Label()
-            label.xalign = 0
-            label.markup = f"<span {color}>{angle}°</span>"
-            self.conflicts.attach(label, column, row, 1, 1)
-            label.show()
+            insert_label(color, angle, self.conflicts, column, row)
 
     def collect_love(self, date1: str, date2: str):
         moon = get_planet("moon", date1)
@@ -437,11 +429,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             else:
                 color = f'foreground="{RED}"'
 
-            label = Gtk.Label()
-            label.xalign = 0
-            label.markup = f"<span {color}>{angle}°</span>"
-            self.love.attach(label, column, row, 1, 1)
-            label.show()
+            insert_label(color, angle, self.love, column, row)
 
     def collect_friendship(self, date1: str, date2: str):
         sun1 = get_planet("sun", date1)
@@ -499,11 +487,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             else:
                 color = f'foreground="{GREEN}"'
 
-            label = Gtk.Label()
-            label.xalign = 0
-            label.markup = f"<span {color}>{angle}°</span>"
-            self.friendship.attach(label, column, row, 1, 1)
-            label.show()
+            insert_label(color, angle, self.friendship, column, row)
 
     def collect_happiness(self, date1: str, date2: str):
         sun1 = get_planet("sun", date1)
@@ -583,11 +567,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             else:
                 color = f'foreground="{GREEN}"'
 
-            label = Gtk.Label()
-            label.xalign = 0
-            label.markup = f"<span {color}>{angle}°</span>"
-            table.attach(label, 1, i + 1, 1, 1)
-            label.show()
+            insert_label(color, angle, table, 1, i+1)
 
         data = zip(angles[2:], aspects_good[2:], range(2))
         for angle, good, i in data:
@@ -596,11 +576,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             else:
                 color = f'foreground="{RED}"'
 
-            label = Gtk.Label()
-            label.xalign = 0
-            label.markup = f"<span {color}>{angle}°</span>"
-            table.attach(label, 2, i + 1, 1, 1)
-            label.show()
+            insert_label(color, angle, table, 2, i+1)
 
 
 class ArrayIter:

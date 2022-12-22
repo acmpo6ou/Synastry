@@ -175,3 +175,17 @@ def clear_table(table: Gtk.Grid):
             header1.markup = header1.text
         if header2:
             header2.markup = header2.text
+
+
+def insert_label(
+    color: str,
+    angle: float,
+    table: Gtk.Grid,
+    column: int,
+    row: int,
+):
+    label = Gtk.Label()
+    label.xalign = 0
+    label.markup = f"<span {color}>{angle}°</span>"
+    table.attach(label, column, row, 1, 1)
+    label.show()
