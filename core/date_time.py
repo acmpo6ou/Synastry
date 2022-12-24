@@ -49,6 +49,12 @@ class DateTime(GladeTemplate):
         gmt_field.text = f"+{value}" if value >= 0 else str(value)
         return True
 
+    @staticmethod
+    def show_leading_zero(field: Gtk.SpinButton):
+        value = int(field.adjustment.value)
+        field.text = f"{value:02}"
+        return True
+
     def on_time_changed(self, _):
         hours = int(self.hours.value)
         minutes = int(self.minutes.value)

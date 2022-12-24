@@ -56,6 +56,7 @@
             <property name="numeric">True</property>
             <property name="update-policy">if-valid</property>
             <property name="value">12</property>
+            <signal name="output" handler="show_leading_zero" swapped="no"/>
             <signal name="value-changed" handler="on_time_changed" swapped="no"/>
           </object>
           <packing>
@@ -74,6 +75,7 @@
             <property name="adjustment">minute</property>
             <property name="climb-rate">1</property>
             <property name="update-policy">if-valid</property>
+            <signal name="output" handler="show_leading_zero" swapped="no"/>
             <signal name="value-changed" handler="on_time_changed" swapped="no"/>
           </object>
           <packing>
@@ -87,6 +89,7 @@
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="margin-end">16</property>
+            <property name="width-chars">4</property>
             <property name="text" translatable="yes">0</property>
             <property name="secondary-icon-tooltip-text" translatable="yes">GMT</property>
             <property name="input-purpose">digits</property>
@@ -114,6 +117,7 @@
             <property name="climb-rate">1</property>
             <property name="update-policy">if-valid</property>
             <property name="value">1</property>
+            <signal name="output" handler="show_leading_zero" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -132,6 +136,7 @@
             <property name="climb-rate">1</property>
             <property name="update-policy">if-valid</property>
             <property name="value">1</property>
+            <signal name="output" handler="show_leading_zero" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
