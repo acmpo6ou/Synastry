@@ -70,7 +70,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
         calculate = Gtk.Button("Calculate")
         calculate.connect("clicked", self.on_calculate)
-        calculate.style_context.add_class("suggested-action")
+        calculate.style_context.add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
 
         hbox = Gtk.Box(Gtk.Orientation.HORIZONTAL, 100)
         hbox.pack_start(self.date1, False, True, 0)
