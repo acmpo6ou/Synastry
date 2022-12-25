@@ -21,6 +21,24 @@ from core.gtk_utils import GladeTemplate
 
 
 class PeriodsWindow(Gtk.Window, GladeTemplate):
-    def __init__(self):
+    def __init__(self, date1: str, date2: str):
         Gtk.Window.__init__(self)
         GladeTemplate.__init__(self, "periods")
+
+    def calculate_for_month(self, month, date1, date2):
+        """
+        Calculates aspects present for 2 persons during given [month].
+
+        :param date1: date of birth of the first person.
+        :param date2: date of birth of the second person.
+        """
+        ...
+
+    def calculate_for_day(self, day, date1, date2):
+        """
+        Calculates aspects present for 2 persons during given [day].
+
+        :param date1: date of birth of the first person.
+        :param date2: date of birth of the second person.
+        """
+        ...
