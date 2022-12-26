@@ -38,10 +38,19 @@ class DateDb:
         """ Creates database file if it's not present. """
         db_file = Path("database.json")
         if not db_file.exists():
-            db_file.touch()
+            db_file.write_text("{}")
 
     def load_db(self):
         """ Loads database entries into main window's combo boxes. """
+        with open("database.json") as file:
+            self.database = json.load(file)
+        self.load_date_picker(self.window.date_picker1)
+        self.load_date_picker(self.window.date_picker2)
+
+    def load_date_picker(self, picker: Gtk.ComboBoxText):
+        picker.remove_all()
+        for entry in sorted(self.database.keys()):
+            picker.append(None, entry)
 
     def on_date_selected(self, picker: Gtk.ComboBoxText, date_time: DateTime):
         """ Loads selected date into date_time. """

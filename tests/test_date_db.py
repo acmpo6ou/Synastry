@@ -14,6 +14,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Synastry.  If not, see <https://www.gnu.org/licenses/>.
 #
+import shutil
 from pathlib import Path
 
 import pytest
@@ -26,6 +27,7 @@ DATE = "2022-08-04 12:00"
 
 @pytest.fixture
 def date_db():
+    Path("database.json").unlink()
     return DateDb(MainWindow())
 
 
@@ -42,3 +44,11 @@ def test_on_save(date_db):
 
     window.save1_button.clicked()
     assert Path("database.json").read_text() == """{"date1": [12, 0, 3, 4, 8, 2022]}"""
+
+
+def test_load_db(date_db):
+    window = date_db.window
+    shutil.copyfile("tests/database.json", "./database.json")
+    date_db.load_db()
+
+    assert date_db.database == {"date1": [12, 0, 3, 4, 8, 2022], "date2": [12, 0, 3, 6, 8, 2022]}
