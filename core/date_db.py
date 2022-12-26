@@ -54,10 +54,12 @@ class DateDb:
 
     def on_date_selected(self, picker: Gtk.ComboBoxText, date_time: DateTime):
         """ Loads selected date into date_time. """
+        selected = picker.active_text
+        date_time.time_data = self.database[selected]
 
     def on_save(self, picker: Gtk.ComboBoxText, date_time: DateTime):
         """ Saves current date to the database. """
-        self.database[picker.active_text] = date_time.data
+        self.database[picker.active_text] = date_time.time_data
         with open("database.json", "w") as file:
             json.dump(self.database, file)
 

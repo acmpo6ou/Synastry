@@ -61,3 +61,12 @@ def test_on_remove(date_db):
     window.remove1_button.clicked()
     assert "date1" not in date_db.database
     assert Path("database.json").read_text() == """{"date2": [12, 0, 3, 6, 8, 2022]}"""
+
+
+def test_on_date_selected(date_db):
+    shutil.copyfile("tests/database.json", "./database.json")
+    date_db.load_db()
+
+    window = date_db.window
+    window.date_picker1.active = 0
+    assert window.date1.time_data == [12, 0, 3, 4, 8, 2022]

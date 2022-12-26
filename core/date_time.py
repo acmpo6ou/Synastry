@@ -45,11 +45,11 @@ class DateTime(GladeTemplate):
         self.FIELDS = (self.hours, self.minutes, self.gmt, self.day, self.month, self.year)
 
     @property
-    def data(self):
+    def time_data(self):
         return [int(field.value) for field in self.FIELDS]
 
-    @data.setter
-    def data(self, values: tuple[int]):
+    @time_data.setter
+    def time_data(self, values: tuple[int]):
         for field, value in zip(self.FIELDS, values):
             field.value = value
 
