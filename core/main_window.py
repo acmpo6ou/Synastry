@@ -598,10 +598,10 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
         self.date_db.on_save(picker, self.date2)
 
     def on_remove1(self, picker: Gtk.ComboBoxText):
-        self.date_db.on_remove(picker, self.date1)
+        self.date_db.on_remove(picker)
 
     def on_remove2(self, picker: Gtk.ComboBoxText):
-        self.date_db.on_remove(picker, self.date2)
+        self.date_db.on_remove(picker)
 
 
 class ArrayIter:

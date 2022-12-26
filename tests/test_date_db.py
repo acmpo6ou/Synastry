@@ -28,7 +28,7 @@ DATE = "2022-08-04 12:00"
 @pytest.fixture
 def date_db():
     Path("database.json").unlink()
-    return DateDb(MainWindow())
+    return MainWindow().date_db
 
 
 def test_fix_db_file(date_db):
@@ -47,8 +47,17 @@ def test_on_save(date_db):
 
 
 def test_load_db(date_db):
-    window = date_db.window
     shutil.copyfile("tests/database.json", "./database.json")
     date_db.load_db()
-
     assert date_db.database == {"date1": [12, 0, 3, 4, 8, 2022], "date2": [12, 0, 3, 6, 8, 2022]}
+
+
+def test_on_remove(date_db):
+    shutil.copyfile("tests/database.json", "./database.json")
+    date_db.load_db()
+    window = date_db.window
+    window.date_picker1.active = 0
+
+    window.remove1_button.clicked()
+    assert "date1" not in date_db.database
+    assert Path("database.json").read_text() == """{"date2": [12, 0, 3, 6, 8, 2022]}"""

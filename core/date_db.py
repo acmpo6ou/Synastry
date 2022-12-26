@@ -61,5 +61,15 @@ class DateDb:
         with open("database.json", "w") as file:
             json.dump(self.database, file)
 
-    def on_remove(self, picker: Gtk.ComboBoxText, date_time: DateTime):
+    def on_remove(self, picker: Gtk.ComboBoxText):
         """ Removes picked date from the database. """
+        selected = picker.active_text
+        if selected not in self.database:
+            return
+
+        del self.database[selected]
+        with open("database.json", "w") as file:
+            json.dump(self.database, file)
+
+        self.load_date_picker(self.window.date_picker1)
+        self.load_date_picker(self.window.date_picker2)
