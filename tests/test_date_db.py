@@ -21,6 +21,8 @@ import pytest
 from core.date_db import DateDb
 from core.main_window import MainWindow
 
+DATE = "2022-08-04 12:00"
+
 
 @pytest.fixture
 def date_db():
@@ -30,3 +32,13 @@ def date_db():
 def test_fix_db_file(date_db):
     # database file should be created automatically
     assert Path("database.json").exists()
+
+
+def test_on_save(date_db):
+    window = date_db.window
+    window.date1.date_time = DATE
+    window.date1.gmt.value = +3
+    window.date_picker1.child.text = "date1"
+
+    window.save1_button.clicked()
+    assert Path("database.json").read_text() == """{"date1": [12, 0, 3, 4, 8, 2022]}"""

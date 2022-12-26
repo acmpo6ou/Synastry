@@ -37,7 +37,10 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
     # <editor-fold>
     parent_widget: Gtk.Box
     date_picker1: Gtk.ComboBoxText
+    save1_button: Gtk.Button
+    remove1_button: Gtk.Button
     date_picker2: Gtk.ComboBoxText
+    remove2_button: Gtk.Button
     conflicts_header: Gtk.Label
     love_header: Gtk.Label
     conflicts1: Gtk.Grid
@@ -588,16 +591,16 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
     def on_date_selected2(self, picker: Gtk.ComboBoxText):
         self.date_db.on_date_selected(picker, self.date2)
 
-    def on_save1(self, _, picker: Gtk.ComboBoxText):
+    def on_save1(self, picker: Gtk.ComboBoxText):
         self.date_db.on_save(picker, self.date1)
 
-    def on_save2(self, _, picker: Gtk.ComboBoxText):
+    def on_save2(self, picker: Gtk.ComboBoxText):
         self.date_db.on_save(picker, self.date2)
 
-    def on_remove1(self, _, picker: Gtk.ComboBoxText):
+    def on_remove1(self, picker: Gtk.ComboBoxText):
         self.date_db.on_remove(picker, self.date1)
 
-    def on_remove2(self, _, picker: Gtk.ComboBoxText):
+    def on_remove2(self, picker: Gtk.ComboBoxText):
         self.date_db.on_remove(picker, self.date2)
 
 

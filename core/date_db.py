@@ -14,6 +14,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Synastry.  If not, see <https://www.gnu.org/licenses/>.
 #
+import json
 from pathlib import Path
 from typing import TYPE_CHECKING
 from gi.repository import Gtk
@@ -27,6 +28,8 @@ if TYPE_CHECKING:
 class DateDb:
     def __init__(self, window: "MainWindow"):
         self.window = window
+        self.database = {}
+
         self.fix_db_file()
         self.load_db()
 
@@ -45,6 +48,9 @@ class DateDb:
 
     def on_save(self, picker: Gtk.ComboBoxText, date_time: DateTime):
         """ Saves current date to the database. """
+        self.database[picker.active_text] = date_time.data
+        with open("database.json", "w") as file:
+            json.dump(self.database, file)
 
     def on_remove(self, picker: Gtk.ComboBoxText, date_time: DateTime):
         """ Removes picked date from the database. """
