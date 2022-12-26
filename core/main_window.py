@@ -22,6 +22,7 @@ import numpy.typing as npt
 from astropy.coordinates import SkyCoord, Angle
 from gi.repository import Gtk
 
+from core.date_db import DateDb
 from core.date_time import DateTime
 from core.gtk_utils import GladeTemplate, clear_table, insert_label
 from core.planets import Planet, get_planet, aspects_good
@@ -64,6 +65,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
         self.maximize()
         # self.set_icon_from_file("img/icon.svg")
+        self.date_db = DateDb(self)
 
         self.date1 = DateTime(self)
         self.date2 = DateTime(self)
@@ -577,6 +579,24 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
                 color = f'foreground="{RED}"'
 
             insert_label(color, angle, table, 2, i+1)
+
+    def on_date_selected1(self, picker: Gtk.ComboBoxText):
+        self.date_db.on_date_selected(picker, self.date1)
+
+    def on_date_selected2(self, picker: Gtk.ComboBoxText):
+        self.date_db.on_date_selected(picker, self.date2)
+
+    def on_save1(self, _, picker: Gtk.ComboBoxText):
+        self.date_db.on_save(picker, self.date1)
+
+    def on_save2(self, _, picker: Gtk.ComboBoxText):
+        self.date_db.on_save(picker, self.date2)
+
+    def on_remove1(self, _, picker: Gtk.ComboBoxText):
+        self.date_db.on_remove(picker, self.date1)
+
+    def on_remove2(self, _, picker: Gtk.ComboBoxText):
+        self.date_db.on_remove(picker, self.date2)
 
 
 class ArrayIter:

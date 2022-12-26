@@ -28,7 +28,12 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="has-entry">True</property>
-                <signal name="changed" handler="on_date_selected" swapped="no"/>
+                <signal name="changed" handler="on_date_selected1" swapped="no"/>
+                <child internal-child="entry">
+                  <object class="GtkEntry">
+                    <property name="can-focus">False</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -42,7 +47,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <signal name="clicked" handler="on_save1" swapped="no"/>
+                <signal name="clicked" handler="on_save1" object="date_picker1" swapped="no"/>
                 <style>
                   <class name="suggested-action"/>
                 </style>
@@ -58,7 +63,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <signal name="clicked" handler="on_remove1" swapped="no"/>
+                <signal name="clicked" handler="on_remove1" object="date_picker1" swapped="no"/>
                 <style>
                   <class name="destructive-action"/>
                 </style>
@@ -88,7 +93,12 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="has-entry">True</property>
-                <signal name="changed" handler="on_date_selected" swapped="no"/>
+                <signal name="changed" handler="on_date_selected2" swapped="no"/>
+                <child internal-child="entry">
+                  <object class="GtkEntry">
+                    <property name="can-focus">False</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -102,7 +112,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <signal name="clicked" handler="on_save2" swapped="no"/>
+                <signal name="clicked" handler="on_save2" object="date_picker2" swapped="no"/>
                 <style>
                   <class name="suggested-action"/>
                 </style>
@@ -118,7 +128,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <signal name="clicked" handler="on_remove2" swapped="no"/>
+                <signal name="clicked" handler="on_remove2" object="date_picker2" swapped="no"/>
                 <style>
                   <class name="destructive-action"/>
                 </style>
