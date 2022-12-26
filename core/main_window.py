@@ -36,6 +36,8 @@ CONFLICT_PLANETS = ("mars", "jupiter", "saturn", "pluto")
 class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
     # <editor-fold>
     parent_widget: Gtk.Box
+    date_picker1: Gtk.ComboBoxText
+    date_picker2: Gtk.ComboBoxText
     conflicts_header: Gtk.Label
     love_header: Gtk.Label
     conflicts1: Gtk.Grid

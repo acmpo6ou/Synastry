@@ -42,6 +42,16 @@ class DateTime(GladeTemplate):
     def __init__(self, main_window):
         GladeTemplate.__init__(self, "date_time")
         self.main_window = main_window
+        self.FIELDS = (self.hours, self.minutes, self.gmt, self.day, self.month, self.year)
+
+    @property
+    def data(self):
+        return [int(field.value) for field in self.FIELDS]
+
+    @data.setter
+    def data(self, values: tuple[int]):
+        for field, value in zip(self.FIELDS, values):
+            field.value = value
 
     @staticmethod
     def show_leading_plus(gmt_field: Gtk.SpinButton):
