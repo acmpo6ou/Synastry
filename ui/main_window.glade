@@ -31,7 +31,7 @@
                 <signal name="changed" handler="on_date_selected1" swapped="no"/>
                 <child internal-child="entry">
                   <object class="GtkEntry">
-                    <property name="can-focus">False</property>
+                    <property name="can-focus">True</property>
                   </object>
                 </child>
               </object>
@@ -96,7 +96,7 @@
                 <signal name="changed" handler="on_date_selected2" swapped="no"/>
                 <child internal-child="entry">
                   <object class="GtkEntry">
-                    <property name="can-focus">False</property>
+                    <property name="can-focus">True</property>
                   </object>
                 </child>
               </object>
