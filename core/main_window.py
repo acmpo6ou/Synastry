@@ -586,10 +586,10 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             insert_label(color, angle, table, 2, i+1)
 
     def on_date_selected1(self, picker: Gtk.ComboBoxText):
-        self.date_db.on_date_selected(picker, self.date1)
+        self.date_db.on_date_selected(picker, self.save1_button, self.remove1_button, self.date1)
 
     def on_date_selected2(self, picker: Gtk.ComboBoxText):
-        self.date_db.on_date_selected(picker, self.date2)
+        self.date_db.on_date_selected(picker, self.save2_button, self.remove2_button, self.date2)
 
     def on_save1(self, picker: Gtk.ComboBoxText):
         self.date_db.on_save(picker, self.date1)

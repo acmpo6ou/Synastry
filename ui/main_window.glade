@@ -45,6 +45,7 @@
               <object class="GtkButton" id="save1_button">
                 <property name="label" translatable="yes">Save</property>
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <signal name="clicked" handler="on_save1" object="date_picker1" swapped="no"/>
@@ -61,6 +62,7 @@
               <object class="GtkButton" id="remove1_button">
                 <property name="label" translatable="yes">Remove</property>
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <signal name="clicked" handler="on_remove1" object="date_picker1" swapped="no"/>
@@ -107,9 +109,10 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="save2_button">
                 <property name="label" translatable="yes">Save</property>
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <signal name="clicked" handler="on_save2" object="date_picker2" swapped="no"/>
@@ -126,6 +129,7 @@
               <object class="GtkButton" id="remove2_button">
                 <property name="label" translatable="yes">Remove</property>
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <signal name="clicked" handler="on_remove2" object="date_picker2" swapped="no"/>

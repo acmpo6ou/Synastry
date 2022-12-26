@@ -70,3 +70,16 @@ def test_on_date_selected(date_db):
     window = date_db.window
     window.date_picker1.active = 0
     assert window.date1.time_data == [12, 0, 3, 4, 8, 2022]
+
+
+def test_button_sensitivity(date_db):
+    shutil.copyfile("tests/database.json", "./database.json")
+    date_db.load_db()
+
+    window = date_db.window
+    assert not window.save1_button.sensitive
+    assert not window.remove1_button.sensitive
+
+    window.date_picker1.active = 0
+    assert window.save1_button.sensitive
+    assert window.remove1_button.sensitive

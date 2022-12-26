@@ -52,9 +52,17 @@ class DateDb:
         for entry in sorted(self.database.keys()):
             picker.append(None, entry)
 
-    def on_date_selected(self, picker: Gtk.ComboBoxText, date_time: DateTime):
+    def on_date_selected(
+        self,
+        picker: Gtk.ComboBoxText,
+        save_button: Gtk.Button,
+        remove_button: Gtk.Button,
+        date_time: DateTime,
+    ):
         """ Loads selected date into date_time. """
         selected = picker.active_text
+        save_button.sensitive = bool(selected)
+        remove_button.sensitive = bool(selected)
         date_time.time_data = self.database[selected]
 
     def on_save(self, picker: Gtk.ComboBoxText, date_time: DateTime):
