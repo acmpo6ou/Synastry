@@ -14,6 +14,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Synastry.  If not, see <https://www.gnu.org/licenses/>.
 #
+from pathlib import Path
 from typing import TYPE_CHECKING
 from gi.repository import Gtk
 
@@ -29,8 +30,12 @@ class DateDb:
         self.fix_db_file()
         self.load_db()
 
-    def fix_db_file(self):
+    @staticmethod
+    def fix_db_file():
         """ Creates database file if it's not present. """
+        db_file = Path("database.json")
+        if not db_file.exists():
+            db_file.touch()
 
     def load_db(self):
         """ Loads database entries into main window's combo boxes. """
