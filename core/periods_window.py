@@ -18,6 +18,7 @@
 from gi.repository import Gtk
 
 from core.gtk_utils import GladeTemplate
+from core.main_window import ArrayIter
 from core.planets import Planet
 import numpy.typing as npt
 
@@ -44,6 +45,13 @@ class PeriodsWindow(Gtk.Window, GladeTemplate):
         self.happiness_pairs = happiness_pairs
         self.unhappiness_pairs = unhappiness_pairs
 
+        planet_pairs, angles = self.calculate_angles(self.dates1, self.dates2)
+        good = self.aspects_good(angles, planet_pairs)
+
+        planet_pairs = ArrayIter(planet_pairs)
+        angles = ArrayIter(angles)
+        good = ArrayIter(good)
+
     def calculate_for_month(self, month, date1, date2):
         """
         Calculates aspects present for 2 persons during given [month].
@@ -66,6 +74,8 @@ class PeriodsWindow(Gtk.Window, GladeTemplate):
         """Collects pairs of a planet with all transit planets."""
 
     def calculate_angels(self, date1: str, date2: str):
+        # TODO: combine, flatten, and set() all pairs
+        #  (but order them because set is not ordered!!)
         ...
 
     def present_conflicts(
@@ -74,6 +84,17 @@ class PeriodsWindow(Gtk.Window, GladeTemplate):
         aspects_good: npt.NDArray[int],
     ):
         # TODO: highlight conflictedness?
-        # TODO: convert planet_pairs into np.array
-        #  filter only bad aspects with planet_pairs[aspects_good == 0]
+
+        # TODO: flatten, set() and order conflict_pairs
+        #  create `aspects` dict:
+        #      Planet to array of its aspects
+        #      or planet.name + (1 or 2) to np.array
+
+        # TODO: for p1, p2 in conflict_pairs
+        #  get aspects1 and aspects2 from aspects dict
+        #  filter both: set aspectsN[aspectsN == -1] = 1
+        #  apply XOR to resulting np.arrays,
+        #  this way we'll get transit planets that affect both natal planets
+        #  for item in resulting array:
+        #      if item is 0: present p1 - transit planet - p2
         ...
