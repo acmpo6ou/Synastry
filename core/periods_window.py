@@ -73,7 +73,7 @@ class PeriodsWindow(Gtk.Window, GladeTemplate):
     def collect_for_planet(self, planet: Planet, date1: str, date2: str):
         """Collects pairs of a planet with all transit planets."""
 
-    def calculate_angels(self, date1: str, date2: str):
+    def calculate_angles(self, date1: str, date2: str):
         # TODO: combine, flatten, and set() all pairs
         #  (but order them because set is not ordered!!)
         ...
