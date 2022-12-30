@@ -20,6 +20,7 @@ from typing import TYPE_CHECKING
 from gi.repository import Gtk
 
 from core.date_time import DateTime
+from core.widgets import WarningDialog
 
 if TYPE_CHECKING:
     from core.main_window import MainWindow
@@ -76,6 +77,10 @@ class DateDb:
 
     def on_remove(self, picker: Gtk.ComboBoxText):
         """ Removes picked date from the database. """
+        dialog = WarningDialog("Remove date?")
+        if dialog.run() != Gtk.ResponseType.YES:
+            return
+
         selected = picker.active_text
         if selected not in self.database:
             return

@@ -16,10 +16,11 @@
 #
 import shutil
 from pathlib import Path
+from unittest.mock import patch
 
 import pytest
 
-from core.date_db import DateDb
+from gi.repository import Gtk
 from core.main_window import MainWindow
 
 DATE = "2022-08-04 12:00"
@@ -52,13 +53,16 @@ def test_load_db(date_db):
     assert date_db.database == {"date1": [12, 0, 3, 4, 8, 2022], "date2": [12, 0, 3, 6, 8, 2022]}
 
 
-def test_on_remove(date_db):
+@patch("core.date_db.WarningDialog", autospec=True)
+def test_on_remove(dialog, date_db):
     shutil.copyfile("tests/database.json", "./database.json")
     date_db.load_db()
     window = date_db.window
     window.date_picker1.active = 0
 
+    dialog.return_value.run.return_value = Gtk.ResponseType.YES
     window.remove1_button.clicked()
+
     assert "date1" not in date_db.database
     assert Path("database.json").read_text() == """{"date2": [12, 0, 3, 6, 8, 2022]}"""
 
