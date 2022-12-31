@@ -24,17 +24,18 @@ from gi.repository import Gtk
 from core.main_window import MainWindow
 
 DATE = "2022-08-04 12:00"
+FAKE_DB = "/tmp/database.json"
 
 
 @pytest.fixture
 def date_db():
-    Path("database.json").unlink()
-    return MainWindow().date_db
+    Path(FAKE_DB).unlink(missing_ok=True)
+    return MainWindow(FAKE_DB).date_db
 
 
 def test_fix_db_file(date_db):
     # database file should be created automatically
-    assert Path("database.json").exists()
+    assert Path(FAKE_DB).exists()
 
 
 def test_on_save(date_db):
@@ -44,18 +45,18 @@ def test_on_save(date_db):
     window.date_picker1.child.text = "date1"
 
     window.save1_button.clicked()
-    assert Path("database.json").read_text() == """{"date1": [12, 0, 3, 4, 8, 2022]}"""
+    assert Path(FAKE_DB).read_text() == """{"date1": [12, 0, 3, 4, 8, 2022]}"""
 
 
 def test_load_db(date_db):
-    shutil.copyfile("tests/database.json", "./database.json")
+    shutil.copyfile("tests/database.json", FAKE_DB)
     date_db.load_db()
     assert date_db.database == {"date1": [12, 0, 3, 4, 8, 2022], "date2": [12, 0, 3, 6, 8, 2022]}
 
 
 @patch("core.date_db.WarningDialog", autospec=True)
 def test_on_remove(dialog, date_db):
-    shutil.copyfile("tests/database.json", "./database.json")
+    shutil.copyfile("tests/database.json", FAKE_DB)
     date_db.load_db()
     window = date_db.window
     window.date_picker1.active = 0
@@ -64,11 +65,11 @@ def test_on_remove(dialog, date_db):
     window.remove1_button.clicked()
 
     assert "date1" not in date_db.database
-    assert Path("database.json").read_text() == """{"date2": [12, 0, 3, 6, 8, 2022]}"""
+    assert Path(FAKE_DB).read_text() == """{"date2": [12, 0, 3, 6, 8, 2022]}"""
 
 
 def test_on_date_selected(date_db):
-    shutil.copyfile("tests/database.json", "./database.json")
+    shutil.copyfile("tests/database.json", FAKE_DB)
     date_db.load_db()
 
     window = date_db.window
@@ -77,7 +78,7 @@ def test_on_date_selected(date_db):
 
 
 def test_button_sensitivity(date_db):
-    shutil.copyfile("tests/database.json", "./database.json")
+    shutil.copyfile("tests/database.json", FAKE_DB)
     date_db.load_db()
 
     window = date_db.window

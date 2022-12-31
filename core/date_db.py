@@ -27,23 +27,23 @@ if TYPE_CHECKING:
 
 
 class DateDb:
-    def __init__(self, window: "MainWindow"):
+    def __init__(self, window: "MainWindow", db_file: str):
         self.window = window
+        self.db_file = db_file
         self.database = {}
 
         self.fix_db_file()
         self.load_db()
 
-    @staticmethod
-    def fix_db_file():
+    def fix_db_file(self):
         """ Creates database file if it's not present. """
-        db_file = Path("database.json")
+        db_file = Path(self.db_file)
         if not db_file.exists():
             db_file.write_text("{}")
 
     def load_db(self):
         """ Loads database entries into main window's combo boxes. """
-        with open("database.json") as file:
+        with open(self.db_file) as file:
             self.database = json.load(file)
         self.load_date_picker(self.window.date_picker1)
         self.load_date_picker(self.window.date_picker2)
@@ -54,11 +54,11 @@ class DateDb:
             picker.append(None, entry)
 
     def on_date_selected(
-        self,
-        picker: Gtk.ComboBoxText,
-        save_button: Gtk.Button,
-        remove_button: Gtk.Button,
-        date_time: DateTime,
+            self,
+            picker: Gtk.ComboBoxText,
+            save_button: Gtk.Button,
+            remove_button: Gtk.Button,
+            date_time: DateTime,
     ):
         """ Loads selected date into date_time. """
         selected = picker.active_text
@@ -69,7 +69,7 @@ class DateDb:
     def on_save(self, picker: Gtk.ComboBoxText, date_time: DateTime):
         """ Saves current date to the database. """
         self.database[picker.active_text] = date_time.time_data
-        with open("database.json", "w") as file:
+        with open(self.db_file, "w") as file:
             json.dump(self.database, file)
 
         self.load_date_picker(self.window.date_picker1)
@@ -86,7 +86,7 @@ class DateDb:
             return
 
         del self.database[selected]
-        with open("database.json", "w") as file:
+        with open(self.db_file, "w") as file:
             json.dump(self.database, file)
 
         self.load_date_picker(self.window.date_picker1)

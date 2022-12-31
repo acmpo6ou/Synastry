@@ -64,13 +64,13 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
     unhappiness1_times: Gtk.Grid
     # </editor-fold>
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, db_file="database.json", *args, **kwargs):
         Gtk.ApplicationWindow.__init__(self, *args, **kwargs)
         GladeTemplate.__init__(self, "main_window")
 
         self.maximize()
         # self.set_icon_from_file("img/icon.svg")
-        self.date_db = DateDb(self)
+        self.date_db = DateDb(self, db_file)
 
         self.date1 = DateTime(self)
         self.date2 = DateTime(self)
