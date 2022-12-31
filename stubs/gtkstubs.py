@@ -22,25 +22,28 @@ This way, we get autocompletion for them.
 See _getattr and _setattr from gtk_utils module for more details.
 """
 
-
 import re
 import shutil
+from pathlib import Path
 
 GTK_STUBS_PATH = "venv/lib/python3.10/site-packages/gi-stubs/repository/"
 
 for module in ("Gtk", "Gdk", "Gio"):
-    _in = open(f"{GTK_STUBS_PATH}/{module}.pyi")
-    out = open(f"/tmp/{module}.pyi", "w")
+    venv_path = f"{GTK_STUBS_PATH}/{module}.pyi"
+    home_path = f"{Path.home()}/{module}.pyi"
+    _in = open(venv_path)
+    out = open(home_path, "w")
 
-    for line in _in.readlines():
+    for line in _in:
         out.write(line)
 
         if line.startswith("    def get_"):
-            prop = re.search("get_([a-z_]*)", line)[1]
+            prop = re.search("get_([a-z0-9_]*)", line)[1]
             type_hint = "Any"
 
             if "->" in line:
                 type_hint = re.search(r"->(.*?):", line)[1]
             out.write(f"    {prop}:{type_hint}\n")
 
-    shutil.copyfile(f"/tmp/{module}.pyi", f"{GTK_STUBS_PATH}/{module}.pyi")
+    Path(venv_path).unlink()
+    shutil.move(home_path, venv_path)

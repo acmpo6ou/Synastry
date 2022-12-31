@@ -29,7 +29,7 @@ import re
 from xml.etree import ElementTree
 
 CORE_DIR = "core/"
-SKIP = ("__init__.py", "gtk_utils.py", "planets.py", "__pycache__")
+SKIP = ("__init__.py", "gtk_utils.py", "planets.py", "__pycache__", "widgets.py", "date_db.py")
 
 
 def gen_glade_stubs():
