@@ -48,6 +48,36 @@ def test_on_save(date_db):
     assert Path(FAKE_DB).read_text() == """{"date1": [12, 0, 3, 4, 8, 2022]}"""
 
 
+@patch("core.date_db.WarningDialog", autospec=True)
+def test_overwrite_yes(dialog, date_db):
+    shutil.copyfile("tests/database.json", FAKE_DB)
+    date_db.load_db()
+    window = date_db.window
+    window.date_picker1.child.text = "date1"
+    window.date1.hours.value = 10
+
+    dialog.return_value.run.return_value = Gtk.ResponseType.YES
+    window.save1_button.clicked()
+
+    expected_json = """{"date1": [10, 0, 3, 4, 8, 2022], "date2": [12, 0, 3, 6, 8, 2022]}"""
+    assert Path(FAKE_DB).read_text() == expected_json
+
+
+@patch("core.date_db.WarningDialog", autospec=True)
+def test_overwrite_no(dialog, date_db):
+    shutil.copyfile("tests/database.json", FAKE_DB)
+    date_db.load_db()
+    window = date_db.window
+    window.date_picker1.child.text = "date1"
+    window.date1.hours.value = 10
+
+    dialog.return_value.run.return_value = Gtk.ResponseType.NO
+    window.save1_button.clicked()
+
+    expected_json = """{"date1": [12, 0, 3, 4, 8, 2022], "date2": [12, 0, 3, 6, 8, 2022]}\n"""
+    assert Path(FAKE_DB).read_text() == expected_json
+
+
 def test_load_db(date_db):
     shutil.copyfile("tests/database.json", FAKE_DB)
     date_db.load_db()

@@ -68,7 +68,13 @@ class DateDb:
 
     def on_save(self, picker: Gtk.ComboBoxText, date_time: DateTime):
         """ Saves current date to the database. """
-        self.database[picker.active_text] = date_time.time_data
+        selected = picker.active_text
+        if selected in self.database:
+            result = WarningDialog(f"{selected} already exists, overwrite?").run()
+            if result == Gtk.ResponseType.NO:
+                return
+
+        self.database[selected] = date_time.time_data
         with open(self.db_file, "w") as file:
             json.dump(self.database, file)
 
