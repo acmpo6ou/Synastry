@@ -69,7 +69,7 @@ class DateTime(GladeTemplate):
         hours = int(self.hours.value)
         minutes = int(self.minutes.value)
         gmt = int(self.gmt.value)
-        self.possibilities.active = hours == 12 and minutes == 0 and gmt == 0
+        self.possibilities.active = hours == 12 and minutes == 0 == gmt
 
     def format_datetime(self, hours):
         minutes = int(self.minutes.value)
