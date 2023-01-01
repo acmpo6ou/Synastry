@@ -55,7 +55,7 @@ def test_load_db(date_db):
 
 
 @patch("core.date_db.WarningDialog", autospec=True)
-def test_on_remove(dialog, date_db):
+def test_on_remove_yes(dialog, date_db):
     shutil.copyfile("tests/database.json", FAKE_DB)
     date_db.load_db()
     window = date_db.window
@@ -66,6 +66,18 @@ def test_on_remove(dialog, date_db):
 
     assert "date1" not in date_db.database
     assert Path(FAKE_DB).read_text() == """{"date2": [12, 0, 3, 6, 8, 2022]}"""
+
+
+@patch("core.date_db.WarningDialog", autospec=True)
+def test_on_remove_no(dialog, date_db):
+    shutil.copyfile("tests/database.json", FAKE_DB)
+    date_db.load_db()
+    window = date_db.window
+    window.date_picker1.active = 0
+
+    dialog.return_value.run.return_value = Gtk.ResponseType.NO
+    window.remove1_button.clicked()
+    assert "date1" in date_db.database
 
 
 def test_on_date_selected(date_db):
