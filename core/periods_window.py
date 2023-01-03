@@ -44,6 +44,8 @@ class PeriodsWindow(Gtk.Window, GladeTemplate):
         self.friendship_pairs = friendship_pairs
         self.happiness_pairs = happiness_pairs
         self.unhappiness_pairs = unhappiness_pairs
+        self.all_pairs = (*conflict_pairs, *love_pairs, *friendship_pairs,
+                          *happiness_pairs, *unhappiness_pairs)
 
         planet_pairs, angles = self.calculate_angles(self.dates1, self.dates2)
         good = self.aspects_good(angles, planet_pairs)
@@ -61,14 +63,25 @@ class PeriodsWindow(Gtk.Window, GladeTemplate):
         """
         ...
 
-    def calculate_for_day(self, day, date1, date2):
+    def collect_for_day(self, day):
         """
-        Calculates aspects present for 2 persons during given [day].
+        Collects planet pairs of aspects present for 2 persons during given [day].
+        """
+        planet_pairs_all = []
+        ra1_all = []
+        dec1_all = []
+        ra2_all = []
+        dec2_all = []
 
-        :param date1: date of birth of the first person.
-        :param date2: date of birth of the second person.
-        """
-        ...
+        for pair in self.all_pairs:
+            for planet in pair:
+                planet_pairs, ra1, dec1, ra2, dec2 = self.collect_for_planet(planet, day)
+                planet_pairs_all += planet_pairs
+                ra1_all += ra1
+                dec1_all += dec1
+                ra2_all += ra2
+                dec2_all += dec2
+        return planet_pairs_all, ra1_all, dec1_all, ra2_all, dec2_all
 
     def collect_for_planet(self, planet: Planet, date: str):
         """Collects pairs of a planet with all transit planets."""
