@@ -19,7 +19,7 @@ from gi.repository import Gtk
 
 from core.gtk_utils import GladeTemplate
 from core.main_window import ArrayIter
-from core.planets import Planet
+from core.planets import Planet, get_planet
 import numpy.typing as npt
 
 
@@ -70,8 +70,22 @@ class PeriodsWindow(Gtk.Window, GladeTemplate):
         """
         ...
 
-    def collect_for_planet(self, planet: Planet, date1: str, date2: str):
+    def collect_for_planet(self, planet: Planet, date: str):
         """Collects pairs of a planet with all transit planets."""
+        planet_pairs = []
+        ra1 = []
+        dec1 = []
+        ra2 = []
+        dec2 = []
+
+        for name in self.PLANETS:
+            transit_planet = get_planet(name, date)
+            planet_pairs.append(planet, transit_planet)
+            ra1.append(planet.body.ra)
+            dec1.append(planet.body.dec)
+            ra2.append(transit_planet.body.ra)
+            dec2.append(transit_planet.body.dec)
+        return planet_pairs, ra1, dec1, ra2, dec2
 
     def calculate_angles(self, date1: str, date2: str):
         # TODO: combine, flatten, and set() all pairs
