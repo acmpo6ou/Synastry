@@ -14,7 +14,9 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Synastry.  If not, see <https://www.gnu.org/licenses/>.
 #
+from calendar import monthrange
 
+from astropy.coordinates import SkyCoord
 from gi.repository import Gtk
 
 from core.gtk_utils import GladeTemplate
@@ -54,14 +56,27 @@ class PeriodsWindow(Gtk.Window, GladeTemplate):
         angles = ArrayIter(angles)
         good = ArrayIter(good)
 
-    def calculate_for_month(self, month, date1, date2):
-        """
-        Calculates aspects present for 2 persons during given [month].
+    def calculate_angles(self, month, year):
+        planet_pairs_all = []
+        ra1_all = []
+        dec1_all = []
+        ra2_all = []
+        dec2_all = []
 
-        :param date1: date of birth of the first person.
-        :param date2: date of birth of the second person.
-        """
-        ...
+        for day in monthrange(year, month):
+            # TODO: adjust time
+            date = f"{year}-{month:02}-{day:02} 08:00"
+            planet_pairs, ra1, dec1, ra2, dec2 = self.collect_for_day(date)
+            planet_pairs_all += planet_pairs
+            ra1_all += ra1
+            dec1_all += dec1
+            ra2_all += ra2
+            dec2_all += dec2
+
+        coords1 = SkyCoord(ra1_all, dec1_all)
+        coords2 = SkyCoord(ra2_all, dec2_all)
+        angles = coords1.separation(coords2)
+        return planet_pairs_all, angles.deg.round(decimals=1)
 
     def collect_for_day(self, day):
         """
@@ -99,11 +114,6 @@ class PeriodsWindow(Gtk.Window, GladeTemplate):
             ra2.append(transit_planet.body.ra)
             dec2.append(transit_planet.body.dec)
         return planet_pairs, ra1, dec1, ra2, dec2
-
-    def calculate_angles(self, date1: str, date2: str):
-        # TODO: combine, flatten, and set() all pairs
-        #  (but order them because set is not ordered!!)
-        ...
 
     def present_conflicts(
         self,
