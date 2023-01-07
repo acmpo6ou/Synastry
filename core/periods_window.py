@@ -16,11 +16,12 @@
 #
 from calendar import monthrange
 
+import numpy as np
 from astropy.coordinates import SkyCoord
 from gi.repository import Gtk
 
 from core.gtk_utils import GladeTemplate
-from core.main_window import ArrayIter
+from core.main_window import ArrayIter, MainWindow
 from core.planets import Planet, get_planet
 import numpy.typing as npt
 
@@ -30,7 +31,7 @@ class PeriodsWindow(Gtk.Window, GladeTemplate):
                "jupiter", "saturn", "uranus", "neptune", "pluto")
 
     def __init__(
-        self, date1: str, date2: str,
+        self,
         conflict_pairs: list[tuple[Planet]],
         love_pairs: list[tuple[Planet]],
         friendship_pairs: list[tuple[Planet]],
@@ -39,8 +40,6 @@ class PeriodsWindow(Gtk.Window, GladeTemplate):
     ):
         Gtk.Window.__init__(self)
         GladeTemplate.__init__(self, "periods")
-        self.date1 = date1
-        self.date2 = date2
         self.conflict_pairs = conflict_pairs
         self.love_pairs = love_pairs
         self.friendship_pairs = friendship_pairs
@@ -49,12 +48,22 @@ class PeriodsWindow(Gtk.Window, GladeTemplate):
         self.all_pairs = (*conflict_pairs, *love_pairs, *friendship_pairs,
                           *happiness_pairs, *unhappiness_pairs)
 
-        planet_pairs, angles = self.calculate_angles(self.dates1, self.dates2)
-        good = self.aspects_good(angles, planet_pairs)
+    def on_calculate(self):
+        # TODO: get actual selected date
+        month, year = 1, 2023
 
-        planet_pairs = ArrayIter(planet_pairs)
-        angles = ArrayIter(angles)
-        good = ArrayIter(good)
+        planet_pairs, angles = self.calculate_angles(month, year)
+        good = MainWindow.aspects_good(angles, planet_pairs)
+
+        days_in_month = monthrange(year, month)[-1]
+        num_planets = len(self.PLANETS)
+        self.planet_pairs = np.array(planet_pairs).reshape(days_in_month, -1, num_planets)
+        self.angles = angles.reshape(days_in_month, -1, num_planets)
+        self.good = good.reshape(days_in_month, -1, num_planets)
+
+        day_block = len(self.all_pairs) * 2
+        for day in monthrange(year, month):
+            self.present_day(day, day_block * day)
 
     def calculate_angles(self, month, year):
         planet_pairs_all = []
@@ -114,6 +123,9 @@ class PeriodsWindow(Gtk.Window, GladeTemplate):
             ra2.append(transit_planet.body.ra)
             dec2.append(transit_planet.body.dec)
         return planet_pairs, ra1, dec1, ra2, dec2
+
+    def present_day(self, day, index):
+
 
     def present_conflicts(
         self,
