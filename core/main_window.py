@@ -25,7 +25,8 @@ from gi.repository import Gtk
 from core.date_db import DateDb
 from core.date_time import DateTime
 from core.gtk_utils import GladeTemplate, clear_table, insert_label
-from core.planets import Planet, get_planet, aspects_good
+from core.planets import Planet, get_planet
+from core.utils import ArrayIter, get_aspects_good
 
 RED = "#f04b51"
 GREEN = "#6db442"
@@ -99,7 +100,7 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
             self.dates2 = self.date2.get_possibilities()
 
         planet_pairs, angles = self.calculate_angles(self.dates1, self.dates2)
-        good = self.aspects_good(angles, planet_pairs)
+        good = get_aspects_good(angles, planet_pairs)
 
         planet_pairs = [planet_pairs[i:i + 49] for i in range(0, len(planet_pairs), 49)]
         angles = angles.reshape(-1, 49)
@@ -147,16 +148,6 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
         self.present_happiness(self.happiness1, angles[4], good[4])
         self.present_happiness(self.happiness2, angles[4], good[4])
-
-    @staticmethod
-    def aspects_good(angles, planet_pairs):
-        planets1_good = []
-        planets2_good = []
-        for p1, p2 in planet_pairs:
-            planets1_good.append(p1.good)
-            planets2_good.append(p2.good)
-        good = aspects_good(angles, planets1_good, planets2_good)
-        return good
 
     def calculate_angles(self, dates1: list[str], dates2: list[str]):
         """
@@ -602,14 +593,3 @@ class MainWindow(Gtk.ApplicationWindow, GladeTemplate):
 
     def on_remove2(self, picker: Gtk.ComboBoxText):
         self.date_db.on_remove(picker)
-
-
-class ArrayIter:
-    def __init__(self, array):
-        self.array = array
-        self.index = 0
-
-    def __getitem__(self, n):
-        res = self.array[self.index : self.index + n]
-        self.index += n
-        return res

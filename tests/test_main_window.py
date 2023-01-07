@@ -22,6 +22,7 @@ from astropy.coordinates import SkyCoord
 from gi.repository import Gtk
 
 from core.main_window import MainWindow, RED, GREEN, DARK_GREEN
+from core.utils import get_aspects_good
 
 DATE = "2022-08-04 12:00"
 DATE2 = "2022-08-06 12:00"
@@ -37,7 +38,7 @@ def get_data(window, collect):
     coords1 = SkyCoord(ra1, dec1)
     coords2 = SkyCoord(ra2, dec2)
     angles = coords1.separation(coords2).deg.round(decimals=1)
-    good = window.aspects_good(angles, planet_pairs)
+    good = get_aspects_good(angles, planet_pairs)
     return planet_pairs, angles, good
 
 

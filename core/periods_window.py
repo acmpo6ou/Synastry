@@ -21,7 +21,8 @@ from astropy.coordinates import SkyCoord
 from gi.repository import Gtk
 
 from core.gtk_utils import GladeTemplate
-from core.main_window import ArrayIter, MainWindow
+from core.main_window import MainWindow
+from core.utils import ArrayIter, get_aspects_good
 from core.planets import Planet, get_planet
 import numpy.typing as npt
 
@@ -53,7 +54,7 @@ class PeriodsWindow(Gtk.Window, GladeTemplate):
         month, year = 1, 2023
 
         planet_pairs, angles = self.calculate_angles(month, year)
-        good = MainWindow.aspects_good(angles, planet_pairs)
+        good = get_aspects_good(angles, planet_pairs)
 
         # reshaping 1d arrays of all planets/angles/aspects into 4d arrays
         # each array will be an array of days, X axis (days_in_month)
@@ -131,8 +132,15 @@ class PeriodsWindow(Gtk.Window, GladeTemplate):
             dec2.append(transit_planet.body.dec)
         return planet_pairs, ra1, dec1, ra2, dec2
 
-    def present_day(self, day, index):
+    def present_day(self, day):
+        planet_pairs = ArrayIter(self.planet_pairs[day])
+        angles = ArrayIter(self.angles[day])
+        good = ArrayIter(self.good[day])
 
+        def data(n):
+            return planet_pairs[n], angles[n], good[n]
+
+        self.present_conflicts()
 
     def present_conflicts(
         self,
