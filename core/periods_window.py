@@ -55,11 +55,17 @@ class PeriodsWindow(Gtk.Window, GladeTemplate):
         planet_pairs, angles = self.calculate_angles(month, year)
         good = MainWindow.aspects_good(angles, planet_pairs)
 
+        # reshaping 1d arrays of all planets/angles/aspects into 4d arrays
+        # each array will be an array of days, X axis (days_in_month)
+        # each day will be an array of aspect arrays during that day, Y axis
+        #     (the number of aspects is different per person pair, that's why I use -1 here)
+        # each aspect array is an array of pairs since each aspect consists of 2 planets, Z axis (2)
+        # each pair is an array of aspects of planet with all transit planets, A axis (num_planets)
         days_in_month = monthrange(year, month)[-1]
         num_planets = len(self.PLANETS)
-        self.planet_pairs = np.array(planet_pairs).reshape(days_in_month, -1, num_planets)
-        self.angles = angles.reshape(days_in_month, -1, num_planets)
-        self.good = good.reshape(days_in_month, -1, num_planets)
+        self.planet_pairs = planet_pairs.reshape(days_in_month, -1, 2, num_planets)
+        self.angles = angles.reshape(days_in_month, -1, 2, num_planets)
+        self.good = good.reshape(days_in_month, -1, 2, num_planets)
 
         day_block = len(self.all_pairs) * 2
         for day in monthrange(year, month):
@@ -85,6 +91,7 @@ class PeriodsWindow(Gtk.Window, GladeTemplate):
         coords1 = SkyCoord(ra1_all, dec1_all)
         coords2 = SkyCoord(ra2_all, dec2_all)
         angles = coords1.separation(coords2)
+        planet_pairs_all = np.array(planet_pairs_all).flatten()
         return planet_pairs_all, angles.deg.round(decimals=1)
 
     def collect_for_day(self, day):
