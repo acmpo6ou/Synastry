@@ -61,15 +61,14 @@ class PeriodsWindow(Gtk.Window, GladeTemplate):
         #     (the number of aspects is different per person pair, that's why I use -1 here)
         # each aspect array is an array of pairs since each aspect consists of 2 planets, Z axis (2)
         # each pair is an array of aspects of planet with all transit planets, A axis (num_planets)
-        days_in_month = monthrange(year, month)[-1]
+        days_in_month = monthrange(year, month)[1]
         num_planets = len(self.PLANETS)
         self.planet_pairs = planet_pairs.reshape(days_in_month, -1, 2, num_planets)
         self.angles = angles.reshape(days_in_month, -1, 2, num_planets)
         self.good = good.reshape(days_in_month, -1, 2, num_planets)
 
-        day_block = len(self.all_pairs) * 2
-        for day in monthrange(year, month):
-            self.present_day(day, day_block * day)
+        for day in range(days_in_month):
+            self.present_day(day)
 
     def calculate_angles(self, month, year):
         planet_pairs_all = []
@@ -78,7 +77,8 @@ class PeriodsWindow(Gtk.Window, GladeTemplate):
         ra2_all = []
         dec2_all = []
 
-        for day in monthrange(year, month):
+        days_in_month = monthrange(year, month)[1]
+        for day in range(days_in_month):
             # TODO: adjust time
             date = f"{year}-{month:02}-{day:02} 08:00"
             planet_pairs, ra1, dec1, ra2, dec2 = self.collect_for_day(date)
