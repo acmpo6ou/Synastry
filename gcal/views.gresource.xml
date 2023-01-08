@@ -4,8 +4,5 @@
     <file compressed="true">gcal-month-cell.ui</file>
     <file compressed="true">gcal-month-popover.ui</file>
     <file compressed="true">gcal-month-view.ui</file>
-    <file compressed="true">gcal-week-header.ui</file>
-    <file compressed="true">gcal-week-view.ui</file>
-    <file compressed="true">gcal-year-view.ui</file>
   </gresource>
 </gresources>
