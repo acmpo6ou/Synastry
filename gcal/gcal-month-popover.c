@@ -18,7 +18,6 @@
 
 #define G_LOG_DOMAIN "GcalMonthPopover"
 
-#include "gcal-context.h"
 #include "gcal-debug.h"
 #include "gcal-event-widget.h"
 #include "gcal-month-popover.h"

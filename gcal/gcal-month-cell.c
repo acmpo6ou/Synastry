@@ -19,9 +19,6 @@
 
 #define G_LOG_DOMAIN "GcalMonthCell"
 
-#include "config.h"
-#include "gcal-application.h"
-#include "gcal-clock.h"
 #include "gcal-debug.h"
 #include "gcal-event-widget.h"
 #include "gcal-utils.h"
