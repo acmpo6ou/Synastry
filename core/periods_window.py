@@ -140,25 +140,21 @@ class PeriodsWindow(Gtk.Window, GladeTemplate):
         def data(n):
             return planet_pairs[n], angles[n], good[n]
 
-        self.present_conflicts()
+        n = len(self.conflict_pairs) * len(self.PLANETS)
+        self.present_conflicts(*data(n))
 
     def present_conflicts(
         self,
-        planet_pairs: list[tuple[Planet]],
+        planet_pairs: npt.NDArray[Planet],
         aspects_good: npt.NDArray[int],
     ):
         # TODO: highlight conflictedness?
+        for i, (p1, p2) in enumerate(planet_pairs):
+            aspects1, aspects2 = aspects_good[i]
+            aspects1[aspects1 == -1] = 1
+            aspects2[aspects2 == -1] = 1
 
-        # TODO: flatten, set() and order conflict_pairs
-        #  create `aspects` dict:
-        #      Planet to array of its aspects
-        #      or planet.name + (1 or 2) to np.array
-
-        # TODO: for p1, p2 in conflict_pairs
-        #  get aspects1 and aspects2 from aspects dict
-        #  filter both: set aspectsN[aspectsN == -1] = 1
-        #  apply XOR to resulting np.arrays,
-        #  this way we'll get transit planets that affect both natal planets
-        #  for item in resulting array:
-        #      if item is 0: present p1 - transit planet - p2
-        ...
+            for i, (a1, a2) in enumerate(zip(aspects1, aspects2)):
+                if a1 == a2 == 0:
+                    transit_planet = self.PLANETS[i]
+                    print(f"{p1.name} - {transit_planet} - {p2.name}")
